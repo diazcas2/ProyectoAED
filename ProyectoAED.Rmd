@@ -1,0 +1,16 @@
+---
+title: "ProyectoAED"
+author: "María de los Ángeles Díaz Castro"
+date: "2025-10-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Cargamos los datos:
+filename<-'data/intensidad_vehiculos_en_carretera_2025.csv'
+vehiculos<- read.csv(filename, sep=";")
+
+

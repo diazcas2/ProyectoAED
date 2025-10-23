@@ -1,6 +1,6 @@
 ---
 title: "ProyectoAED"
-author: "María de los Ángeles Díaz Castro"
+author: "María de los Ángeles Díaz Castro, Ana Blasco Vega e Irene Barba La Orden "
 date: "2025-10-23"
 output: html_document
 ---

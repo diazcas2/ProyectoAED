@@ -9,10 +9,39 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##Cargamos los datos:
+## Cargamos los datos:
 ```{r}
 filename <-'data/intensidad_vehiculos_en_carretera_2025.csv'
 vehiculos <- read.csv(filename, sep=";")
 ```
 
+## Dataframe TIDY
+```{r}
+library(tidyr)
+library(dplyr)
+
+# Comprobamos de qué tipo es cada variable
+sapply(vehiculos, class)
+# Hay que transformar la variable DIA de caracter a fecha
+vehiculos$DIA <- as.Date(vehiculos$DIA, format = '%d/%m/%Y')
+class(vehiculos$DIA)
+
+# Tiene que ser un dataset tidy (para trabajar más fácilmente), entonces comprobamos cuáles son las variables y reorganizamos si es necesario
+
+# TRAM: Separamos la 'variable' TRAM en dos variables (XX código CV de la carretera + XXX número de tramo)
+# Comprobamos que todos los valores tienen 5 dígitos
+all(length(vehiculos$TRAM == 5))
+vehiculos <- vehiculos %>% separate(col = TRAM, into = c('Código_CV', 'Núm_tramo'), sep = 2)
+
+# INTA, INTAP, INTD, INTDP, INTT, INTTP: no son variables (hacemos lo mismo que con TRAM)
+vehiculos <- vehiculos %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehículo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')
+
+# En la columna Tipo_vehículo solo aparece si es pesado (P). Rellenamos el resto con T (= todos vehículos)
+vehiculos <- vehiculos %>% mutate(Tipo_vehículo = ifelse(Tipo_Vehículo == 'P', 'P', 'T'))
+vehiculos <- vehiculos[, -15] # no sé porque se me duplica, borro esa y ya lo arreglaré
+
+# Elimino las filas que en la variable Sentido tienen T(=ambos sentidos)
+vehiculos <- vehiculos %>% filter(Sentido != 'T')
+head(vehiculos)
+```
 

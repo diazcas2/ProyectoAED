@@ -27,10 +27,11 @@ type: article
 status: submit
 # front matter
 simplesummary: |
-  A Simple summary goes here.
+  Preparación y análisis exploratorio del tráfico diario de carreteras en Valencia 2025, obtenido de la página oficial de la Generalitat Valenciana.
 abstract: |
-  A single paragraph of about 200 words maximum.
-keywords: |
+  Este proyecto tiene como objetivo analizar el tráfico en Valencia durante 2025, utilizando datos del dataset público proporcionado por la Generalitat Valenciana. Se consideran 18 variables, de las que se incluyen el número de vehículos que transitan por cada tramo, el método de captación o las coordenadas iniciales y finales de cada registro, entre otras. En total, se han recopilado 15.235 observaciones asociadas a distintos momentos en los que se registró tráfico. Los datos se reestructuraron para facilitar un análisis exploratorio previo, identificando patrones de circulación y posibles anomalías, tratando de ofrecer información valiosa para mejorar la gestión del tráfico y la planificación de las carreteras en Valencia.
+
+keywords: | 
 
 # back matter
 acknowledgement: |

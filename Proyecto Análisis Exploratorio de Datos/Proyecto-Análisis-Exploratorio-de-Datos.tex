@@ -121,12 +121,24 @@ Blasco Vega}
 % The commands \thirdnote{} till \eighthnote{} are available for further notes
 
 % Simple summary
-\simplesumm{A Simple summary goes here.}
+\simplesumm{Preparación y análisis exploratorio del tráfico diario de
+carreteras en Valencia 2025, obtenido de la página oficial de la
+Generalitat Valenciana.}
 
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\)
-\abstract{A single paragraph of about 200 words maximum.}
+\abstract{Este proyecto tiene como objetivo analizar el tráfico en
+Valencia durante 2025, utilizando datos del dataset público
+proporcionado por la Generalitat Valenciana. Se consideran 18 variables,
+de las que se incluyen el número de vehículos que transitan por cada
+tramo, el método de captación o las coordenadas iniciales y finales de
+cada registro, entre otras. En total, se han recopilado 15.235
+observaciones asociadas a distintos momentos en los que se registró
+tráfico. Los datos se reestructuraron para facilitar un análisis
+exploratorio previo, identificando patrones de circulación y posibles
+anomalías, tratando de ofrecer información valiosa para mejorar la
+gestión del tráfico y la planificación de las carreteras en Valencia.}
 
 
 % Keywords
@@ -198,7 +210,25 @@ Blasco Vega}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{enumerate}
-\item 
+\item *TRAM*: Código del tramo al que se le asocia el tráfico.
+\subitem  1ER y 2o dígito:código CV- de la carretera; Tres últimos: número de tramo
+\item *DIA*: fecha de los datos
+\item *INTA*: Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
+\item *INTAP*: Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
+\item *INTD*: Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
+\item *INTDP*: Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
+\item *INTT*:Total de vehículos que pasan por el tramo analizado. (este dato será la suma de los dos sentidos anteriores)
+\item *INTTP*: Total de vehículos pesados que pasan por el tramo analizado.(este dato será la suma de los dos sentidos anteriores)
+\item *TIPUSV*: Tipo de vía (Autovía, Convencional o Desdoblada)
+\item *TIPUSE*: Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar)
+\item *PKE*:Posición, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
+\item *PKECOOR*: Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
+\item *PKINI*: Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente. (tráfico invariante en todo el tramo).
+\item *REFINI*: Ubicación del inicio del tramo al que se asocia el tráfico.
+\item *PKINICOOR*:Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico. (tráfico invariante en todo el tramo)
+\item *PKFI*: Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente.(tráfico invariante en todo el tramo)
+\item *REFFI*:Ubicación del final del tramo al que se asocia el tráfico.
+\item *PKFICOOR*:Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico.(tráfico invariante en todo el tramo)
 
 \end{enumerate}
 

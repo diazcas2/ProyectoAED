@@ -31,17 +31,16 @@ class(vehiculos$DIA)
 # TRAM: Separamos la 'variable' TRAM en dos variables (XX código CV de la carretera + XXX número de tramo)
 # Comprobamos que todos los valores tienen 5 dígitos
 all(length(vehiculos$TRAM == 5))
-vehiculos <- vehiculos %>% separate(col = TRAM, into = c('Código_CV', 'Núm_tramo'), sep = 2)
+vehiculos_tidy <- vehiculos %>% separate(col = TRAM, into = c('Código_CV', 'Num_tramo'), sep = 2)
 
 # INTA, INTAP, INTD, INTDP, INTT, INTTP: no son variables (hacemos lo mismo que con TRAM)
-vehiculos <- vehiculos %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehículo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')
+vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehiculo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')
 
 # En la columna Tipo_vehículo solo aparece si es pesado (P). Rellenamos el resto con T (= todos vehículos)
-vehiculos <- vehiculos %>% mutate(Tipo_vehículo = ifelse(Tipo_Vehículo == 'P', 'P', 'T'))
-vehiculos <- vehiculos[, -15] # no sé porque se me duplica, borro esa y ya lo arreglaré
+vehiculos_tidy <- vehiculos_tidy %>% mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))
 
 # Elimino las filas que en la variable Sentido tienen T(=ambos sentidos)
-vehiculos <- vehiculos %>% filter(Sentido != 'T')
+vehiculos_tidy <- vehiculos_tidy %>% filter(Sentido != 'T')
 head(vehiculos)
 ```
 

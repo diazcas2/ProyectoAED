@@ -46,6 +46,9 @@ head(vehiculos)
 ```
 
 ```{r}
-
+# PKECOOR, PKINICOOR, PKFICOOR: vamos a separar en latitud y longitud
+vehiculos_tidy$PKE <- as.character(vehiculos_tidy$PKE)
+vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', names_pattern = '^PK(E|INI|FI)COOR$',  values_to = 'Valor_coordenada') %>% separate(col = Valor_coordenada, into = c('Latitud', 'Longitud'), sep=';') %>% pivot_longer(col = c(Latitud, Longitud), names_to = 'Tipo_Coordenada', values_to = 'Valor_Coordenada')
+head(vehiculos_tidy)
 ```
 

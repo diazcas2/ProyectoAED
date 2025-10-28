@@ -114,8 +114,10 @@ vehiculos_tidy <- vehiculos %>% separate(col = TRAM, into = c('Código_CV', 'Num
 ```
 
 Las variables $INTA$, $INTAP$, $INTD$, $INTDP$, $INTT$ y $INTTP$ contienen información sobre el tipo de vehículo, si es pesado o no, y el sentido del tráfico, ascendente o descendente. Con el fin de estructurar mejor estos datos, aplicamos pivot_longer(), generando dos nuevas variables, $Sentido$ y $Tipo_Vehiculo$.
+
+En la columna $Tipo_Vehiculo$, los valores en blanco se rellenan con 'T', que representa cualquier vehículo, mientras que 'P' indica vehículos pesados. 
 ```{r}
-vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehiculo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')
+vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehiculo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')%>% mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T')) 
 ```
 
 

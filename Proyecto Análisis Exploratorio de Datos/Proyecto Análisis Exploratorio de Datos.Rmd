@@ -56,25 +56,51 @@ output:
     extra_dependencies: longtable
 ---
 
-\begin{enumerate}
-\item *TRAM*: Código del tramo al que se le asocia el tráfico.
-\subitem  Primer y segundo dígito: código CV- de la carretera; tres últimos dígitos: número de tramo.
-\item *DIA*: Fecha de los datos.
-\item *INTA*: Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
-\item *INTAP*: Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
-\item *INTD*: Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
-\item *INTDP*: Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
-\item *INTT*: Total de vehículos que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
-\item *INTTP*: Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
-\item *TIPUSV*: Tipo de vía (Autovía, Convencional o Desdoblada).
-\item *TIPUSE*: Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
-\item *PKE*: Posición, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
-\item *PKECOOR*: Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
-\item *PKINI*: Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
-\item *REFINI*: Ubicación del inicio del tramo al que se asocia el tráfico.
-\item *PKINICOOR*: Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
-\item *PKFI*: Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
-\item *REFFI*: Ubicación del final del tramo al que se asocia el tráfico.
-\item *PKFICOOR*: Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
+# Introducción.
+El tráfico de vehículos va más allá de los números, muestra cómo Valencia se mueve, organiza y enfrenta cada día sus desafíos de desplazamiento. Este proyecto se centra en analizar la intensidad del tráfico en las carreteras de la Comunidad Valenciana durante 2025, a partir de datos públicos proporcionados por la Generalitat Valenciana. A través de un análisis exploratorio de 15.235 observaciones, se busca descubrir patrones de circulación, identificar posibles anomalías y generar información que sea útil para la gestión del transporte. Las visualizaciones y estadísticas que se presentan a lo largo del documento permiten observar de manera clara cómo se mueve Valencia por sus carreteras, ofreciendo una visión tanto cuantitativa como práctica del tráfico en 2025.
 
+# Importación de los datos.
+Para importar los datos, primero se descarga el fichero y se verifica que los datos estén en el directorio adecuado. De esta forma, haciendo uso de la función de importación en R, obtenemos el dataset. Es importante especificar el encoding, ya que, de lo contrario, algunos caracteres pueden no reconocerse correctamente.
+
+```{r}
+filename <-'../data/intensidad_vehiculos_en_carretera_2025.csv'
+vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
+```
+
+Las 18 variables del dataset son las siguientes:
+
+\begin{enumerate}
+\item \textbf{TRAM}: Código del tramo al que se le asocia el tráfico.
+\subitem  Primer y segundo dígito: código CV- de la carretera; tres últimos dígitos: número de tramo.
+\item \textbf{DIA}: Fecha de los datos.
+\item \textbf{INTA}: Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTAP}: Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTD}: Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTDP}: Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTT}: Total de vehículos que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{INTTP}: Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{TIPUSV}: Tipo de vía (Autovía, Convencional o Desdoblada).
+\item \textbf{TIPUSE}: Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
+\item \textbf{PKE}: Posición, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
+\item \textbf{PKECOOR}: Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
+\item \textbf{PKINI}: Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFINI}: Ubicación del inicio del tramo al que se asocia el tráfico.
+\item \textbf{PKINICOOR}: Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
+\item \textbf{PKFI}: Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFFI}: Ubicación del final del tramo al que se asocia el tráfico.
+\item \textbf{PKFICOOR}: Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
 \end{enumerate}
+
+Es importante revisar el tipo de cada variable para comprender mejor la estructura del dataset, para ello se utilizan las funciones sapply y class:
+
+```{r}
+sapply(vehiculos, class)
+```
+Se puede observar que $DIA$ es de tipo character, por lo que es necesario convertirla a formato de fecha.
+
+```{r}
+vehiculos$DIA <- as.Date(vehiculos$DIA, format = '%d/%m/%Y')
+class(vehiculos$DIA)
+```
+
+

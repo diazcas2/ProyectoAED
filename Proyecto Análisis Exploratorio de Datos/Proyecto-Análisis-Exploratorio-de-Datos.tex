@@ -191,6 +191,47 @@ gestión del tráfico y la planificación de las carreteras en Valencia.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Pandoc syntax highlighting
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 
 % tightlist command for lists without linebreak
 \providecommand{\tightlist}{%
@@ -209,26 +250,59 @@ gestión del tráfico y la planificación de las carreteras en Valencia.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Introducción.}\label{introducciuxf3n.}
+
+El tráfico de vehículos va más allá de los números, muestra cómo
+Valencia se mueve, organiza y enfrenta cada día sus desafíos de
+desplazamiento. Este proyecto se centra en analizar la intensidad del
+tráfico en las carreteras de la Comunidad Valenciana durante 2025, a
+partir de datos públicos proporcionados por la Generalitat Valenciana. A
+través de un análisis exploratorio de 15.235 observaciones, se busca
+descubrir patrones de circulación, identificar posibles anomalías y
+generar información que sea útil para la gestión del transporte. Las
+visualizaciones y estadísticas que se presentan a lo largo del documento
+permiten observar de manera clara cómo se mueve Valencia por sus
+carreteras, ofreciendo una visión tanto cuantitativa como práctica del
+tráfico en 2025.
+
+\subsection{Importación de los
+datos.}\label{importaciuxf3n-de-los-datos.}
+
+Para importar los datos, primero se descarga el fichero y se verifica
+que los datos estén en el directorio adecuado. De esta forma, haciendo
+uso de la función de importación en R, obtenemos el dataset. Es
+importante especificar el encoding, ya que, de lo contrario, algunos
+caracteres pueden no reconocerse correctamente.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{filename }\OtherTok{\textless{}{-}}\StringTok{\textquotesingle{}../data/intensidad\_vehiculos\_en\_carretera\_2025.csv\textquotesingle{}}
+\NormalTok{vehiculos }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(filename, }\AttributeTok{sep=}\StringTok{";"}\NormalTok{,}\AttributeTok{encoding =} \StringTok{"UTF{-}8"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Las 18 variables del dataset son las siguientes:
+
 \begin{enumerate}
-\item *TRAM*: Código del tramo al que se le asocia el tráfico.
-\subitem  1ER y 2o dígito:código CV- de la carretera; Tres últimos: número de tramo
-\item *DIA*: fecha de los datos
-\item *INTA*: Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
-\item *INTAP*: Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
-\item *INTD*: Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
-\item *INTDP*: Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
-\item *INTT*:Total de vehículos que pasan por el tramo analizado. (este dato será la suma de los dos sentidos anteriores)
-\item *INTTP*: Total de vehículos pesados que pasan por el tramo analizado.(este dato será la suma de los dos sentidos anteriores)
-\item *TIPUSV*: Tipo de vía (Autovía, Convencional o Desdoblada)
-\item *TIPUSE*: Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar)
-\item *PKE*:Posición, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
-\item *PKECOOR*: Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
-\item *PKINI*: Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente. (tráfico invariante en todo el tramo).
-\item *REFINI*: Ubicación del inicio del tramo al que se asocia el tráfico.
-\item *PKINICOOR*:Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico. (tráfico invariante en todo el tramo)
-\item *PKFI*: Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente.(tráfico invariante en todo el tramo)
-\item *REFFI*:Ubicación del final del tramo al que se asocia el tráfico.
-\item *PKFICOOR*:Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico.(tráfico invariante en todo el tramo)
+\item \textbf{TRAM}: Código del tramo al que se le asocia el tráfico.
+\subitem  Primer y segundo dígito: código CV- de la carretera; tres últimos dígitos: número de tramo.
+\item \textbf{DIA}: Fecha de los datos.
+\item \textbf{INTA}: Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTAP}: Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTD}: Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTDP}: Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTT}: Total de vehículos que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{INTTP}: Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{TIPUSV}: Tipo de vía (Autovía, Convencional o Desdoblada).
+\item \textbf{TIPUSE}: Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
+\item \textbf{PKE}: Posición, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
+\item \textbf{PKECOOR}: Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
+\item \textbf{PKINI}: Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFINI}: Ubicación del inicio del tramo al que se asocia el tráfico.
+\item \textbf{PKINICOOR}: Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
+\item \textbf{PKFI}: Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFFI}: Ubicación del final del tramo al que se asocia el tráfico.
+\item \textbf{PKFICOOR}: Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
 
 \end{enumerate}
 
@@ -264,47 +338,13 @@ title.}
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontributions{For research articles with several authors, a short
-paragraph specifying their individual contributions must be provided.}
 
 
-\institutionalreview{In this section, you should add the Institutional
-Review Board Statement and approval number, if relevant to your study.
-You might choose to exclude this statement if the study did not require
-ethical approval. Please note that the Editorial Office might ask you
-for further information. Please add ``The study was conducted in
-accordance with the Declaration of Helsinki, and approved by the
-Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE
-(protocol code XXX and date of approval).'' for studies involving
-humans. OR ``The animal study protocol was approved by the Institutional
-Review Board (or Ethics Committee) of NAME OF INSTITUTE (protocol code
-XXX and date of approval).'' for studies involving animals. OR ``Ethical
-review and approval were waived for this study due to REASON (please
-provide a detailed justification).'' OR ``Not applicable'' for studies
-not involving humans or animals.}
 
-\informedconsent{Any research article describing a study involving
-humans should contain this statement. Please add
-\texttt{Informed\ consent\ was\ obtained\ from\ all\ subjects\ \ involved\ in\ the\ study.\textquotesingle{}\textquotesingle{}\ OR}Patient
-consent was waived due to REASON (please provide a detailed
-justification).'\,' OR ``Not applicable'\,' for studies not involving
-humans. You might also choose to exclude this statement if the study did
-not involve humans.
 
-Written informed consent for publication must be obtained from
-participating patients who can be identified (including by the patients
-themselves). Please state ``Written informed consent has been obtained
-from the patient(s) to publish this paper'\,' if applicable.}
-
-\dataavailability{We encourage all authors of articles published in MDPI
-journals to share their research data. In this section, please provide
-details regarding where data supporting reported results can be found,
-including links to publicly archived datasets analyzed or generated
-during the study. Where no new data were created, or where data is
-unavailable due to privacy or ethical re-strictions, a statement is
-still required. Suggested Data Availability Statements are available in
-section ``MDPI Research Data Policies'' at
-\url{https://www.mdpi.com/ethics}.}
+\dataavailability{Los datos usados en este estudio son públicos
+disponibles en
+{[}\url{https://dadesobertes.gva.es/dataset/20b91b5a-c26d-4624-bcf5-b76a74b3ec88/resource/abe57190-d53d-4d41-9266-d7c2254621ae/download/intensidad_vehiculos_en_carretera_2025.csv}{]}}
 
 % Only for journal Nursing Reports
 %\publicinvolvement{Please describe how the public (patients, consumers, carers) were involved in the research. Consider reporting against the GRIPP2 (Guidance for Reporting Involvement of Patients and the Public) checklist. If the public were not involved in any aspect of the research add: ``No public involvement in any aspect of this research''.}
@@ -315,20 +355,7 @@ section ``MDPI Research Data Policies'' at
 % Only for journal Nursing Reports
 %\guidelinesstandards{Please add a statement indicating which reporting guideline was used when drafting the report. For example, ``This manuscript was drafted against the XXX (the full name of reporting guidelines and citation) for XXX (type of research) research''. A complete list of reporting guidelines can be accessed via the equator network: \url{https://www.equator-network.org/}.}
 
-\acknowledgments{All sources of funding of the study should be
-disclosed.}
 
-\conflictsofinterest{Declare conflicts of interest or state `The authors
-declare no conflict of interest.' Authors must identify and declare any
-personal circumstances or interest that may be perceived as
-inappropriately influencing the representation or interpretation of
-reported research results. Any role of the funding sponsors in the
-design of the study; in the collection, analyses or interpretation of
-data in the writing of the manuscript, or in the decision to publish the
-results must be declared in this section. If there is no role, please
-state `The founding sponsors had no role in the design of the study; in
-the collection, analyses, or interpretation of data; in the writing of
-the manuscript, an in the decision to publish the results'.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional

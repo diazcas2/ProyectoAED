@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.27)  27 OCT 2025 20:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.27)  28 OCT 2025 18:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -843,26 +843,41 @@ Package: seqsplit 2006/08/07 v0.1 Splitting long sequences (DNA, RNA, proteins, 
 \cellWidthX=\skip188
 \cellWidthY=\skip189
 \cellWidthZ=\skip190
+) (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Package: fancyvrb 2025/07/28 4.6 verbatim text (tvz,hv)
+\FV@CodeLineNo=\count390
+\FV@InFile=\read3
+\FV@TabBox=\box78
+\c@FancyVerbLine=\count391
+\FV@StepNumber=\count392
+\FV@OutFile=\write4
+) (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/framed/framed.sty
+Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
+\OuterFrameSep=\skip191
+\fb@frw=\dimen341
+\fb@frh=\dimen342
+\FrameRule=\dimen343
+\FrameSep=\dimen344
 ) (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2024-12-18 v4.23 Multi-page Table package (DPC)
-\LTleft=\skip191
-\LTright=\skip192
-\LTpre=\skip193
-\LTpost=\skip194
-\LTchunksize=\count390
-\LTcapwidth=\dimen341
-\LT@head=\box78
-\LT@firsthead=\box79
-\LT@foot=\box80
-\LT@lastfoot=\box81
-\LT@gbox=\box82
-\LT@cols=\count391
-\LT@rows=\count392
-\c@LT@tables=\count393
-\c@LT@chunks=\count394
+\LTleft=\skip192
+\LTright=\skip193
+\LTpre=\skip194
+\LTpost=\skip195
+\LTchunksize=\count393
+\LTcapwidth=\dimen345
+\LT@head=\box79
+\LT@firsthead=\box80
+\LT@foot=\box81
+\LT@lastfoot=\box82
+\LT@gbox=\box83
+\LT@cols=\count394
+\LT@rows=\count395
+\c@LT@tables=\count396
+\c@LT@chunks=\count397
 \LT@p@ftn=\toks63
 )
-Package translations Info: No language package found. I am going to use `english' as default language. on input line 206.
+Package translations Info: No language package found. I am going to use `english' as default language. on input line 247.
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2025-07-12 v7.01o Hypertext links for LaTeX
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty
@@ -874,13 +889,13 @@ Package: nameref 2025-06-21 v2.57 Cross-referencing by name of section
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count395
+\c@section@level=\count398
 ) (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 )
-\@linkdim=\dimen342
-\Hy@linkcounter=\count396
-\Hy@pagecounter=\count397
+\@linkdim=\dimen346
+\Hy@linkcounter=\count399
+\Hy@pagecounter=\count400
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
@@ -888,7 +903,7 @@ Now handling font encoding PD1 ...
 ) (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count398
+\Hy@SavedSpaceFactor=\count401
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -906,17 +921,17 @@ Package hyperref Info: Plain pages OFF on input line 4210.
 Package hyperref Info: Backreferencing OFF on input line 4215.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4462.
-\c@Hy@tempcnt=\count399
+\c@Hy@tempcnt=\count402
 LaTeX Info: Redefining \url on input line 4801.
-\XeTeXLinkMargin=\dimen343
+\XeTeXLinkMargin=\dimen347
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
-\Fld@menulength=\count400
-\Field@Width=\dimen344
-\Fld@charsize=\dimen345
+\Fld@menulength=\count403
+\Field@Width=\dimen348
+\Fld@charsize=\dimen349
 Package hyperref Info: Hyper figures OFF on input line 6078.
 Package hyperref Info: Link nesting OFF on input line 6083.
 Package hyperref Info: Hyper index ON on input line 6086.
@@ -924,15 +939,15 @@ Package hyperref Info: backreferencing OFF on input line 6093.
 Package hyperref Info: Link coloring ON on input line 6096.
 Package hyperref Info: Link coloring with OCG OFF on input line 6103.
 Package hyperref Info: PDF/A mode OFF on input line 6108.
-\Hy@abspage=\count401
-\c@Item=\count402
-\c@Hfootnote=\count403
+\Hy@abspage=\count404
+\c@Item=\count405
+\c@Hfootnote=\count406
 )
 Package hyperref Info: Driver: hpdftex.
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2025-07-12 v7.01o Hyperref driver for pdfTeX
-\Fld@listcount=\count404
-\c@bookmark@seq@number=\count405
+\Fld@listcount=\count407
+\c@bookmark@seq@number=\count408
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2025-06-21 v1.11 Rerun checks for auxiliary files (HO)
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
@@ -940,7 +955,7 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 284.
 )
-\Hy@SectionHShift=\skip195
+\Hy@SectionHShift=\skip196
 ) (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/cleveref/cleveref.sty
 Package: cleveref 2018/03/27 v0.21.4 Intelligent cross-referencing
 Package cleveref Info: `hyperref' support loaded on input line 2370.
@@ -960,37 +975,38 @@ Package cleveref Info: always capitalise cross-reference names on input line 785
 Package cleveref Info: no abbreviation of names on input line 7852.
 )
 ==> First Aid for cleveref.sty applied!
-LaTeX Font Info:    Trying to load font information for T1+ppl on input line 206.
+LaTeX Font Info:    Trying to load font information for T1+ppl on input line 247.
 (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
-) (./Proyecto-Análisis-Exploratorio-de-Datos.aux)
+)
+No file Proyecto-Análisis-Exploratorio-de-Datos.aux.
 \openout1 = `Proyecto-Análisis-Exploratorio-de-Datos.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 206.
-LaTeX Font Info:    ... okay on input line 206.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 206.
-LaTeX Font Info:    ... okay on input line 206.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 206.
-LaTeX Font Info:    ... okay on input line 206.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 206.
-LaTeX Font Info:    ... okay on input line 206.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 206.
-LaTeX Font Info:    ... okay on input line 206.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 206.
-LaTeX Font Info:    ... okay on input line 206.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 206.
-LaTeX Font Info:    ... okay on input line 206.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 206.
-LaTeX Font Info:    ... okay on input line 206.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 206.
-LaTeX Font Info:    ... okay on input line 206.
-LaTeX Info: Redefining \microtypecontext on input line 206.
-Package microtype Info: Applying patch `item' on input line 206.
-Package microtype Info: Applying patch `toc' on input line 206.
-Package microtype Info: Applying patch `eqnum' on input line 206.
-Package microtype Info: Applying patch `footnote' on input line 206.
-Package microtype Info: Applying patch `verbatim' on input line 206.
-LaTeX Info: Redefining \microtypesetup on input line 206.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 247.
+LaTeX Font Info:    ... okay on input line 247.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 247.
+LaTeX Font Info:    ... okay on input line 247.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 247.
+LaTeX Font Info:    ... okay on input line 247.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 247.
+LaTeX Font Info:    ... okay on input line 247.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 247.
+LaTeX Font Info:    ... okay on input line 247.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 247.
+LaTeX Font Info:    ... okay on input line 247.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 247.
+LaTeX Font Info:    ... okay on input line 247.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 247.
+LaTeX Font Info:    ... okay on input line 247.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 247.
+LaTeX Font Info:    ... okay on input line 247.
+LaTeX Info: Redefining \microtypecontext on input line 247.
+Package microtype Info: Applying patch `item' on input line 247.
+Package microtype Info: Applying patch `toc' on input line 247.
+Package microtype Info: Applying patch `eqnum' on input line 247.
+Package microtype Info: Applying patch `footnote' on input line 247.
+Package microtype Info: Applying patch `verbatim' on input line 247.
+LaTeX Info: Redefining \microtypesetup on input line 247.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1006,7 +1022,7 @@ File: mt-ppl.cfg 2005/11/16 v1.6 microtype config. file: Palatino (RS)
 ) (c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/translations/translations-basic-dictionary-english.trsl
 File: translations-basic-dictionary-english.trsl (english translation file `translations-basic-dictionary')
 )
-Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 206.
+Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 247.
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
 * driver: pdftex
@@ -1048,223 +1064,27 @@ Package caption Info: longtable package is loaded.
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 206.
-(./Proyecto-Análisis-Exploratorio-de-Datos.out) (./Proyecto-Análisis-Exploratorio-de-Datos.out)
-\@outlinefile=\write4
-\openout4 = `Proyecto-Análisis-Exploratorio-de-Datos.out'.
+Package hyperref Info: Link coloring ON on input line 247.
+\@outlinefile=\write5
+\openout5 = `Proyecto-Análisis-Exploratorio-de-Datos.out'.
 
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 206.
-(c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ppl.fd
-File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
-)
-Underfull \hbox (badness 3590) in paragraph at lines 206--206
-\T1/ppl/m/n/7 (+20) Submitted to \T1/ppl/m/it/7 (+20) Jour-nal Not Spec-i-fied
- []
+! I can't write on file `Proyecto-Análisis-Exploratorio-de-Datos.pdf'.
+(Press Enter to retry, or Control-Z to exit; default file extension is `.pdf')
+Please type another file name for output
+! Emergency stop.
+<to be read again> 
+                   \edef 
+l.247 \begin{document}
+                      
+*** (job aborted, file error in nonstop mode)
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 206--206
-\T1/ppl/m/n/7 (+20) un-der the terms and con-di-tions
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 206--206
-\T1/ppl/m/n/7 (+20) of the Cre-ative Com-mons Attri-
- []
-
-
-Underfull \hbox (badness 8019) in paragraph at lines 206--206
-\T1/ppl/m/n/7 (+20) bu-tion (CC BY) li-cense ([][]https://[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 206--206
-[][]\T1/ppl/m/n/7 (+20) creativecommons.org/licenses/by/[][]
- []
-
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 206.
-(c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
-File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
-)
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 206.
-(c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.fd
-File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
-)
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 206.
-(c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omszplm.fd
-File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
-)
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 206.
-(c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omxzplm.fd
-File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
-)
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 206.
-(c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
-)
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 206.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 206.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 206.
-(c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-)
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 206.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 206.
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 206.
-(c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.fd
-File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `zplm' (encoding: OT1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-(c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-eur.cfg
-File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
-)
-LaTeX Font Info:    Redeclaring symbol font `AMSb' on input line 206.
-LaTeX Font Info:    Overwriting symbol font `AMSb' in version `normal'
-(Font)                  U/msb/m/n --> U/msb/m/n on input line 206.
-LaTeX Font Info:    Overwriting symbol font `AMSb' in version `bold'
-(Font)                  U/msb/m/n --> U/msb/m/n on input line 206.
-Package marginnote Info: Margin note 1.1 is on absolute page 1 on input line 206.
-Package marginnote Info: right page because not two side mode on input line 206.
-
-Underfull \hbox (badness 3590) in paragraph at lines 206--206
-\T1/ppl/m/n/7 (+20) Submitted to \T1/ppl/m/it/7 (+20) Jour-nal Not Spec-i-fied
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 206--206
-\T1/ppl/m/n/7 (+20) un-der the terms and con-di-tions
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 206--206
-\T1/ppl/m/n/7 (+20) of the Cre-ative Com-mons Attri-
- []
-
-
-Underfull \hbox (badness 8019) in paragraph at lines 206--206
-\T1/ppl/m/n/7 (+20) bu-tion (CC BY) li-cense ([][]https://[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 206--206
-[][]\T1/ppl/m/n/7 (+20) creativecommons.org/licenses/by/[][]
- []
-
-Package marginnote Info: xpos seems to be 167.01753pt on input line 206.
-Package epstopdf Info: Source file: <Definitions/logo-mdpi.eps>
-(epstopdf)                    date: 2025-10-27 17:55:34
-(epstopdf)                    size: 563678 bytes
-(epstopdf)             Output file: <Definitions/logo-mdpi-eps-converted-to.pdf>
-(epstopdf)                    date: 2025-10-27 17:55:34
-(epstopdf)                    size: 13060 bytes
-(epstopdf)             Command: <repstopdf --outfile=Definitions/logo-mdpi-eps-converted-to.pdf Definitions/logo-mdpi.eps>
-(epstopdf)             \includegraphics on input line 206.
-Package epstopdf Info: Output file is already uptodate.
-<Definitions/logo-mdpi-eps-converted-to.pdf, id=26, 74.2775pt x 49.18375pt>
-File: Definitions/logo-mdpi-eps-converted-to.pdf Graphic file (type pdf)
-<use Definitions/logo-mdpi-eps-converted-to.pdf>
-Package pdftex.def Info: Definitions/logo-mdpi-eps-converted-to.pdf  used on input line 206.
-(pdftex.def)             Requested size: 42.96877pt x 28.45274pt.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 206.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 206.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 206.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 206.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `cmss' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 20.0pt, for example:
-(fancyhdr)                \setlength{\headheight}{20.0pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-8.0pt}.
-
-[1
-
-{c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc} <./Definitions/logo-mdpi-eps-converted-to.pdf>]
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 244.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 244.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 244.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 244.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `cmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `cmtt' (encoding: TS1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 16.18796pt, for example:
-(fancyhdr)                \setlength{\headheight}{16.18796pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
-
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 349--349
-
- []
-
-(./appendix.tex
-
-Package array Warning: Column C is already defined on input line 11.
-
-)
-No file Proyecto-Análisis-Exploratorio-de-Datos.bbl.
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 16.18796pt, for example:
-(fancyhdr)                \setlength{\headheight}{16.18796pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
-
-[3] 
-enddocument/afterlastpage (AED): lastpage setting LastPage.
-(./Proyecto-Análisis-Exploratorio-de-Datos.aux)
- ***********
-LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2025-10-09>
- ***********
-Package rerunfilecheck Info: File `Proyecto-Análisis-Exploratorio-de-Datos.out' has not changed.
-(rerunfilecheck)             Checksum: 53AF543438DEB31C59760B435EAADF5D;315.
- ) 
+ 
 Here is how much of TeX's memory you used:
- 33496 strings out of 469728
- 631943 string characters out of 5475651
- 1129376 words of memory out of 5000000
- 61077 multiletter control sequences out of 15000+600000
- 684058 words of font info for 286 fonts, out of 8000000 for 9000
+ 32169 strings out of 469728
+ 598353 string characters out of 5475651
+ 1109507 words of memory out of 5000000
+ 60087 multiletter control sequences out of 15000+600000
+ 629890 words of font info for 45 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 123i,12n,121p,4660b,864s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt0900.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt0900.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.375pk><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on Proyecto-Análisis-Exploratorio-de-Datos.pdf (3 pages, 94174 bytes).
-PDF statistics:
- 138 PDF objects out of 1000 (max. 8388607)
- 86 compressed objects within 1 object stream
- 26 named destinations out of 1000 (max. 500000)
- 86058 words of extra memory for PDF output out of 89155 (max. 10000000)
-
+ 123i,1n,121p,4660b,181s stack positions out of 10000i,1000n,20000p,200000b,200000s
+!  ==> Fatal error occurred, no output PDF file produced!

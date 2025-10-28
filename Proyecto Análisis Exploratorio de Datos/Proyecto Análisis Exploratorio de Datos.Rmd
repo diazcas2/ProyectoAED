@@ -34,22 +34,8 @@ abstract: |
 keywords: | 
 
 dataavailability: |
-  Los datos usados en este estudio son públicos disponibles en https://dadesobertes.gva.es/dataset/20b91b5a-c26d-4624-bcf5-b76a74b3ec88/resource/abe57190-d53d-4d41-9266-d7c2254621ae/download/intensidad_vehiculos_en_carretera_2025.csv 
+  Los datos usados en este estudio son públicos disponibles en  [https://dadesobertes.gva.es/dataset/20b91b5a-c26d-4624-bcf5-b76a74b3ec88/resource/abe57190-d53d-4d41-9266-d7c2254621ae/download/intensidad_vehiculos_en_carretera_2025.csv]
 
-
-The data used in this study are publicly available from [NAME OF DATABASE OR SOURCE]
-  at [URL or DOI]. All datasets analyzed were accessed on [date of access].
-conflictsofinterest: |
-  Declare conflicts of interest or state 'The authors declare no conflict of 
-  interest.' Authors must identify and declare any personal circumstances or
-  interest that may be perceived as inappropriately influencing the
-  representation or interpretation of reported research results. Any role of the
-  funding sponsors in the design of the study; in the collection, analyses or 
-  interpretation of data in the writing of the manuscript, or in the decision to 
-  publish the results must be declared in this section. If there is no role, 
-  please state 'The founding sponsors had no role in the design of the study; 
-  in the collection, analyses, or interpretation of data; in the writing of the 
-  manuscript, an in the decision to publish the results'.
 supplementary: |
  The following supporting information can be downloaded at:  
  \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title.

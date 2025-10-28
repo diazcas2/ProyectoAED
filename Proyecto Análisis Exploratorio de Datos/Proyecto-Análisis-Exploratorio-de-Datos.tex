@@ -265,8 +265,7 @@ permiten observar de manera clara cómo se mueve Valencia por sus
 carreteras, ofreciendo una visión tanto cuantitativa como práctica del
 tráfico en 2025.
 
-\subsection{Importación de los
-datos.}\label{importaciuxf3n-de-los-datos.}
+\section{Importación de los datos.}\label{importaciuxf3n-de-los-datos.}
 
 Para importar los datos, primero se descarga el fichero y se verifica
 que los datos estén en el directorio adecuado. De esta forma, haciendo
@@ -303,8 +302,40 @@ Las 18 variables del dataset son las siguientes:
 \item \textbf{PKFI}: Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
 \item \textbf{REFFI}: Ubicación del final del tramo al que se asocia el tráfico.
 \item \textbf{PKFICOOR}: Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
-
 \end{enumerate}
+
+Es importante revisar el tipo de cada variable para comprender mejor la
+estructura del dataset, para ello se utilizan las funciones sapply y
+class:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sapply}\NormalTok{(vehiculos, class)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        TRAM         DIA        INTA       INTAP        INTD       INTDP 
+##   "integer" "character"   "numeric"   "numeric"   "numeric"   "numeric" 
+##        INTT       INTTP      TIPUSV      TIPUSE         PKE     PKECOOR 
+##   "numeric"   "numeric" "character" "character"   "integer" "character" 
+##       PKINI      REFINI   PKINICOOR        PKFI       REFFI    PKFICOOR 
+##   "integer" "character" "character"   "integer" "character" "character"
+\end{verbatim}
+
+Se puede observar que \(DIA\) es de tipo character, por lo que es
+necesario convertirla a formato de fecha.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vehiculos}\SpecialCharTok{$}\NormalTok{DIA }\OtherTok{\textless{}{-}} \FunctionTok{as.Date}\NormalTok{(vehiculos}\SpecialCharTok{$}\NormalTok{DIA, }\AttributeTok{format =} \StringTok{\textquotesingle{}\%d/\%m/\%Y\textquotesingle{}}\NormalTok{)}
+\FunctionTok{class}\NormalTok{(vehiculos}\SpecialCharTok{$}\NormalTok{DIA)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Date"
+\end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

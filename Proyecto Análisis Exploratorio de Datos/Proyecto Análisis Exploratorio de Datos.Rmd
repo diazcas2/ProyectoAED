@@ -103,4 +103,19 @@ vehiculos$DIA <- as.Date(vehiculos$DIA, format = '%d/%m/%Y')
 class(vehiculos$DIA)
 ```
 
+# Conversión de los datos a estructura tidy.
+La estructura tidy se caracteriza por tener cada variable en una columna, cada observación en una fila y nombres de columnas que sean representativos. Veamos que ocure en nuestro dataset.
+
+La columna $TRAM$ contiene información del código CV- de la carretera (dos primeros dígitos) y del número de tramo(tres últimos dígitos). Por tanto, primero verificaremos que todos los valores de esta columna tengan cinco dígitos. Si es así, procederemos a dividirla en dos columnas separadas, que se llamarán $Código_CV$ y $Num_tramo$.
+
+```{r}
+all(length(vehiculos$TRAM == 5))
+vehiculos_tidy <- vehiculos %>% separate(col = TRAM, into = c('Código_CV', 'Num_tramo'), sep = 2)
+```
+
+Las variables $INTA$, $INTAP$, $INTD$, $INTDP$, $INTT$ y $INTTP$ contienen información sobre el tipo de vehículo, si es pesado o no, y el sentido del tráfico, ascendente o descendente. Con el fin de estructurar mejor estos datos, aplicamos pivot_longer(), generando dos nuevas variables, $Sentido$ y $Tipo_Vehiculo$.
+```{r}
+vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehiculo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')
+```
+
 

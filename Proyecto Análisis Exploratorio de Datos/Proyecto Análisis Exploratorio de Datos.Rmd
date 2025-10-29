@@ -114,7 +114,7 @@ library(dplyr)
 
 all(length(vehiculos$TRAM == 5))
 vehiculos_tidy <- vehiculos %>%
-  separate(col = TRAM, into = c('Código_CV', 'Num_tramo'), sep = 2)
+  separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2)
 ```
 
 Las variables $INTA$, $INTAP$, $INTD$, $INTDP$, $INTT$ y $INTTP$ contienen información sobre el tipo de vehículo, si es pesado o no, y el sentido del tráfico, ascendente o descendente. Con el fin de estructurar mejor estos datos, aplicamos pivot_longer(), generando dos nuevas variables, $Sentido$ y $Tipo_Vehiculo$.
@@ -156,12 +156,12 @@ vehiculos_tidy <- vehiculos_tidy %>%
 
 Por último, las variables $PKINI$, $PKFI$ y $PKE$ indican la posición inicial, final y exacta donde se registró el tráfico, tomando como referencia la placa kilométrica anterior en sentido ascendente, suponiendo que el tráfico es invariante en todo el tramo.
 
-Mediante la función pivot_longer(), se crean dos nuevas columnas: $Tipo_Posición_Punto_Quilométrico$, que especifica si la posición corresponde al punto inicial o final, y $Valor_Punto_Quilométrico$, que contiene el valor asociado a dicha posición.
+Mediante la función pivot_longer(), se crean dos nuevas columnas: $Tipo_Posicion_Punto_Quilometrico$, que especifica si la posición corresponde al punto inicial o final, y $Valor_Punto_Quilometrico$, que contiene el valor asociado a dicha posición.
 
 ```{r}
 vehiculos_tidy <- vehiculos_tidy %>%
    pivot_longer(col = matches('^PK(INI|FI|E)'), names_pattern = '^PK(INI|FI|E)',
-                names_to = 'Tipo_Posición_Punto_Quilometrico', 
+                names_to = 'Tipo_Posicion_Punto_Quilometrico', 
                 values_to = 'Valor_Punto_Quilometrico')
 ```
 

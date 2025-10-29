@@ -60,19 +60,59 @@ vehiculos_tidy$Valor_Coordenada <- sub(',', '.', vehiculos_tidy$Valor_Coordenada
 vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
 str(vehiculos_tidy$Valor_Coordenada)
 
-# Renombramos algunas variables
+#Renombramos algunas variables
 vehiculos_tidy <- vehiculos_tidy %>% dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
 
 # Rescribimos algunos valores
-vehiculos_tidy$Coordenadas <- ifelse(vehiculos_tidy$Coordenadas == 'INI', 'Iniciales', ifelse(vehiculos_tidy$Coordenadas == 'E', 'Exactas', ifelse(vehiculos_tidy$Coordenadas == 'FI', 'Finales', vehiculos_tidy$Coordenadas)))
+#vehiculos_tidy$Coordenadas <- ifelse(vehiculos_tidy$Coordenadas == 'INI', 'Iniciales', ifelse(vehiculos_tidy$Coordenadas == 'E', 'Exactas', ifelse(vehiculos_tidy$Coordenadas == 'FI', 'Finales', vehiculos_tidy$Coordenadas)))
 
-vehiculos_tidy$Tipo_Ubicacion <- ifelse(vehiculos_tidy$Tipo_Ubicacion == 'INI', 'Inicial', ifelse(vehiculos_tidy$Tipo_Ubicacion == 'E', 'Exacta', ifelse(vehiculos_tidy$Tipo_Ubicacion == 'FI', 'Final', vehiculos_tidy$Tipo_Ubicacion)))
+#vehiculos_tidy$Tipo_Ubicacion <- ifelse(vehiculos_tidy$Tipo_Ubicacion == 'INI', 'Inicial', ifelse(vehiculos_tidy$Tipo_Ubicacion == 'E', 'Exacta', ifelse(vehiculos_tidy$Tipo_Ubicacion == 'FI', 'Final', vehiculos_tidy$Tipo_Ubicacion)))
 
-vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <- ifelse(vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico == 'INI', 'Inicial', ifelse(vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico == 'E', 'Exacta', ifelse(vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico == 'FI', 'Final', vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico)))
+#vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <- ifelse(vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico == 'INI', 'Inicial', ifelse(vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico == 'E', 'Exacta', ifelse(vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico == 'FI', 'Final', vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico)))
 
-vehiculos_tidy$Sentido <- ifelse(vehiculos_tidy$Sentido == 'A', 'Ascendente', ifelse(vehiculos_tidy$Sentido == 'D', 'Descendente', vehiculos_tidy$Sentido))
+#vehiculos_tidy$Sentido <- ifelse(vehiculos_tidy$Sentido == 'A', 'Ascendente', ifelse(vehiculos_tidy$Sentido == 'D', 'Descendente', vehiculos_tidy$Sentido))
 
-vehiculos_tidy$Tipo_Vehiculo <- ifelse(vehiculos_tidy$Tipo_Vehiculo == 'T', 'Todos', ifelse(vehiculos_tidy$Tipo_Vehiculo == 'P', 'Pesados', vehiculos_tidy$Tipo_Vehiculo))
+#vehiculos_tidy$Tipo_Vehiculo <- ifelse(vehiculos_tidy$Tipo_Vehiculo == 'T', 'Todos', ifelse(vehiculos_tidy$Tipo_Vehiculo == 'P', 'Pesados', vehiculos_tidy$Tipo_Vehiculo))
+
+#optimizado: 
+library(dplyr)
+
+vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <-
+  vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+
+vehiculos_tidy$Sentido <-
+  vehiculos_tidy$Sentido %>%
+  replace(. == "A", "Ascendente") %>%
+  replace(. == "D", "Descendente")
+
+vehiculos_tidy$Tipo_Vehiculo <-
+  vehiculos_tidy$Tipo_Vehiculo %>%
+  replace(. == "T", "Todos") %>%
+  replace(. == "P", "Pesados")
+
+vehiculos_tidy$Coordenadas <-
+  vehiculos_tidy$Coordenadas %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+
+vehiculos_tidy$Tipo_Ubicacion <-
+  vehiculos_tidy$Tipo_Ubicacion %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+
+vehiculos_tidy$Tipo_Via <-
+  vehiculos_tidy$Tipo_Via %>%
+  replace(. == "Aut.", "Autovia") %>%
+  replace(. == "Conv.", "Convencional") %>%
+  replace(. == "Desd.", "Desdoblada")
+
+
+
 
 head(vehiculos_tidy)
 

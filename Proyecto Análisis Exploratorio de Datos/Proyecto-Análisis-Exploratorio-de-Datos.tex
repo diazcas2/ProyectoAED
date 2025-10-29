@@ -400,7 +400,7 @@ columnas separadas, que se llamarán \(Código_CV\) y \(Num_tramo\).
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{separate}\NormalTok{(}\AttributeTok{col =}\NormalTok{ TRAM, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Código\_CV\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Num\_tramo\textquotesingle{}}\NormalTok{), }\AttributeTok{sep =} \DecValTok{2}\NormalTok{)}
+  \FunctionTok{separate}\NormalTok{(}\AttributeTok{col =}\NormalTok{ TRAM, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Codigo\_CV\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Num\_tramo\textquotesingle{}}\NormalTok{), }\AttributeTok{sep =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -460,15 +460,15 @@ adicionales: \(Latitud\) y \(Longitud\).
 En cuanto a las \(REFINI\) y \(REFFI\) recogen las ubicaciones inicial y
 final del tramo donde se ha detectado el tráfico. Para reorganizar esta
 información, aplicamos pivot\_longer(), generando dos nuevas columnas:
-\(Tipo_Ubicación\), que especifica si se trata de la ubicación inicial o
-final, y \(Ubicación\), que que almacena el nombre de la vía o
+\(Tipo_Ubicacion\), que especifica si se trata de la ubicación inicial o
+final, y \(Ubicacion\), que que almacena el nombre de la vía o
 localización.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{col =} \FunctionTok{starts\_with}\NormalTok{(}\StringTok{\textquotesingle{}REF\textquotesingle{}}\NormalTok{), }\AttributeTok{names\_pattern =} \StringTok{\textquotesingle{}\^{}REF(INI|FI)\textquotesingle{}}\NormalTok{,}
-               \AttributeTok{names\_to =} \StringTok{\textquotesingle{}Tipo\_Ubicación\textquotesingle{}}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{\textquotesingle{}Ubicación\textquotesingle{}}\NormalTok{)}
+               \AttributeTok{names\_to =} \StringTok{\textquotesingle{}Tipo\_Ubicacion\textquotesingle{}}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{\textquotesingle{}Ubicacion\textquotesingle{}}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -478,15 +478,15 @@ como referencia la placa kilométrica anterior en sentido ascendente,
 suponiendo que el tráfico es invariante en todo el tramo.
 
 Mediante la función pivot\_longer(), se crean dos nuevas columnas:
-\(Tipo_Posición_Punto_Quilométrico\), que especifica si la posición
-corresponde al punto inicial o final, y \(Valor_Punto_Quilométrico\),
+\(Tipo_Posicion_Punto_Quilometrico\), que especifica si la posición
+corresponde al punto inicial o final, y \(Valor_Punto_Quilometrico\),
 que contiene el valor asociado a dicha posición.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy }\SpecialCharTok{\%\textgreater{}\%}
    \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{col =} \FunctionTok{matches}\NormalTok{(}\StringTok{\textquotesingle{}\^{}PK(INI|FI|E)\textquotesingle{}}\NormalTok{), }\AttributeTok{names\_pattern =} \StringTok{\textquotesingle{}\^{}PK(INI|FI|E)\textquotesingle{}}\NormalTok{,}
-                \AttributeTok{names\_to =} \StringTok{\textquotesingle{}Tipo\_Posición\_Punto\_Quilometrico\textquotesingle{}}\NormalTok{, }
+                \AttributeTok{names\_to =} \StringTok{\textquotesingle{}Tipo\_Posicion\_Punto\_Quilometrico\textquotesingle{}}\NormalTok{, }
                 \AttributeTok{values\_to =} \StringTok{\textquotesingle{}Valor\_Punto\_Quilometrico\textquotesingle{}}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -521,13 +521,53 @@ correctamente los valores a tipo numérico. Veámoslo:
 \end{verbatim}
 
 Solo falta asegurarnos de que los nombres de las columnas sean
-representativos, para ello utilizaremos la función rename(); una vez
-hecho esto, el dataset estará completamente en formato tidy.
+representativos; para ello, utilizamos la función rename() y
+reemplazamos algunos valores abreviados por descripciones completas
+mediante la función ifelse(). Por ejemplo, en las variables relacionadas
+con coordenadas y ubicación, los códigos INI, E y FI se sustituyeron por
+Inicial, Exacta y Final; en Sentido, los valores A y D pasaron a
+Ascendente y Descendente; y en Tipo\_Vehiculo, T y P se cambiaron por
+Todos y Pesados. Veámoslo:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy }\SpecialCharTok{\%\textgreater{}\%}
 \NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{Fecha =}\NormalTok{ DIA, }\AttributeTok{Tipo\_Via =}\NormalTok{ TIPUSV, }\AttributeTok{Metodologia\_Captacion=}\NormalTok{ TIPUSE)}
+
+\CommentTok{\# Rescribimos algunos valores:}
+\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Sentido }\OtherTok{\textless{}{-}}
+\NormalTok{  vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Sentido }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"A"}\NormalTok{, }\StringTok{"Ascendente"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"D"}\NormalTok{, }\StringTok{"Descendente"}\NormalTok{)}
+
+\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Vehiculo }\OtherTok{\textless{}{-}}
+\NormalTok{  vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Vehiculo }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"T"}\NormalTok{, }\StringTok{"Todos"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"P"}\NormalTok{, }\StringTok{"Pesados"}\NormalTok{)}
+
+\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Coordenadas }\OtherTok{\textless{}{-}}
+\NormalTok{  vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Coordenadas }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"INI"}\NormalTok{, }\StringTok{"Inicial"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"E"}\NormalTok{, }\StringTok{"Exacta"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"FI"}\NormalTok{, }\StringTok{"Final"}\NormalTok{)}
+
+\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Ubicacion }\OtherTok{\textless{}{-}}
+\NormalTok{  vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Ubicacion }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"INI"}\NormalTok{, }\StringTok{"Inicial"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"E"}\NormalTok{, }\StringTok{"Exacta"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"FI"}\NormalTok{, }\StringTok{"Final"}\NormalTok{)}
+
+\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Posicion\_Punto\_Quilometrico }\OtherTok{\textless{}{-}}
+\NormalTok{  vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Posicion\_Punto\_Quilometrico }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"INI"}\NormalTok{, }\StringTok{"Inicial"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"E"}\NormalTok{, }\StringTok{"Exacta"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"FI"}\NormalTok{, }\StringTok{"Final"}\NormalTok{)}
+
+\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Via }\OtherTok{\textless{}{-}}
+\NormalTok{  vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Via }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"Aut."}\NormalTok{, }\StringTok{"Autovia"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"Conv."}\NormalTok{, }\StringTok{"Convencional"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"Desd."}\NormalTok{, }\StringTok{"Desdoblada"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -542,17 +582,17 @@ dataset, usando la función head():
 
 \begin{verbatim}
 ## # A tibble: 6 x 15
-##   Código_CV Num_tramo Fecha      Tipo_Via Metodologia_Captacion Sentido
-##   <chr>     <chr>     <date>     <chr>    <chr>                 <chr>  
-## 1 10        007       2025-03-07 Aut.     Espiras               A      
-## 2 10        007       2025-03-07 Aut.     Espiras               A      
-## 3 10        007       2025-03-07 Aut.     Espiras               A      
-## 4 10        007       2025-03-07 Aut.     Espiras               A      
-## 5 10        007       2025-03-07 Aut.     Espiras               A      
-## 6 10        007       2025-03-07 Aut.     Espiras               A      
+##   Codigo_CV Num_tramo Fecha      Tipo_Via Metodologia_Captacion Sentido   
+##   <chr>     <chr>     <date>     <chr>    <chr>                 <chr>     
+## 1 10        007       2025-03-07 Autovia  Espiras               Ascendente
+## 2 10        007       2025-03-07 Autovia  Espiras               Ascendente
+## 3 10        007       2025-03-07 Autovia  Espiras               Ascendente
+## 4 10        007       2025-03-07 Autovia  Espiras               Ascendente
+## 5 10        007       2025-03-07 Autovia  Espiras               Ascendente
+## 6 10        007       2025-03-07 Autovia  Espiras               Ascendente
 ## # i 9 more variables: Tipo_Vehiculo <chr>, Intensidad <dbl>, Coordenadas <chr>,
-## #   Tipo_Coordenada <chr>, Valor_Coordenada <dbl>, Tipo_Ubicación <chr>,
-## #   Ubicación <chr>, Tipo_Posición_Punto_Quilometrico <chr>,
+## #   Tipo_Coordenada <chr>, Valor_Coordenada <dbl>, Tipo_Ubicacion <chr>,
+## #   Ubicacion <chr>, Tipo_Posicion_Punto_Quilometrico <chr>,
 ## #   Valor_Punto_Quilometrico <int>
 \end{verbatim}
 

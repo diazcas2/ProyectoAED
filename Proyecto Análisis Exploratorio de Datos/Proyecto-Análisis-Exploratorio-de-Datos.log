@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.28)  29 OCT 2025 11:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.28)  29 OCT 2025 19:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1250,33 +1250,13 @@ Overfull \hbox (5.36655pt too wide) in paragraph at lines 436--442
  []
 
 
-LaTeX Warning: Command \' invalid in math mode on input line 463.
-
-Missing character: There is no Û in font pplr7t!
-
-LaTeX Warning: Command \' invalid in math mode on input line 464.
-
-Missing character: There is no Û in font pplr7t!
-
 Overfull \hbox (3.89955pt too wide) in paragraph at lines 460--466
 \T1/ppl/m/n/10 (-20) donde se ha de-tec-tado el tr·-fico. Para re-or-ga-ni-zar esta in-for-ma-ciÛn, apli-camos pivot_longer(),
  []
 
 
-LaTeX Warning: Command \' invalid in math mode on input line 481.
-
-
-LaTeX Warning: Command \' invalid in math mode on input line 481.
-
-Missing character: There is no Û in font pplr7t!
-Missing character: There is no È in font pplr7t!
-
-LaTeX Warning: Command \' invalid in math mode on input line 482.
-
-Missing character: There is no È in font pplr7t!
-
-Overfull \hbox (43.22173pt too wide) in paragraph at lines 480--484
-[]\T1/ppl/m/n/10 (-20) Mediante la fun-ciÛn pivot_longer(), se crean dos nuevas colum-nas: $\OML/zplm/m/it/10 Tipo[]osicin[]unto[]uilomtrico$\T1/ppl/m/n/10 (-20) ,
+Overfull \hbox (52.15169pt too wide) in paragraph at lines 480--484
+[]\T1/ppl/m/n/10 (-20) Mediante la fun-ciÛn pivot_longer(), se crean dos nuevas colum-nas: $\OML/zplm/m/it/10 Tipo[]osicion[]unto[]uilometrico$\T1/ppl/m/n/10 (-20) ,
  []
 
 
@@ -1294,33 +1274,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
 [4]
-Overfull \hbox (36.03967pt too wide) in paragraph at lines 557--557
-[]\T1/cmtt/m/n/10 ## # i 9 more variables: Tipo_Vehiculo <chr>, Intensidad <dbl>, Coordenadas <chr>,[] 
- []
-
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 568.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 568.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 568.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 568.
-
-Underfull \hbox (badness 10000) in paragraph at lines 597--597
-\T1/ppl/m/n/9 (-13) dadesobertes . gva . es / dataset / 2 0 b 9 1b 5 a -[] c 2 6d -[] 4 6 2 4 -[]bcf 5 -[]b 7 6a 7 4b 3 ec 8 8 / resource / abe 5 7 1 9 0 -[]d 5 3d -[] 4d 4
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 626--626
-
- []
-
-(./appendix.tex
-
-Package array Warning: Column C is already defined on input line 11.
-
-
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1329,7 +1282,64 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[5])
+[5]
+Overfull \hbox (9.79608pt too wide) in paragraph at lines 597--597
+[]\T1/cmtt/m/n/10 ## 1 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+ []
+
+
+Overfull \hbox (9.79608pt too wide) in paragraph at lines 597--597
+[]\T1/cmtt/m/n/10 ## 2 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+ []
+
+
+Overfull \hbox (9.79608pt too wide) in paragraph at lines 597--597
+[]\T1/cmtt/m/n/10 ## 3 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+ []
+
+
+Overfull \hbox (9.79608pt too wide) in paragraph at lines 597--597
+[]\T1/cmtt/m/n/10 ## 4 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+ []
+
+
+Overfull \hbox (9.79608pt too wide) in paragraph at lines 597--597
+[]\T1/cmtt/m/n/10 ## 5 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+ []
+
+
+Overfull \hbox (9.79608pt too wide) in paragraph at lines 597--597
+[]\T1/cmtt/m/n/10 ## 6 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+ []
+
+
+Overfull \hbox (36.03967pt too wide) in paragraph at lines 597--597
+[]\T1/cmtt/m/n/10 ## # i 9 more variables: Tipo_Vehiculo <chr>, Intensidad <dbl>, Coordenadas <chr>,[] 
+ []
+
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 608.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 608.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 608.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 608.
+
+Underfull \hbox (badness 10000) in paragraph at lines 637--637
+\T1/ppl/m/n/9 (-13) dadesobertes . gva . es / dataset / 2 0 b 9 1b 5 a -[] c 2 6d -[] 4 6 2 4 -[]bcf 5 -[]b 7 6a 7 4b 3 ec 8 8 / resource / abe 5 7 1 9 0 -[]d 5 3d -[] 4d 4
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 666--666
+
+ []
+
+(./appendix.tex
+
+Package array Warning: Column C is already defined on input line 11.
+
+)
 No file Proyecto-An√°lisis-Exploratorio-de-Datos.bbl.
 
 
@@ -1351,18 +1361,18 @@ Package rerunfilecheck Info: File `Proyecto-An√°lisis-Exploratorio-de-Datos.out'
 (rerunfilecheck)             Checksum: FC02ED4B8554AA56F8B57D95B56BAE3D;877.
  ) 
 Here is how much of TeX's memory you used:
- 34052 strings out of 469728
- 640656 string characters out of 5475651
+ 34056 strings out of 469728
+ 640725 string characters out of 5475651
  1139672 words of memory out of 5000000
- 61580 multiletter control sequences out of 15000+600000
- 687607 words of font info for 314 fonts, out of 8000000 for 9000
+ 61583 multiletter control sequences out of 15000+600000
+ 687922 words of font info for 315 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  123i,12n,121p,4660b,851s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.375pk><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on Proyecto-An√°lisis-Exploratorio-de-Datos.pdf (6 pages, 121375 bytes).
+ <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecit1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.375pk><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
+Output written on Proyecto-An√°lisis-Exploratorio-de-Datos.pdf (6 pages, 126831 bytes).
 PDF statistics:
- 225 PDF objects out of 1000 (max. 8388607)
- 112 compressed objects within 2 object streams
+ 245 PDF objects out of 1000 (max. 8388607)
+ 116 compressed objects within 2 object streams
  32 named destinations out of 1000 (max. 500000)
- 86082 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 86594 words of extra memory for PDF output out of 89155 (max. 10000000)
 

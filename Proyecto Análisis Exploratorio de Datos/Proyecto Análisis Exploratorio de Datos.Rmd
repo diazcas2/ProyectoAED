@@ -174,11 +174,47 @@ vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
 str(vehiculos_tidy$Valor_Coordenada)
 ```
 
-Solo falta asegurarnos de que los nombres de las columnas sean representativos, para ello utilizaremos la función rename(); una vez hecho esto, el dataset estará completamente en formato tidy.
+Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función rename() y reemplazamos algunos valores abreviados por descripciones completas mediante la función ifelse(). Por ejemplo, en las variables relacionadas con coordenadas y ubicación, los códigos INI, E y FI se sustituyeron por Inicial, Exacta y Final; en Sentido, los valores A y D pasaron a Ascendente y Descendente; y en Tipo_Vehiculo, T y P se cambiaron por Todos y Pesados. Veámoslo:
 
 ```{r}
 vehiculos_tidy <- vehiculos_tidy %>%
   dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
+
+# Rescribimos algunos valores:
+vehiculos_tidy$Sentido <-
+  vehiculos_tidy$Sentido %>%
+  replace(. == "A", "Ascendente") %>%
+  replace(. == "D", "Descendente")
+
+vehiculos_tidy$Tipo_Vehiculo <-
+  vehiculos_tidy$Tipo_Vehiculo %>%
+  replace(. == "T", "Todos") %>%
+  replace(. == "P", "Pesados")
+
+vehiculos_tidy$Coordenadas <-
+  vehiculos_tidy$Coordenadas %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+
+vehiculos_tidy$Tipo_Ubicacion <-
+  vehiculos_tidy$Tipo_Ubicacion %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+
+vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <-
+  vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+
+vehiculos_tidy$Tipo_Via <-
+  vehiculos_tidy$Tipo_Via %>%
+  replace(. == "Aut.", "Autovia") %>%
+  replace(. == "Conv.", "Convencional") %>%
+  replace(. == "Desd.", "Desdoblada")
+
 ```
 
 A continuación, se muestra un fragmento de las primeras filas del dataset, usando la función head():

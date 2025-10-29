@@ -17,6 +17,7 @@ vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
 
 ## Dataframe TIDY
 ```{r}
+rm(vehiculos_tidy)
 library(tidyr)
 library(dplyr)
 
@@ -46,21 +47,34 @@ head(vehiculos)
 ```
 
 ```{r}
-# PKECOOR, PKINICOOR, PKFICOOR: vamos a separar en latitud y longitud
+# PK(E|INI|FI)COOR separamos estas variables según la coordenada (inicial, final, exacta); según si se mide latitud/longitud y el valor
 
-#Primero nos centramos en las PKECOOR, PKINICOOR, PKFICOOR, donde cogemos y ponemos las coordenadas y el tipo de coordenadas.
+# PK(INI|FI|E) separamos según el tipo (inicial, final, exacto) y el valor
 
+# REF(INIFI) separamos según el tipo de ubicación (inicial, final) y valor
 
-vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', names_pattern = '^PK(E|INI|FI)COOR$',  values_to = 'Valor_coordenada')%>% separate(col = Valor_coordenada, into = c('Latitud', 'Longitud'), sep=';') %>% pivot_longer(col = c(Latitud, Longitud), names_to = 'Tipo_Coordenada', values_to = 'Valor_Coordenada')%>% pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',names_to = 'Tipo_Ubicación', values_to = 'Ubicación')%>% pivot_longer(col = matches('^PK(INI|FI|E)'), names_pattern = '^PK(INI|FI|E)',names_to = 'Tipo_Posición_Punto_Quilometrico', values_to = 'Valor_Punto_Quilometrico')
+vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', names_pattern = '^PK(E|INI|FI)COOR$',  values_to = 'Valor_coordenada')%>% separate(col = Valor_coordenada, into = c('Latitud', 'Longitud'), sep=';') %>% pivot_longer(col = c(Latitud, Longitud), names_to = 'Tipo_Coordenada', values_to = 'Valor_Coordenada')%>% pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',names_to = 'Tipo_Ubicacion', values_to = 'Ubicacion')%>% pivot_longer(col = matches('^PK(INI|FI|E)'), names_pattern = '^PK(INI|FI|E)',names_to = 'Tipo_Posicion_Punto_Quilometrico', values_to = 'Valor_Punto_Quilometrico')
 
 str(vehiculos_tidy$Valor_Coordenada)
 vehiculos_tidy$Valor_Coordenada <- sub(',', '.', vehiculos_tidy$Valor_Coordenada)
 vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
 str(vehiculos_tidy$Valor_Coordenada)
 
-#head(vehiculos_tidy)
-
 # Renombramos algunas variables
 vehiculos_tidy <- vehiculos_tidy %>% dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
+
+# Rescribimos algunos valores
+vehiculos_tidy$Coordenadas <- ifelse(vehiculos_tidy$Coordenadas == 'INI', 'Iniciales', ifelse(vehiculos_tidy$Coordenadas == 'E', 'Exactas', ifelse(vehiculos_tidy$Coordenadas == 'FI', 'Finales', vehiculos_tidy$Coordenadas)))
+
+vehiculos_tidy$Tipo_Ubicacion <- ifelse(vehiculos_tidy$Tipo_Ubicacion == 'INI', 'Inicial', ifelse(vehiculos_tidy$Tipo_Ubicacion == 'E', 'Exacta', ifelse(vehiculos_tidy$Tipo_Ubicacion == 'FI', 'Final', vehiculos_tidy$Tipo_Ubicacion)))
+
+vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <- ifelse(vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico == 'INI', 'Inicial', ifelse(vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico == 'E', 'Exacta', ifelse(vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico == 'FI', 'Final', vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico)))
+
+vehiculos_tidy$Sentido <- ifelse(vehiculos_tidy$Sentido == 'A', 'Ascendente', ifelse(vehiculos_tidy$Sentido == 'D', 'Descendente', vehiculos_tidy$Sentido))
+
+vehiculos_tidy$Tipo_Vehiculo <- ifelse(vehiculos_tidy$Tipo_Vehiculo == 'T', 'Todos', ifelse(vehiculos_tidy$Tipo_Vehiculo == 'P', 'Pesados', vehiculos_tidy$Tipo_Vehiculo))
+
+head(vehiculos_tidy)
+
 ```
 

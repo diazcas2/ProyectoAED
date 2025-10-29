@@ -294,7 +294,7 @@ Las 18 variables del dataset son las siguientes:
 \item \textbf{INTTP}: Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
 \item \textbf{TIPUSV}: Tipo de vía (Autovía, Convencional o Desdoblada).
 \item \textbf{TIPUSE}: Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
-\item \textbf{PKE}: Posición, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
+\item \textbf{PKE}: Posición exacta, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
 \item \textbf{PKECOOR}: Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
 \item \textbf{PKINI}: Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
 \item \textbf{REFINI}: Ubicación del inicio del tramo al que se asocia el tráfico.
@@ -335,6 +335,225 @@ necesario convertirla a formato de fecha.
 
 \begin{verbatim}
 ## [1] "Date"
+\end{verbatim}
+
+\section{Conversión de los datos a estructura
+Tidy.}\label{conversiuxf3n-de-los-datos-a-estructura-tidy.}
+
+La estructura tidy se caracteriza por tener cada variable en una
+columna, cada observación en una fila y nombres de columnas que sean
+representativos. Veamos que ocure en nuestro dataset.
+
+La columna \(TRAM\) contiene información del código CV- de la carretera
+(dos primeros dígitos) y del número de tramo(tres últimos dígitos). Por
+tanto, primero verificaremos que todos los valores de esta columna
+tengan cinco dígitos. Si es así, procederemos a dividirla en dos
+columnas separadas, que se llamarán \(Código_CV\) y \(Num_tramo\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'tidyr' was built under R version 4.4.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'dplyr' was built under R version 4.4.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Adjuntando el paquete: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{all}\NormalTok{(}\FunctionTok{length}\NormalTok{(vehiculos}\SpecialCharTok{$}\NormalTok{TRAM }\SpecialCharTok{==} \DecValTok{5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{separate}\NormalTok{(}\AttributeTok{col =}\NormalTok{ TRAM, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Código\_CV\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Num\_tramo\textquotesingle{}}\NormalTok{), }\AttributeTok{sep =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Las variables \(INTA\), \(INTAP\), \(INTD\), \(INTDP\), \(INTT\) y
+\(INTTP\) contienen información sobre el tipo de vehículo, si es pesado
+o no, y el sentido del tráfico, ascendente o descendente. Con el fin de
+estructurar mejor estos datos, aplicamos pivot\_longer(), generando dos
+nuevas variables, \(Sentido\) y \(Tipo_Vehiculo\).
+
+En la columna \(Tipo_Vehiculo\), los valores en blanco se rellenan con
+`T', que representa cualquier vehículo, mientras que `P' indica
+vehículos pesados.
+
+Por otro lado, las columnas \(INTT\) y \(INTTP\) representan la
+intensidad total del tráfico, es decir, la suma de los vehículos que
+circulan en ambos sentidos (ascendente y descendente), diferenciando si
+son pesados o no. Dado que esta información puede obtenerse a partir de
+las demás variables, eliminaremos estas columnas y, en caso de ser
+necesario, podremos recalcular sus valores sumando las correspondientes
+columnas de sentido.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{col =} \FunctionTok{starts\_with}\NormalTok{(}\StringTok{\textquotesingle{}INT\textquotesingle{}}\NormalTok{), }
+    \AttributeTok{names\_to =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Sentido\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Tipo\_Vehiculo\textquotesingle{}}\NormalTok{), }
+    \AttributeTok{names\_pattern =} \StringTok{\textquotesingle{}\^{}INT([ADT])\{1\}(P?)$\textquotesingle{}}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{\textquotesingle{}Intensidad\textquotesingle{}}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Tipo\_Vehiculo =} \FunctionTok{ifelse}\NormalTok{(Tipo\_Vehiculo }\SpecialCharTok{==} \StringTok{\textquotesingle{}P\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}P\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}T\textquotesingle{}}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Sentido }\SpecialCharTok{!=} \StringTok{\textquotesingle{}T\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Del mismo modo, las columnas \(PKECOOR\), \(PKINICOOR\) y \(PKFICOOR\)
+contienen las coordenadas geográficas, diferenciando entre la posición
+inicial, final y exacta. Para reorganizar esta información, aplicamos
+pivot\_longer(), que genera dos nuevas columnas: \(Coordenadas\), donde
+se indica el tipo de coordenada (inicial, final o exacta), y
+\(Valor_coordenada\), que almacena su valor correspondiente.
+
+Además, observamos que cada coordenada incluye la latitud y la longitud
+separadas por un punto y coma. Por ello, utilizamos la función
+separate() para dividir \(Valor_coordenada\) en dos columnas
+adicionales: \(Latitud\) y \(Longitud\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{col =} \FunctionTok{ends\_with}\NormalTok{(}\StringTok{\textquotesingle{}COOR\textquotesingle{}}\NormalTok{), }\AttributeTok{names\_to =} \StringTok{\textquotesingle{}Coordenadas\textquotesingle{}}\NormalTok{, }
+               \AttributeTok{names\_pattern =} \StringTok{\textquotesingle{}\^{}PK(E|INI|FI)COOR$\textquotesingle{}}\NormalTok{,  }
+               \AttributeTok{values\_to =} \StringTok{\textquotesingle{}Valor\_coordenada\textquotesingle{}}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{separate}\NormalTok{(}\AttributeTok{col =}\NormalTok{ Valor\_coordenada, }\AttributeTok{into =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Latitud\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Longitud\textquotesingle{}}\NormalTok{), }\AttributeTok{sep=}\StringTok{\textquotesingle{};\textquotesingle{}}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{col =} \FunctionTok{c}\NormalTok{(Latitud, Longitud), }\AttributeTok{names\_to =} \StringTok{\textquotesingle{}Tipo\_Coordenada\textquotesingle{}}\NormalTok{, }
+               \AttributeTok{values\_to =} \StringTok{\textquotesingle{}Valor\_Coordenada\textquotesingle{}}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+En cuanto a las \(REFINI\) y \(REFFI\) recogen las ubicaciones inicial y
+final del tramo donde se ha detectado el tráfico. Para reorganizar esta
+información, aplicamos pivot\_longer(), generando dos nuevas columnas:
+\(Tipo_Ubicación\), que especifica si se trata de la ubicación inicial o
+final, y \(Ubicación\), que que almacena el nombre de la vía o
+localización.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{col =} \FunctionTok{starts\_with}\NormalTok{(}\StringTok{\textquotesingle{}REF\textquotesingle{}}\NormalTok{), }\AttributeTok{names\_pattern =} \StringTok{\textquotesingle{}\^{}REF(INI|FI)\textquotesingle{}}\NormalTok{,}
+               \AttributeTok{names\_to =} \StringTok{\textquotesingle{}Tipo\_Ubicación\textquotesingle{}}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{\textquotesingle{}Ubicación\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Por último, las variables \(PKINI\), \(PKFI\) y \(PKE\) indican la
+posición inicial, final y exacta donde se registró el tráfico, tomando
+como referencia la placa kilométrica anterior en sentido ascendente,
+suponiendo que el tráfico es invariante en todo el tramo.
+
+Mediante la función pivot\_longer(), se crean dos nuevas columnas:
+\(Tipo_Posición_Punto_Quilométrico\), que especifica si la posición
+corresponde al punto inicial o final, y \(Valor_Punto_Quilométrico\),
+que contiene el valor asociado a dicha posición.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy }\SpecialCharTok{\%\textgreater{}\%}
+   \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{col =} \FunctionTok{matches}\NormalTok{(}\StringTok{\textquotesingle{}\^{}PK(INI|FI|E)\textquotesingle{}}\NormalTok{), }\AttributeTok{names\_pattern =} \StringTok{\textquotesingle{}\^{}PK(INI|FI|E)\textquotesingle{}}\NormalTok{,}
+                \AttributeTok{names\_to =} \StringTok{\textquotesingle{}Tipo\_Posición\_Punto\_Quilometrico\textquotesingle{}}\NormalTok{, }
+                \AttributeTok{values\_to =} \StringTok{\textquotesingle{}Valor\_Punto\_Quilometrico\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+La columna \(Valor_Coordenada\) contiene los valores de latitud y
+longitud, donde se utilizan comas como separador decimal. Por este
+motivo, R detecta la columna como tipo character, cuando en realidad
+debería ser numérica. Para solucionarlo, usamos la función sub() para
+reemplazar las comas por puntos, lo que nos permite convertir
+correctamente los valores a tipo numérico. Veámoslo:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{str}\NormalTok{(vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Valor\_Coordenada)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  chr [1:2193840] "39,88828171" "39,88828171" "39,88828171" "39,88828171" ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Valor\_Coordenada }\OtherTok{\textless{}{-}} \FunctionTok{sub}\NormalTok{(}\StringTok{\textquotesingle{},\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}.\textquotesingle{}}\NormalTok{, vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Valor\_Coordenada)}
+\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Valor\_Coordenada }\OtherTok{\textless{}{-}}\FunctionTok{as.numeric}\NormalTok{(vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Valor\_Coordenada)}
+\FunctionTok{str}\NormalTok{(vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Valor\_Coordenada)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  num [1:2193840] 39.9 39.9 39.9 39.9 39.9 ...
+\end{verbatim}
+
+Solo falta asegurarnos de que los nombres de las columnas sean
+representativos, para ello utilizaremos la función rename(); una vez
+hecho esto, el dataset estará completamente en formato tidy.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{Fecha =}\NormalTok{ DIA, }\AttributeTok{Tipo\_Via =}\NormalTok{ TIPUSV, }\AttributeTok{Metodologia\_Captacion=}\NormalTok{ TIPUSE)}
+\end{Highlighting}
+\end{Shaded}
+
+A continuación, se muestra un fragmento de las primeras filas del
+dataset, usando la función head():
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(vehiculos\_tidy)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 15
+##   Código_CV Num_tramo Fecha      Tipo_Via Metodologia_Captacion Sentido
+##   <chr>     <chr>     <date>     <chr>    <chr>                 <chr>  
+## 1 10        007       2025-03-07 Aut.     Espiras               A      
+## 2 10        007       2025-03-07 Aut.     Espiras               A      
+## 3 10        007       2025-03-07 Aut.     Espiras               A      
+## 4 10        007       2025-03-07 Aut.     Espiras               A      
+## 5 10        007       2025-03-07 Aut.     Espiras               A      
+## 6 10        007       2025-03-07 Aut.     Espiras               A      
+## # i 9 more variables: Tipo_Vehiculo <chr>, Intensidad <dbl>, Coordenadas <chr>,
+## #   Tipo_Coordenada <chr>, Valor_Coordenada <dbl>, Tipo_Ubicación <chr>,
+## #   Ubicación <chr>, Tipo_Posición_Punto_Quilometrico <chr>,
+## #   Valor_Punto_Quilometrico <int>
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

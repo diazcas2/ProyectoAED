@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.28)  28 OCT 2025 18:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.28)  29 OCT 2025 11:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1183,7 +1183,7 @@ Package epstopdf Info: Source file: <Definitions/logo-mdpi.eps>
 (epstopdf)             Command: <repstopdf --outfile=Definitions/logo-mdpi-eps-converted-to.pdf Definitions/logo-mdpi.eps>
 (epstopdf)             \includegraphics on input line 247.
 Package epstopdf Info: Output file is already uptodate.
-<Definitions/logo-mdpi-eps-converted-to.pdf, id=34, 74.2775pt x 49.18375pt>
+<Definitions/logo-mdpi-eps-converted-to.pdf, id=38, 74.2775pt x 49.18375pt>
 File: Definitions/logo-mdpi-eps-converted-to.pdf Graphic file (type pdf)
 <use Definitions/logo-mdpi-eps-converted-to.pdf>
 Package pdftex.def Info: Definitions/logo-mdpi-eps-converted-to.pdf  used on input line 247.
@@ -1231,21 +1231,88 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
 [2]
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 349.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 349.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 349.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 349.
 
-Underfull \hbox (badness 10000) in paragraph at lines 378--378
+LaTeX Warning: Command \' invalid in math mode on input line 351.
+
+Missing character: There is no Û in font pplr7t!
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[3]
+Overfull \hbox (5.36655pt too wide) in paragraph at lines 436--442
+\OML/zplm/m/it/10 Coordenadas$\T1/ppl/m/n/10 (-20) , donde se in-dica el tipo de co-or-de-nada (ini-cial, fi-nal o ex-acta), y $\OML/zplm/m/it/10 Valor[]oordenada$\T1/ppl/m/n/10 (-20) ,
+ []
+
+
+LaTeX Warning: Command \' invalid in math mode on input line 463.
+
+Missing character: There is no Û in font pplr7t!
+
+LaTeX Warning: Command \' invalid in math mode on input line 464.
+
+Missing character: There is no Û in font pplr7t!
+
+Overfull \hbox (3.89955pt too wide) in paragraph at lines 460--466
+\T1/ppl/m/n/10 (-20) donde se ha de-tec-tado el tr·-fico. Para re-or-ga-ni-zar esta in-for-ma-ciÛn, apli-camos pivot_longer(),
+ []
+
+
+LaTeX Warning: Command \' invalid in math mode on input line 481.
+
+
+LaTeX Warning: Command \' invalid in math mode on input line 481.
+
+Missing character: There is no Û in font pplr7t!
+Missing character: There is no È in font pplr7t!
+
+LaTeX Warning: Command \' invalid in math mode on input line 482.
+
+Missing character: There is no È in font pplr7t!
+
+Overfull \hbox (43.22173pt too wide) in paragraph at lines 480--484
+[]\T1/ppl/m/n/10 (-20) Mediante la fun-ciÛn pivot_longer(), se crean dos nuevas colum-nas: $\OML/zplm/m/it/10 Tipo[]osicin[]unto[]uilomtrico$\T1/ppl/m/n/10 (-20) ,
+ []
+
+
+Overfull \hbox (20.29352pt too wide) in paragraph at lines 509--509
+[]\T1/cmtt/m/n/10 ##  chr [1:2193840] "39,88828171" "39,88828171" "39,88828171" "39,88828171" ...[] 
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[4]
+Overfull \hbox (36.03967pt too wide) in paragraph at lines 557--557
+[]\T1/cmtt/m/n/10 ## # i 9 more variables: Tipo_Vehiculo <chr>, Intensidad <dbl>, Coordenadas <chr>,[] 
+ []
+
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 568.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 568.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 568.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 568.
+
+Underfull \hbox (badness 10000) in paragraph at lines 597--597
 \T1/ppl/m/n/9 (-13) dadesobertes . gva . es / dataset / 2 0 b 9 1b 5 a -[] c 2 6d -[] 4 6 2 4 -[]bcf 5 -[]b 7 6a 7 4b 3 ec 8 8 / resource / abe 5 7 1 9 0 -[]d 5 3d -[] 4d 4
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 407--407
+Underfull \hbox (badness 10000) in paragraph at lines 626--626
 
  []
 
@@ -1253,7 +1320,16 @@ Underfull \hbox (badness 10000) in paragraph at lines 407--407
 
 Package array Warning: Column C is already defined on input line 11.
 
-)
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[5])
 No file Proyecto-An√°lisis-Exploratorio-de-Datos.bbl.
 
 
@@ -1264,7 +1340,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[3] 
+[6] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./Proyecto-An√°lisis-Exploratorio-de-Datos.aux)
  ***********
@@ -1272,21 +1348,21 @@ LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-10-24>
  ***********
 Package rerunfilecheck Info: File `Proyecto-An√°lisis-Exploratorio-de-Datos.out' has not changed.
-(rerunfilecheck)             Checksum: 492483E2EAF07EEFE88F524A99ADEC13;604.
+(rerunfilecheck)             Checksum: FC02ED4B8554AA56F8B57D95B56BAE3D;877.
  ) 
 Here is how much of TeX's memory you used:
- 34022 strings out of 469728
- 640328 string characters out of 5475651
+ 34052 strings out of 469728
+ 640656 string characters out of 5475651
  1139672 words of memory out of 5000000
- 61576 multiletter control sequences out of 15000+600000
- 684619 words of font info for 298 fonts, out of 8000000 for 9000
+ 61580 multiletter control sequences out of 15000+600000
+ 687607 words of font info for 314 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  123i,12n,121p,4660b,851s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.375pk><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on Proyecto-An√°lisis-Exploratorio-de-Datos.pdf (3 pages, 102152 bytes).
+Output written on Proyecto-An√°lisis-Exploratorio-de-Datos.pdf (6 pages, 121375 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
- 98 compressed objects within 1 object stream
- 28 named destinations out of 1000 (max. 500000)
- 86074 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 225 PDF objects out of 1000 (max. 8388607)
+ 112 compressed objects within 2 object streams
+ 32 named destinations out of 1000 (max. 500000)
+ 86082 words of extra memory for PDF output out of 89155 (max. 10000000)
 

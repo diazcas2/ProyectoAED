@@ -81,7 +81,7 @@ Las 18 variables del dataset son las siguientes:
 \item \textbf{INTTP}: Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
 \item \textbf{TIPUSV}: Tipo de vía (Autovía, Convencional o Desdoblada).
 \item \textbf{TIPUSE}: Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
-\item \textbf{PKE}: Posición, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
+\item \textbf{PKE}: Posición exacta, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
 \item \textbf{PKECOOR}: Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
 \item \textbf{PKINI}: Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
 \item \textbf{REFINI}: Ubicación del inicio del tramo al que se asocia el tráfico.
@@ -103,21 +103,88 @@ vehiculos$DIA <- as.Date(vehiculos$DIA, format = '%d/%m/%Y')
 class(vehiculos$DIA)
 ```
 
-# Conversión de los datos a estructura tidy.
+# Conversión de los datos a estructura Tidy.
 La estructura tidy se caracteriza por tener cada variable en una columna, cada observación en una fila y nombres de columnas que sean representativos. Veamos que ocure en nuestro dataset.
 
 La columna $TRAM$ contiene información del código CV- de la carretera (dos primeros dígitos) y del número de tramo(tres últimos dígitos). Por tanto, primero verificaremos que todos los valores de esta columna tengan cinco dígitos. Si es así, procederemos a dividirla en dos columnas separadas, que se llamarán $Código_CV$ y $Num_tramo$.
 
 ```{r}
+library(tidyr)
+library(dplyr)
+
 all(length(vehiculos$TRAM == 5))
-vehiculos_tidy <- vehiculos %>% separate(col = TRAM, into = c('Código_CV', 'Num_tramo'), sep = 2)
+vehiculos_tidy <- vehiculos %>%
+  separate(col = TRAM, into = c('Código_CV', 'Num_tramo'), sep = 2)
 ```
 
 Las variables $INTA$, $INTAP$, $INTD$, $INTDP$, $INTT$ y $INTTP$ contienen información sobre el tipo de vehículo, si es pesado o no, y el sentido del tráfico, ascendente o descendente. Con el fin de estructurar mejor estos datos, aplicamos pivot_longer(), generando dos nuevas variables, $Sentido$ y $Tipo_Vehiculo$.
 
 En la columna $Tipo_Vehiculo$, los valores en blanco se rellenan con 'T', que representa cualquier vehículo, mientras que 'P' indica vehículos pesados. 
+
+Por otro lado, las columnas $INTT$ y $INTTP$ representan la intensidad total del tráfico, es decir, la suma de los vehículos que circulan en ambos sentidos (ascendente y descendente), diferenciando si son pesados o no. Dado que esta información puede obtenerse a partir de las demás variables, eliminaremos estas columnas y, en caso de ser necesario, podremos recalcular sus valores sumando las correspondientes columnas de sentido.
+
 ```{r}
-vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehiculo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')%>% mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T')) 
+vehiculos_tidy <- vehiculos_tidy %>%
+  pivot_longer(col = starts_with('INT'), 
+    names_to = c('Sentido', 'Tipo_Vehiculo'), 
+    names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')%>%
+  mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))%>%
+  filter(Sentido != 'T')
+```
+
+Del mismo modo, las columnas $PKECOOR$, $PKINICOOR$ y $PKFICOOR$ contienen las coordenadas geográficas, diferenciando entre la posición inicial, final y exacta. Para reorganizar esta información, aplicamos pivot_longer(), que genera dos nuevas columnas: $Coordenadas$, donde se indica el tipo de coordenada (inicial, final o exacta), y $Valor_coordenada$, que almacena su valor correspondiente.
+
+Además, observamos que cada coordenada incluye la latitud y la longitud separadas por un punto y coma. Por ello, utilizamos la función separate() para dividir $Valor_coordenada$ en dos columnas adicionales: $Latitud$ y $Longitud$.
+
+```{r}
+vehiculos_tidy <- vehiculos_tidy %>%
+  pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', 
+               names_pattern = '^PK(E|INI|FI)COOR$',  
+               values_to = 'Valor_coordenada')%>%
+  separate(col = Valor_coordenada, into = c('Latitud', 'Longitud'), sep=';')%>%
+  pivot_longer(col = c(Latitud, Longitud), names_to = 'Tipo_Coordenada', 
+               values_to = 'Valor_Coordenada') 
+```
+
+En cuanto a las $REFINI$ y $REFFI$ recogen las ubicaciones inicial y final del tramo donde se ha detectado el tráfico. Para reorganizar esta información, aplicamos pivot_longer(), generando dos nuevas columnas: $Tipo_Ubicacion$, que especifica si se trata de la ubicación inicial o final, y $Ubicacion$, que que almacena el nombre de la vía o localización.
+
+```{r}
+vehiculos_tidy <- vehiculos_tidy %>%
+  pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',
+               names_to = 'Tipo_Ubicacion', values_to = 'Ubicacion')
+```
+
+Por último, las variables $PKINI$, $PKFI$ y $PKE$ indican la posición inicial, final y exacta donde se registró el tráfico, tomando como referencia la placa kilométrica anterior en sentido ascendente, suponiendo que el tráfico es invariante en todo el tramo.
+
+Mediante la función pivot_longer(), se crean dos nuevas columnas: $Tipo_Posición_Punto_Quilométrico$, que especifica si la posición corresponde al punto inicial o final, y $Valor_Punto_Quilométrico$, que contiene el valor asociado a dicha posición.
+
+```{r}
+vehiculos_tidy <- vehiculos_tidy %>%
+   pivot_longer(col = matches('^PK(INI|FI|E)'), names_pattern = '^PK(INI|FI|E)',
+                names_to = 'Tipo_Posición_Punto_Quilometrico', 
+                values_to = 'Valor_Punto_Quilometrico')
+```
+
+La columna $Valor_Coordenada$ contiene los valores de latitud y longitud, donde se utilizan comas como separador decimal. Por este motivo, R detecta la columna como tipo character, cuando en realidad debería ser numérica. Para solucionarlo, usamos la función sub() para reemplazar las comas por puntos, lo que nos permite convertir correctamente los valores a tipo numérico. Veámoslo:
+
+```{r}
+str(vehiculos_tidy$Valor_Coordenada)
+vehiculos_tidy$Valor_Coordenada <- sub(',', '.', vehiculos_tidy$Valor_Coordenada)
+vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
+str(vehiculos_tidy$Valor_Coordenada)
+```
+
+Solo falta asegurarnos de que los nombres de las columnas sean representativos, para ello utilizaremos la función rename(); una vez hecho esto, el dataset estará completamente en formato tidy.
+
+```{r}
+vehiculos_tidy <- vehiculos_tidy %>%
+  dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
+```
+
+A continuación, se muestra un fragmento de las primeras filas del dataset, usando la función head():
+
+```{r}
+head(vehiculos_tidy)
 ```
 
 

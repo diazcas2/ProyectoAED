@@ -47,10 +47,18 @@ head(vehiculos)
 
 ```{r}
 # PKECOOR, PKINICOOR, PKFICOOR: vamos a separar en latitud y longitud
-vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', names_pattern = '^PK(E|INI|FI)COOR$',  values_to = 'Valor_coordenada') %>% separate(col = Valor_coordenada, into = c('Latitud', 'Longitud'), sep=';') %>% pivot_longer(col = c(Latitud, Longitud), names_to = 'Tipo_Coordenada', values_to = 'Valor_Coordenada') %>% pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',names_to = 'Tipo_Referencia', values_to = 'Referencia_Red')  %>% pivot_longer(col = matches('^PK(INI|FI|E)'), names_pattern = '^PK(INI|FI|E)',names_to = 'Tipo_Punto_Quilometrico', values_to = 'Punto_Quilometrico')
 
+#Primero nos centramos en las PKECOOR, PKINICOOR, PKFICOOR, donde cogemos y ponemos las coordenadas y el tipo de coordenadas.
+
+
+vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', names_pattern = '^PK(E|INI|FI)COOR$',  values_to = 'Valor_coordenada')%>% separate(col = Valor_coordenada, into = c('Latitud', 'Longitud'), sep=';') %>% pivot_longer(col = c(Latitud, Longitud), names_to = 'Tipo_Coordenada', values_to = 'Valor_Coordenada')%>% pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',names_to = 'Tipo_Ubicación', values_to = 'Ubicación')%>% pivot_longer(col = matches('^PK(INI|FI|E)'), names_pattern = '^PK(INI|FI|E)',names_to = 'Tipo_Posición_Punto_Quilometrico', values_to = 'Valor_Punto_Quilometrico')
+
+str(vehiculos_tidy$Valor_Coordenada)
 vehiculos_tidy$Valor_Coordenada <- sub(',', '.', vehiculos_tidy$Valor_Coordenada)
-head(vehiculos_tidy)
+vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
+str(vehiculos_tidy$Valor_Coordenada)
+
+#head(vehiculos_tidy)
 
 # Renombramos algunas variables
 vehiculos_tidy <- vehiculos_tidy %>% dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)

@@ -142,7 +142,7 @@ Por otro lado, las columnas $INTT$ y $INTTP$ representan la intensidad total del
 vehiculos_tidy <- vehiculos_tidy %>%
   pivot_longer(col = starts_with('INT'), 
     names_to = c('Sentido', 'Tipo_Vehiculo'), 
-    names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')%>%
+    names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Flujo_Vehiculos')%>%
   mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))%>%
   filter(Sentido != 'T')
 ```

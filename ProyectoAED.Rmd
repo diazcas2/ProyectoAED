@@ -46,7 +46,7 @@ all(length(vehiculos$TRAM == 5))
 vehiculos_tidy <- vehiculos %>% separate(col = TRAM, into = c('Codigo_CV', 'Num_Tramo'), sep = 2)
 
 # INTA, INTAP, INTD, INTDP, INTT, INTTP: no son variables (hacemos lo mismo que con TRAM)
-vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehiculo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Intensidad')
+vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehiculo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Flujo_Vehiculos')
 
 # En la columna Tipo_vehículo solo aparece si es pesado (P). Rellenamos el resto con T (= todos vehículos)
 vehiculos_tidy <- vehiculos_tidy %>% mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))
@@ -128,4 +128,90 @@ vehiculos_tidy$Tipo_Via <-
 head(vehiculos_tidy)
 
 ```
+
+
+
+########### APARTADO 1:
+
+```{r}
+glimpse(vehiculos_tidy)
+```
+Cada columna es del tipo que le corresponde, (esto decir muy breve) por ejemplo en el código y el número de tramo tiene sentido que sean caracter porque al final identifican el tramo y no tendría sentido que fueran numéricos. (No destacaría ninguno más la verdad)
+
+```{r}
+is.na(vehiculos_tidy) #Ya vió Ana que no había valores faltantes, por lo que no tiene mucho sentido que lo pongamos ahora
+```
+
+###################### APARTADO 4: CORRELACIONES ########################
+
+Vamos a ver las relaciones existentes en algunas variables
+```{r}
+library(corrplot)
+
+vehiculos_num<-vehiculos_tidy[sapply(vehiculos_tidy, is.numeric)]
+matrizcorr<-cor(vehiculos_num)
+corrplot(matrizcorr)
+#Entre el flujo de coches y el punto km hay algo de dependencia lineal, muy poca xd
+
+####FECHA-FLUJO:
+library(dplyr)
+library(ggplot2)
+
+#Cogemos la media de los coches porque sino salen tantos datos que se ve fatal. Podemos ver que el tráfico es más o menos el mismo en los meses que estamos estudiando, menos cerca de julio que el tráfico disminuye, quizás se puede asociar a las vacaciones de verano.
+vehiculos_tidy %>%
+  group_by(Fecha) %>%
+  summarise(Flujo_medio = mean(Flujo_Vehiculos, na.rm = TRUE)) %>%
+  ggplot(aes(x = Fecha, y = Flujo_medio)) +
+  geom_line(color = "steelblue") +
+  labs(title = "Evolución temporal del Flujo de Vehículos medio")
+
+
+library(DescTools)
+
+tabla <- table(vehiculos_tidy$Tipo_Via, vehiculos_tidy$Metodologia_Captacion)
+tabla
+
+chisq.test(tabla) ##Como es mayor que 0 sabemos que hay cierto grado de dependencia pero no sabemos cuanta, por lo que voy a hacer la V de Cramer, esta no hay porqué ponerla
+
+library(DescTools)
+CramerV(tabla)
+
+#>0.07673791
+#Como obtenemos un valor muy cercano a 0, podríamos decir que son prácticamente independientes.
+
+
+```
+
+```{r}
+library(DescTools)
+
+tabla1 <- table(vehiculos_tidy$Tipo_Via, vehiculos_tidy$Tipo_Vehiculo)
+tabla1
+
+chisq.test(tabla1) ##Como es 0 sabemos que son independientes, es decir, que el tipo de vehículo no influye en que pase más o menos por una carretera
+library(DescTools)
+CramerV(tabla1)
+
+#>0
+#Como obtenemos el valor 0, sabemos que nuestras variables son independientes
+
+#####PON EL QUE TE DÉ MÁS RABIA
+```
+
+```{r}
+library(DescTools)
+
+tabla2 <- table(vehiculos_tidy$Sentido, vehiculos_tidy$Tipo_Vehiculo)
+tabla2
+
+chisq.test(tabla2) ##Como es 0 sabemos que son independientes, es decir, que el tipo de vehículo no influye en que pase más o menos en sentido ascendente o descendente
+library(DescTools)
+CramerV(tabla2)
+
+#>0
+#Como obtenemos el valor 0, sabemos que nuestras variables son independientes
+```
+
+Faltaría ver un poco la relación entre una categórica y numérica, como el tipo de vía con el flujo de vehículos, pero eso es con un box_plot y se hará en gráficos.
+
 

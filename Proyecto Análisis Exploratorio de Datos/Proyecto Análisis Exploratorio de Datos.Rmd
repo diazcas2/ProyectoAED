@@ -121,7 +121,7 @@ Como puede apreciarse en el dataframe `missings`, que recuenta los valores falta
 # Conversión de los datos a estructura Tidy.
 La estructura tidy se caracteriza por tener cada variable en una columna, cada observación en una fila y nombres de columnas que sean representativos. Veamos que ocure en nuestro dataset.
 
-La columna $TRAM$ contiene información del código CV- de la carretera (dos primeros dígitos) y del número de tramo(tres últimos dígitos). Por tanto, primero verificaremos que todos los valores de esta columna tengan cinco dígitos. Si es así, procederemos a dividirla en dos columnas separadas, que se llamarán $Código\_CV$ y `Num_tramo`.
+La columna `TRAM` contiene información del código CV- de la carretera (dos primeros dígitos) y del número de tramo(tres últimos dígitos). Por tanto, primero verificaremos que todos los valores de esta columna tengan cinco dígitos. Si es así, procederemos a dividirla en dos columnas separadas, que se llamarán `Código_CV` y `Num_tramo`.
 
 ```{r}
 library(tidyr)
@@ -132,11 +132,11 @@ vehiculos_tidy <- vehiculos %>%
   separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2)
 ```
 
-Las variables $INTA$, $INTAP$, $INTD$, $INTDP$, $INTT$ y $INTTP$ contienen información sobre el tipo de vehículo, si es pesado o no, y el sentido del tráfico, ascendente o descendente. Con el fin de estructurar mejor estos datos, aplicamos pivot_longer(), generando dos nuevas variables, $Sentido$ y $Tipo_Vehiculo$.
+Las variables `INTA`, `INTAP`, `INTD`, `INTDP`, `INTT` y `INTTP` contienen información sobre el tipo de vehículo, si es pesado o no, y el sentido del tráfico, ascendente o descendente. Con el fin de estructurar mejor estos datos, aplicamos _pivot_longer()_, generando dos nuevas variables, `Sentido` y `Tipo_Vehiculo`.
 
-En la columna $Tipo_Vehiculo$, los valores en blanco se rellenan con 'T', que representa cualquier vehículo, mientras que 'P' indica vehículos pesados. 
+En la columna `Tipo_Vehiculo`, los valores en blanco se rellenan con _T_, que representa cualquier vehículo, mientras que _P_ indica vehículos pesados. 
 
-Por otro lado, las columnas $INTT$ y $INTTP$ representan la intensidad total del tráfico, es decir, la suma de los vehículos que circulan en ambos sentidos (ascendente y descendente), diferenciando si son pesados o no. Dado que esta información puede obtenerse a partir de las demás variables, eliminaremos estas columnas y, en caso de ser necesario, podremos recalcular sus valores sumando las correspondientes columnas de sentido.
+Por otro lado, las columnas `INTT` y `INTTP` representan la intensidad total del tráfico, es decir, la suma de los vehículos que circulan en ambos sentidos (ascendente y descendente), diferenciando si son pesados o no. Dado que esta información puede obtenerse a partir de las demás variables, eliminaremos estas columnas y, en caso de ser necesario, podremos recalcular sus valores sumando las correspondientes columnas de sentido.
 
 ```{r}
 vehiculos_tidy <- vehiculos_tidy %>%
@@ -147,9 +147,9 @@ vehiculos_tidy <- vehiculos_tidy %>%
   filter(Sentido != 'T')
 ```
 
-Del mismo modo, las columnas $PKECOOR$, $PKINICOOR$ y $PKFICOOR$ contienen las coordenadas geográficas, diferenciando entre la posición inicial, final y exacta. Para reorganizar esta información, aplicamos pivot_longer(), que genera dos nuevas columnas: $Coordenadas$, donde se indica el tipo de coordenada (inicial, final o exacta), y $Valor_coordenada$, que almacena su valor correspondiente.
+Del mismo modo, las columnas `PKECOOR`, `PKINICOOR` y `PKFICOOR` contienen las coordenadas geográficas, diferenciando entre la posición inicial, final y exacta. Para reorganizar esta información, aplicamos `pivot_longer()`, que genera dos nuevas columnas: `Coordenadas`, donde se indica el tipo de coordenada (inicial, final o exacta), y `Valor_coordenada`, que almacena su valor correspondiente.
 
-Además, observamos que cada coordenada incluye la latitud y la longitud separadas por un punto y coma. Por ello, utilizamos la función separate() para dividir $Valor_coordenada$ en dos columnas adicionales: $Latitud$ y $Longitud$.
+Además, observamos que cada coordenada incluye la latitud y la longitud separadas por un punto y coma. Por ello, utilizamos la función `separate()` para dividir `Valor_coordenada` en dos columnas adicionales: `Latitud` y `Longitud`.
 
 ```{r}
 vehiculos_tidy <- vehiculos_tidy %>%
@@ -161,7 +161,7 @@ vehiculos_tidy <- vehiculos_tidy %>%
                values_to = 'Valor_Coordenada') 
 ```
 
-En cuanto a las $REFINI$ y $REFFI$ recogen las ubicaciones inicial y final del tramo donde se ha detectado el tráfico. Para reorganizar esta información, aplicamos pivot_longer(), generando dos nuevas columnas: $Tipo_Ubicacion$, que especifica si se trata de la ubicación inicial o final, y $Ubicacion$, que que almacena el nombre de la vía o localización.
+En cuanto a las variables `REFINI` y `REFFI`, estas recogen las ubicaciones inicial y final del tramo donde se ha detectado el tráfico. Para reorganizar esta información, aplicamos `pivot_longer()`, generando dos nuevas columnas: `Tipo_Ubicacion`, que especifica si se trata de la ubicación inicial o final, y `Ubicacion`, que almacena el nombre de la vía o localización.
 
 ```{r}
 vehiculos_tidy <- vehiculos_tidy %>%
@@ -169,9 +169,9 @@ vehiculos_tidy <- vehiculos_tidy %>%
                names_to = 'Tipo_Ubicacion', values_to = 'Ubicacion')
 ```
 
-Por último, las variables $PKINI$, $PKFI$ y $PKE$ indican la posición inicial, final y exacta donde se registró el tráfico, tomando como referencia la placa kilométrica anterior en sentido ascendente, suponiendo que el tráfico es invariante en todo el tramo.
+Por último, las variables `PKINI`, `PKFI` y `PKE` indican la posición inicial, final y exacta donde se registró el tráfico, tomando como referencia la placa kilométrica anterior en sentido ascendente, suponiendo que el tráfico es invariante en todo el tramo.
 
-Mediante la función pivot_longer(), se crean dos nuevas columnas: $Tipo_Posicion_Punto_Quilometrico$, que especifica si la posición corresponde al punto inicial o final, y $Valor_Punto_Quilometrico$, que contiene el valor asociado a dicha posición.
+Mediante la función `pivot_longer()`, se crean dos nuevas columnas: `Tipo_Posicion_Punto_Quilometrico`, que especifica si la posición corresponde al punto inicial o final, y `Valor_Punto_Quilometrico`, que contiene el valor asociado a dicha posición.
 
 ```{r}
 vehiculos_tidy <- vehiculos_tidy %>%
@@ -180,7 +180,7 @@ vehiculos_tidy <- vehiculos_tidy %>%
                 values_to = 'Valor_Punto_Quilometrico')
 ```
 
-La columna $Valor_Coordenada$ contiene los valores de latitud y longitud, donde se utilizan comas como separador decimal. Por este motivo, R detecta la columna como tipo character, cuando en realidad debería ser numérica. Para solucionarlo, usamos la función sub() para reemplazar las comas por puntos, lo que nos permite convertir correctamente los valores a tipo numérico. Veámoslo:
+La columna `Valor_Coordenada` contiene los valores de latitud y longitud, donde se utilizan comas como separador decimal. Por este motivo, R detecta la columna como tipo character, cuando en realidad debería ser numérica. Para solucionarlo, usamos la función `sub()` para reemplazar las comas por puntos, lo que nos permite convertir correctamente los valores a tipo numérico. Veámoslo:
 
 ```{r}
 str(vehiculos_tidy$Valor_Coordenada)
@@ -189,7 +189,7 @@ vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
 str(vehiculos_tidy$Valor_Coordenada)
 ```
 
-Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función rename() y reemplazamos algunos valores abreviados por descripciones completas mediante la función ifelse(). Por ejemplo, en las variables relacionadas con coordenadas y ubicación, los códigos INI, E y FI se sustituyeron por Inicial, Exacta y Final; en Sentido, los valores A y D pasaron a Ascendente y Descendente; y en Tipo_Vehiculo, T y P se cambiaron por Todos y Pesados. Veámoslo:
+Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función `rename()` y reemplazamos algunos valores abreviados por descripciones completas mediante la función `ifelse()`. Por ejemplo, en las variables relacionadas con coordenadas y ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ Veámoslo:
 
 ```{r}
 vehiculos_tidy <- vehiculos_tidy %>%

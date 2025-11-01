@@ -214,4 +214,13 @@ CramerV(tabla2)
 
 Faltaría ver un poco la relación entre una categórica y numérica, como el tipo de vía con el flujo de vehículos, pero eso es con un box_plot y se hará en gráficos.
 
+# detallitos random
+
+Tenemos observaciones **solo** del primer semestre de 2025:
+
+```{r}
+Fechas_ordenadas <- sort(unique(vehiculos_tidy$Fecha))
+Fechas_ordenadas[1] # 1er día con datos: 1 de enero de 2025
+Fechas_ordenadas[length(Fechas_ordenadas)] #último día con datos: 30 de junio de 2025
+```
 

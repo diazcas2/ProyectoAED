@@ -270,7 +270,26 @@ which(abs(vehiculos_tidy$Valor_Coordenada-median(vehiculos_tidy$Valor_Coordenada
 ```
 
 # VARIABLE VALOR PUNTO QUILOMÉTRICO
+```{r}
+###### Regla 3 sigma #######
+Valor_Punto_Quilometrico_Media <- mean(vehiculos_tidy$Valor_Punto_Quilometrico)
+Valor_Punto_Quilometrico_Var <- var(vehiculos_tidy$Valor_Punto_Quilometrico)
 
+# Comprobamos que valores son outliers
+which(abs(vehiculos_tidy$Valor_Punto_Quilometrico[i]-Valor_Punto_Quilometrico_Media)>3*Valor_Punto_Quilometrico_Var)
+# en principio con este método no aparece ningún outlier (método poco agresivo)
+
+###### Regla boxplot ######
+boxplot(vehiculos_tidy$Valor_Punto_Quilometrico)
+Valor_Punto_Quilometrico_IQR <- IQR(vehiculos_tidy$Valor_Punto_Quilometrico)
+Valor_Punto_Quilometrico_Q <- quantile(vehiculos_tidy$Valor_Punto_Quilometrico, probs = c(0.25, 0.5, 0.75))
+
+which(vehiculos_tidy$Valor_Punto_Quilometrico>Valor_Punto_Quilometrico_Q[[3]]+1.5*Valor_Punto_Quilometrico_IQR)
+which(vehiculos_tidy$Valor_Punto_Quilometrico[i]<Valor_Punto_Quilometrico_Q[[1]]-1.5*Valor_Punto_Quilometrico_IQR)
+
+###### Identificador Hampel ######
+which(abs(vehiculos_tidy$Valor_Punto_Quilometrico-median(vehiculos_tidy$Valor_Punto_Quilometrico))>3*mad(vehiculos_tidy$Valor_Punto_Quilometrico))
+```
 
 
 

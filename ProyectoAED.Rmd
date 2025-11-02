@@ -224,3 +224,63 @@ Fechas_ordenadas[1] # 1er día con datos: 1 de enero de 2025
 Fechas_ordenadas[length(Fechas_ordenadas)] #último día con datos: 30 de junio de 2025
 ```
 
+################# APARTADO 5: OUTLIERS ################
+# VARIABLE FLUJO VEHICULOS
+```{r}
+###### Regla 3 sigma ######
+Flujo_Vehiculos_Media <- mean(vehiculos_tidy$Flujo_Vehiculos)
+Flujo_Vehiculos_Var <- var(vehiculos_tidy$Flujo_Vehiculos)
+
+# Comprobamos que valores son outliers
+which(abs(vehiculos_tidy$Flujo_Vehiculos[i]-Flujo_Vehiculos_Media)>3*Flujo_Vehiculos_Var)
+# en principio con este método no aparece ningún outlier (método poco agresivo)
+
+###### Regla boxplot ######
+boxplot(vehiculos_tidy$Flujo_Vehiculos)
+Flujo_vehiculos_IQR <- IQR(vehiculos_tidy$Flujo_Vehiculos)
+Flujo_vehiculos_Q <- quantile(vehiculos_tidy$Flujo_Vehiculos, probs = c(0.25, 0.5, 0.75))
+
+which(vehiculos_tidy$Flujo_Vehiculos>Flujo_vehiculos_Q[[3]]+1.5*Flujo_vehiculos_IQR)
+which(vehiculos_tidy$Flujo_Vehiculos[i]<Flujo_vehiculos_Q[[1]]-1.5*Flujo_vehiculos_IQR)
+
+###### Identificador Hampel ######
+which(abs(vehiculos_tidy$Flujo_Vehiculos-median(vehiculos_tidy$Flujo_Vehiculos))>3*mad(vehiculos_tidy$Flujo_Vehiculos))
+```
+
+# VARIABLE VALOR COORDENADAS
+```{r}
+###### Regla 3 sigma ######
+Valor_Coordenada_Media <- mean(vehiculos_tidy$Valor_Coordenada)
+Valor_Coordenada_Var <- var(vehiculos_tidy$Valor_Coordenada)
+
+# Comprobamos que valores son outliers
+which(abs(vehiculos_tidy$Valor_Coordenada[i]-Valor_Coordenada_Media)>3*Valor_Coordenada_Var)
+# en principio con este método no aparece ningún outlier (método poco agresivo)
+
+###### Regla boxplot ######
+boxplot(vehiculos_tidy$Valor_Coordenada)
+Valor_Coordenada_IQR <- IQR(vehiculos_tidy$Valor_Coordenada)
+Valor_Coordenada_Q <- quantile(vehiculos_tidy$Valor_Coordenada, probs = c(0.25, 0.5, 0.75))
+
+which(vehiculos_tidy$Valor_Coordenada>Valor_Coordenada_Q[[3]]+1.5*Valor_Coordenada_IQR)
+which(vehiculos_tidy$Valor_Coordenada[i]<Valor_Coordenada_Q[[1]]-1.5*Valor_Coordenada_IQR)
+
+###### Identificador Hampel ######
+which(abs(vehiculos_tidy$Valor_Coordenada-median(vehiculos_tidy$Valor_Coordenada))>3*mad(vehiculos_tidy$Valor_Coordenada))
+```
+
+# VARIABLE VALOR PUNTO QUILOMÉTRICO
+
+
+
+
+
+
+
+
+
+
+
+
+
+

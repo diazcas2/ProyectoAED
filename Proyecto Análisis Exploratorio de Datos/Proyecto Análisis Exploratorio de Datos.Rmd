@@ -238,4 +238,35 @@ A continuación, se muestra un fragmento de las primeras filas del dataset, usan
 head(vehiculos_tidy)
 ```
 
+# Relación entre las variables
+En este apartado estudiaremos si existe una relación lineal entre las variables  de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas:
+```{r}
+vehiculos_num <- vehiculos_tidy[sapply(vehiculos_tidy, is.numeric)]
+```
+Obteniendo las variables `Flujo_Vehiculos`, `Valor_Coordenada` y `Valor_Punto_Quilometrico` almacenadas en `vehiculos_num`.
+A continuación, calculamos la matriz de correlación de Pearson con la función cor() para determinar si existe o no una relación lineal entre estas variables:
+```{r}
+library(corrplot)
+matrizcorr <- cor(vehiculos_num)
+matrizcorr
+```
+Observamos una matriz simétrica donde la diagonal toma los valores 1 (correlación positiva perfecta) ya que corresponde a la correlación entre cada variable consigo misma. Por otro lado, el resto de correlaciones toman valores muy próximos a cero, indicándonos la ausencia de una relación lineal significativa entre `Valor_Coordenada`-`Flujo_Vehiculos`, `Valor_Punto_Quilometrico`-`Flujo_Vehiculos` y `Valor_Punto_Quilometrico`-`Valor_Coordenada`. Podemos representar gráficamente esta matriz con la función corrplot():
+```{r}
+corrplot(matrizcorr, tl.col = "black", col = colorRampPalette(c("red", "gray", "navyblue"))(200))
+```
 
+Ahora estudiaremos la dependencia o independencia entre algunas variables categóricas: `Tipo_Via`-`Metodologia_Captacion`, `Tipo_Via`-`Tipo_Vehiculo`, `Sentido`-`Tipo_Vehiculo`. Comenzando con las dos primeras variables, calculamos el coeficiente V de Cramer (que está acotado entre 0 y 1):
+```{r}
+library(DescTools)
+tabla <- table(vehiculos_tidy$Tipo_Via, vehiculos_tidy$Metodologia_Captacion)
+CramerV(tabla)
+```
+Obteniendo 0.076, entonces sí que hay dependencia pero las variables prácticamente no se influyen entre sí.
+Con respecto a las siguientes varibales:
+```{r}
+tabla1 <- table(vehiculos_tidy$Tipo_Via, vehiculos_tidy$Tipo_Vehiculo)
+CramerV(tabla1)
+tabla2 <- table(vehiculos_tidy$Sentido, vehiculos_tidy$Tipo_Vehiculo)
+CramerV(tabla2)
+```
+Obtenemos un valor del coeficiente para los pares de variables `Tipo_Via`-`Tipo_Vehiculo` y  `Sentido`-`Tipo_Vehiculo` de 0; por tanto, ambos pares son independientes. Podríamos pensar que existe alguna dependencia entre el tipo de vehículo y el tipo de vía por la que se circula (autovía, convecional o desdoblada), pero observamos que no. En cambio, ya esperábamos que el sentido de circulación (ascendente o descendente) y el tipo de vehículo fueran completamente independientes ya que el tipo de vehículo no depende del sentido del trayecto (los vehículos pueden circular indistintamente en un sentido o en otro).

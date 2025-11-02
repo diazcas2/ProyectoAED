@@ -299,7 +299,3 @@ which(abs(vehiculos_tidy$Valor_Punto_Quilometrico-median(vehiculos_tidy$Valor_Pu
 
 
 
-
-
-
-

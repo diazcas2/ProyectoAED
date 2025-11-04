@@ -1,59 +1,24 @@
 ---
-title: Proyecto Análisis Exploratorio de Datos
+title: "Proyecto Análisis Exploratorio de Datos"
 author:
-  - name: María de los Ángeles Díaz Castro
-  - name: Irene Barba La Orden
-  - name: Ana Blasco Vega
-# affiliation:
-#   - num: 1
-#     email: diazcas2@alumni.uv.es
-#   - num: 2
-#     email: ibarlaor@alumni.uv.es
-#   - num: 3
-#     email: ablasve@alumni.uv.es
-
-#authorcitation: |
- # Leutnant, D.; Doe, J.
-# firstnote to eighthnote
-#firstnote: |
-  #Current address: Updated affiliation
-#secondnote: |
-# These authors contributed equally to this work.
-#correspondence: |
- # leutnant@fh-muenster.de; Tel.: +XX-000-00-0000.
-# document options
+- name: María de los Ángeles Díaz Castro
+- name: Irene Barba La Orden
+- name: Ana Blasco Vega
 journal: notspecified
 type: article
 status: submit
-# front matter
 simplesummary: |
   Preparación y análisis exploratorio del tráfico diario de carreteras en Valencia 2025, obtenido de la página oficial de la Generalitat Valenciana.
 abstract: |
   Este proyecto tiene como objetivo analizar el tráfico en Valencia durante 2025, utilizando datos del dataset público proporcionado por la Generalitat Valenciana. Se consideran 18 variables, de las que se incluyen el número de vehículos que transitan por cada tramo, el método de captación o las coordenadas iniciales y finales de cada registro, entre otras. En total, se han recopilado 15.235 observaciones asociadas a distintos momentos en los que se registró tráfico. Los datos se reestructuraron para facilitar un análisis exploratorio previo, identificando patrones de circulación y posibles anomalías, tratando de ofrecer información valiosa para mejorar la gestión del tráfico y la planificación de las carreteras en Valencia.
 
-keywords: | 
+keywords: null
 
 dataavailability: |
   Los datos usados en este estudio son públicos disponibles en  [https://dadesobertes.gva.es/dataset/20b91b5a-c26d-4624-bcf5-b76a74b3ec88/resource/abe57190-d53d-4d41-9266-d7c2254621ae/download/intensidad_vehiculos_en_carretera_2025.csv]
 
-supplementary: |
- The following supporting information can be downloaded at:  
- \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title.
-abbreviations:
-  - short: MDPI
-    long: Multidisciplinary Digital Publishing Institute
-  - short: DOAJ
-    long: Directory of open access journals
-  - short: TLA
-    long: Three letter acronym
-  - short: LD 
-    long: linear dichroism
-bibliography: mybibfile.bib
-appendix: appendix.tex
-endnotes: false
 output: 
-  rticles::mdpi_article:
-    extra_dependencies: longtable
+  rticles::mdpi_article
 ---
 
 # Introducción.
@@ -62,11 +27,13 @@ El tráfico de vehículos va más allá de los números, muestra cómo Valencia 
 # Importación de los datos.
 Para importar los datos, primero se descarga el fichero ([aquí](https://dadesobertes.gva.es/dataset/tra-int-veh-2025)) y se verifica que los datos estén en el directorio adecuado. Es importante especificar el encoding (en nuestro caso es UTF-8), ya que, de lo contrario, algunos caracteres pueden no reconocerse correctamente. De esta forma, haciendo uso de la función de importación en R con los parámetros adecuados, obtenemos el dataset.
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 library(readr)
 library(VIM)
 library(tidyr)
 library(dplyr)
+library(corrplot)
+library(DescTools)
 filename <-'../data/intensidad_vehiculos_en_carretera_2025.csv'
 vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
 ```
@@ -124,9 +91,6 @@ La estructura tidy se caracteriza por tener cada variable en una columna, cada o
 La columna `TRAM` contiene información del código CV- de la carretera (dos primeros dígitos) y del número de tramo(tres últimos dígitos). Por tanto, primero verificaremos que todos los valores de esta columna tengan cinco dígitos. Si es así, procederemos a dividirla en dos columnas separadas, que se llamarán `Código_CV` y `Num_tramo`.
 
 ```{r}
-library(tidyr)
-library(dplyr)
-
 all(length(vehiculos$TRAM == 5))
 vehiculos_tidy <- vehiculos %>%
   separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2)
@@ -189,8 +153,7 @@ vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
 str(vehiculos_tidy$Valor_Coordenada)
 ```
 
-Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función `rename()` y reemplazamos algunos valores abreviados por descripciones completas mediante la función `ifelse()`. Por ejemplo, en las variables relacionadas con coordenadas y ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ Veámoslo:
-
+Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función `rename()` y reemplazamos algunos valores abreviados por descripciones completas mediante la función `ifelse()`. Por ejemplo, en las variables relacionadas con coordenadas y ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ En el caso de las coordenadas y ubicación, se hace de forma análoga.
 ```{r}
 vehiculos_tidy <- vehiculos_tidy %>%
   dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
@@ -212,6 +175,15 @@ vehiculos_tidy$Coordenadas <-
   replace(. == "E", "Exacta") %>%
   replace(. == "FI", "Final")
 
+vehiculos_tidy$Tipo_Via <-
+  vehiculos_tidy$Tipo_Via %>%
+  replace(. == "Aut.", "Autovia") %>%
+  replace(. == "Conv.", "Convencional") %>%
+  replace(. == "Desd.", "Desdoblada")
+
+```
+
+```{r,include=FALSE}
 vehiculos_tidy$Tipo_Ubicacion <-
   vehiculos_tidy$Tipo_Ubicacion %>%
   replace(. == "INI", "Inicial") %>%
@@ -223,13 +195,6 @@ vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <-
   replace(. == "INI", "Inicial") %>%
   replace(. == "E", "Exacta") %>%
   replace(. == "FI", "Final")
-
-vehiculos_tidy$Tipo_Via <-
-  vehiculos_tidy$Tipo_Via %>%
-  replace(. == "Aut.", "Autovia") %>%
-  replace(. == "Conv.", "Convencional") %>%
-  replace(. == "Desd.", "Desdoblada")
-
 ```
 
 A continuación, se muestra un fragmento de las primeras filas del dataset, usando la función head():
@@ -244,25 +209,41 @@ En este apartado estudiaremos si existe una relación lineal entre las variables
 vehiculos_num <- vehiculos_tidy[sapply(vehiculos_tidy, is.numeric)]
 ```
 Obteniendo las variables `Flujo_Vehiculos`, `Valor_Coordenada` y `Valor_Punto_Quilometrico` almacenadas en `vehiculos_num`.
-A continuación, calculamos la matriz de correlación de Pearson con la función cor() para determinar si existe o no una relación lineal entre estas variables:
+
+A continuación, calculamos las matrices de correlación de Pearson y Spearman con la función cor() para determinar si existe o no una relación entre estas variables:
 ```{r}
-library(corrplot)
-matrizcorr <- cor(vehiculos_num)
-matrizcorr
+matrizcorr1 <-cor(vehiculos_num,use='complete.obs',method='pearson')
+matrizcorr2 <-cor(vehiculos_num,use='complete.obs',method='spearman')
+matrizcorr1
+matrizcorr2
 ```
-Observamos una matriz simétrica donde la diagonal toma los valores 1 (correlación positiva perfecta) ya que corresponde a la correlación entre cada variable consigo misma. Por otro lado, el resto de correlaciones toman valores muy próximos a cero, indicándonos la ausencia de una relación lineal significativa entre `Valor_Coordenada`-`Flujo_Vehiculos`, `Valor_Punto_Quilometrico`-`Flujo_Vehiculos` y `Valor_Punto_Quilometrico`-`Valor_Coordenada`. Podemos representar gráficamente esta matriz con la función corrplot():
-```{r}
-corrplot(matrizcorr, tl.col = "black", col = colorRampPalette(c("red", "gray", "navyblue"))(200))
+
+Si nos fijamos en la matriz de Pearson, podemos ver que las correlaciones toman valores muy próximos a cero, lo que indica la ausencia de una relación lineal significativa entre V`Valor_Coordenada`-`Flujo_Vehiculos`, `Valor_Punto_Quilometrico`-`Flujo_Vehiculos` y `Valor_Punto_Quilometrico`-`Valor_Coordenada`. Sin embargo, al analizar la matriz de Spearman, los valores siguen siendo cercanos a cero, aunque los signos cambian. Lo que indica que, en algunos casos, cuando una variable aumenta, la otra tiende a disminuir, aunque la relación no sea fuerte. Podemos verlo gráficamente:
+
+```{r, echo=FALSE, fig.width=10, fig.height=4}
+par(mfrow = c(1, 2))
+corrplot(
+  matrizcorr1,
+  tl.col = "black",
+  col = colorRampPalette(c("red", "gray", "navyblue"))(200),
+  tl.cex = 0.7
+)
+corrplot(
+  matrizcorr2,
+  tl.col = "black",
+  col = colorRampPalette(c("red", "gray", "navyblue"))(200),
+  tl.cex = 0.7
+)
+
 ```
 
 Ahora estudiaremos la dependencia o independencia entre algunas variables categóricas: `Tipo_Via`-`Metodologia_Captacion`, `Tipo_Via`-`Tipo_Vehiculo`, `Sentido`-`Tipo_Vehiculo`. Comenzando con las dos primeras variables, calculamos el coeficiente V de Cramer (que está acotado entre 0 y 1):
 ```{r}
-library(DescTools)
+
 tabla <- table(vehiculos_tidy$Tipo_Via, vehiculos_tidy$Metodologia_Captacion)
 CramerV(tabla)
 ```
-Obteniendo 0.076, entonces sí que hay dependencia pero las variables prácticamente no se influyen entre sí.
-Con respecto a las siguientes varibales:
+Obteniendo $0.076$, lo que nos indica que hay dependencia pero las variables prácticamente no se influyen entre sí.Veamos que ocurre con las otras variables:
 ```{r}
 tabla1 <- table(vehiculos_tidy$Tipo_Via, vehiculos_tidy$Tipo_Vehiculo)
 CramerV(tabla1)

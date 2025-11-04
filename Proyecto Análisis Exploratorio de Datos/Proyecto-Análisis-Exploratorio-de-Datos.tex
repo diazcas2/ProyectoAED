@@ -239,10 +239,23 @@ gestión del tráfico y la planificación de las carreteras en Valencia.}
 
 
 % Add imagehandling
+% Custom command from Pandoc 3.2.1 to scale images if necessary
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+\makeatother
 
 
 
-\usepackage{longtable}
 
 \begin{document}
 
@@ -267,20 +280,48 @@ tráfico en 2025.
 
 \section{Importación de los datos.}\label{importaciuxf3n-de-los-datos.}
 
-Para importar los datos, primero se descarga el fichero y se verifica
-que los datos estén en el directorio adecuado. De esta forma, haciendo
-uso de la función de importación en R, obtenemos el dataset. Es
-importante especificar el encoding, ya que, de lo contrario, algunos
-caracteres pueden no reconocerse correctamente.
+Para importar los datos, primero se descarga el fichero
+(\href{https://dadesobertes.gva.es/dataset/tra-int-veh-2025}{aquí}) y se
+verifica que los datos estén en el directorio adecuado. Es importante
+especificar el encoding (en nuestro caso es UTF-8), ya que, de lo
+contrario, algunos caracteres pueden no reconocerse correctamente. De
+esta forma, haciendo uso de la función de importación en R con los
+parámetros adecuados, obtenemos el dataset.
+
+Para empezar, echaremos un pequeño vistazo a los datos para ver cuántas
+variables tenemos y de qué tipo son.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{filename }\OtherTok{\textless{}{-}}\StringTok{\textquotesingle{}../data/intensidad\_vehiculos\_en\_carretera\_2025.csv\textquotesingle{}}
-\NormalTok{vehiculos }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(filename, }\AttributeTok{sep=}\StringTok{";"}\NormalTok{,}\AttributeTok{encoding =} \StringTok{"UTF{-}8"}\NormalTok{)}
+\FunctionTok{glimpse}\NormalTok{(vehiculos)}
 \end{Highlighting}
 \end{Shaded}
 
-Las 18 variables del dataset son las siguientes:
+\begin{verbatim}
+## Rows: 15,235
+## Columns: 18
+## $ TRAM      <int> 10007, 10007, 10007, 10007, 10007, 10007, 10007, 10024, 1002~
+## $ DIA       <chr> "07/03/2025", "08/03/2025", "09/03/2025", "10/03/2025", "11/~
+## $ INTA      <dbl> 13.437, 6.871, 6.457, 14.053, 13.827, 14.218, 14.028, 13.774~
+## $ INTAP     <dbl> 2.694, 505.000, 319.000, 2.985, 3.077, 3.134, 3.134, 2.793, ~
+## $ INTD      <dbl> 13.437, 6.515, 6.243, 13.490, 13.394, 13.799, 13.779, 13.787~
+## $ INTDP     <dbl> 2.674, 424.000, 290.000, 2.904, 2.864, 3.000, 3.065, 2.725, ~
+## $ INTT      <dbl> 26.874, 13.386, 12.700, 27.543, 27.221, 28.017, 27.807, 27.5~
+## $ INTTP     <dbl> 5.368, 929.000, 609.000, 5.889, 5.941, 6.134, 6.199, 5.518, ~
+## $ TIPUSV    <chr> "Aut.", "Aut.", "Aut.", "Aut.", "Aut.", "Aut.", "Aut.", "Aut~
+## $ TIPUSE    <chr> "Espiras", "Espiras", "Espiras", "Espiras", "Espiras", "Espi~
+## $ PKE       <int> 700, 700, 700, 700, 700, 700, 700, 2400, 2400, 2400, 2400, 2~
+## $ PKECOOR   <chr> "39,88828171;-0,1963450773", "39,88828171;-0,1963450773", "3~
+## $ PKINI     <int> 0, 0, 0, 0, 0, 0, 0, 1650, 1650, 1650, 1650, 1650, 1650, 165~
+## $ REFINI    <chr> "Ac. Vilavella des de BetxÃ­", "Ac. Vilavella des de BetxÃ­"~
+## $ PKINICOOR <chr> "39,8805620167;-0,1927724982", "39,8805620167;-0,1927724982"~
+## $ PKFI      <int> 1650, 1650, 1650, 1650, 1650, 1650, 1650, 5000, 5000, 5000, ~
+## $ REFFI     <chr> "CV-223", "CV-223", "CV-223", "CV-223", "CV-223", "CV-223", ~
+## $ PKFICOOR  <chr> "39,8964339871;-0,1969224331", "39,8964339871;-0,1969224331"~
+\end{verbatim}
+
+Procedemos ahora a explicar qué signica cada columna. Las 18 variables
+del dataset se definen como sigue:
 
 \begin{enumerate}
 \item \textbf{TRAM}: Código del tramo al que se le asocia el tráfico.
@@ -304,27 +345,9 @@ Las 18 variables del dataset son las siguientes:
 \item \textbf{PKFICOOR}: Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
 \end{enumerate}
 
-Es importante revisar el tipo de cada variable para comprender mejor la
-estructura del dataset, para ello se utilizan las funciones sapply y
-class:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{sapply}\NormalTok{(vehiculos, class)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##        TRAM         DIA        INTA       INTAP        INTD       INTDP 
-##   "integer" "character"   "numeric"   "numeric"   "numeric"   "numeric" 
-##        INTT       INTTP      TIPUSV      TIPUSE         PKE     PKECOOR 
-##   "numeric"   "numeric" "character" "character"   "integer" "character" 
-##       PKINI      REFINI   PKINICOOR        PKFI       REFFI    PKFICOOR 
-##   "integer" "character" "character"   "integer" "character" "character"
-\end{verbatim}
-
-Se puede observar que \(DIA\) es de tipo character, por lo que es
-necesario convertirla a formato de fecha.
+Cuando hemos echado un vistazo al conjunto hemos podido observar que
+\(DIA\) es de tipo character, por lo que es necesario convertirla a
+formato de fecha.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -337,6 +360,44 @@ necesario convertirla a formato de fecha.
 ## [1] "Date"
 \end{verbatim}
 
+Antes de proseguir modificando y explorando los datos vamos a considerar
+los valores faltantes haciendo uso de la función \texttt{aggr} del
+paquete \texttt{VIM}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a }\OtherTok{\textless{}{-}} \FunctionTok{aggr}\NormalTok{(vehiculos, }\AttributeTok{sortVars =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{plot =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{a}\SpecialCharTok{$}\NormalTok{missings}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            Variable Count
+## TRAM           TRAM     0
+## DIA             DIA     0
+## INTA           INTA     0
+## INTAP         INTAP     0
+## INTD           INTD     0
+## INTDP         INTDP     0
+## INTT           INTT     0
+## INTTP         INTTP     0
+## TIPUSV       TIPUSV     0
+## TIPUSE       TIPUSE     0
+## PKE             PKE     0
+## PKECOOR     PKECOOR     0
+## PKINI         PKINI     0
+## REFINI       REFINI     0
+## PKINICOOR PKINICOOR     0
+## PKFI           PKFI     0
+## REFFI         REFFI     0
+## PKFICOOR   PKFICOOR     0
+\end{verbatim}
+
+Como puede apreciarse en el dataframe \texttt{missings}, que recuenta
+los valores faltantes de cada variable, nos encontramos en la feliz
+situación de no hallar ningún valor faltante, por lo que no será
+necesario llevar a cabo ningún proceso de imputación o similar.
+
 \section{Conversión de los datos a estructura
 Tidy.}\label{conversiuxf3n-de-los-datos-a-estructura-tidy.}
 
@@ -344,48 +405,12 @@ La estructura tidy se caracteriza por tener cada variable en una
 columna, cada observación en una fila y nombres de columnas que sean
 representativos. Veamos que ocure en nuestro dataset.
 
-La columna \(TRAM\) contiene información del código CV- de la carretera
-(dos primeros dígitos) y del número de tramo(tres últimos dígitos). Por
-tanto, primero verificaremos que todos los valores de esta columna
-tengan cinco dígitos. Si es así, procederemos a dividirla en dos
-columnas separadas, que se llamarán \(Código_CV\) y \(Num_tramo\).
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(tidyr)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'tidyr' was built under R version 4.4.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(dplyr)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'dplyr' was built under R version 4.4.3
-\end{verbatim}
-
-\begin{verbatim}
-## 
-## Adjuntando el paquete: 'dplyr'
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-\end{verbatim}
+La columna \texttt{TRAM} contiene información del código CV- de la
+carretera (dos primeros dígitos) y del número de tramo(tres últimos
+dígitos). Por tanto, primero verificaremos que todos los valores de esta
+columna tengan cinco dígitos. Si es así, procederemos a dividirla en dos
+columnas separadas, que se llamarán \texttt{Código\_CV} y
+\texttt{Num\_tramo}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -404,18 +429,19 @@ columnas separadas, que se llamarán \(Código_CV\) y \(Num_tramo\).
 \end{Highlighting}
 \end{Shaded}
 
-Las variables \(INTA\), \(INTAP\), \(INTD\), \(INTDP\), \(INTT\) y
-\(INTTP\) contienen información sobre el tipo de vehículo, si es pesado
-o no, y el sentido del tráfico, ascendente o descendente. Con el fin de
-estructurar mejor estos datos, aplicamos pivot\_longer(), generando dos
-nuevas variables, \(Sentido\) y \(Tipo_Vehiculo\).
+Las variables \texttt{INTA}, \texttt{INTAP}, \texttt{INTD},
+\texttt{INTDP}, \texttt{INTT} y \texttt{INTTP} contienen información
+sobre el tipo de vehículo, si es pesado o no, y el sentido del tráfico,
+ascendente o descendente. Con el fin de estructurar mejor estos datos,
+aplicamos \emph{pivot\_longer()}, generando dos nuevas variables,
+\texttt{Sentido} y \texttt{Tipo\_Vehiculo}.
 
-En la columna \(Tipo_Vehiculo\), los valores en blanco se rellenan con
-`T', que representa cualquier vehículo, mientras que `P' indica
-vehículos pesados.
+En la columna \texttt{Tipo\_Vehiculo}, los valores en blanco se rellenan
+con \emph{T}, que representa cualquier vehículo, mientras que \emph{P}
+indica vehículos pesados.
 
-Por otro lado, las columnas \(INTT\) y \(INTTP\) representan la
-intensidad total del tráfico, es decir, la suma de los vehículos que
+Por otro lado, las columnas \texttt{INTT} y \texttt{INTTP} representan
+la intensidad total del tráfico, es decir, la suma de los vehículos que
 circulan en ambos sentidos (ascendente y descendente), diferenciando si
 son pesados o no. Dado que esta información puede obtenerse a partir de
 las demás variables, eliminaremos estas columnas y, en caso de ser
@@ -427,23 +453,24 @@ columnas de sentido.
 \NormalTok{vehiculos\_tidy }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{col =} \FunctionTok{starts\_with}\NormalTok{(}\StringTok{\textquotesingle{}INT\textquotesingle{}}\NormalTok{), }
     \AttributeTok{names\_to =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Sentido\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Tipo\_Vehiculo\textquotesingle{}}\NormalTok{), }
-    \AttributeTok{names\_pattern =} \StringTok{\textquotesingle{}\^{}INT([ADT])\{1\}(P?)$\textquotesingle{}}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{\textquotesingle{}Intensidad\textquotesingle{}}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+    \AttributeTok{names\_pattern =} \StringTok{\textquotesingle{}\^{}INT([ADT])\{1\}(P?)$\textquotesingle{}}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{\textquotesingle{}Flujo\_Vehiculos\textquotesingle{}}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Tipo\_Vehiculo =} \FunctionTok{ifelse}\NormalTok{(Tipo\_Vehiculo }\SpecialCharTok{==} \StringTok{\textquotesingle{}P\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}P\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}T\textquotesingle{}}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{filter}\NormalTok{(Sentido }\SpecialCharTok{!=} \StringTok{\textquotesingle{}T\textquotesingle{}}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-Del mismo modo, las columnas \(PKECOOR\), \(PKINICOOR\) y \(PKFICOOR\)
-contienen las coordenadas geográficas, diferenciando entre la posición
-inicial, final y exacta. Para reorganizar esta información, aplicamos
-pivot\_longer(), que genera dos nuevas columnas: \(Coordenadas\), donde
-se indica el tipo de coordenada (inicial, final o exacta), y
-\(Valor_coordenada\), que almacena su valor correspondiente.
+Del mismo modo, las columnas \texttt{PKECOOR}, \texttt{PKINICOOR} y
+\texttt{PKFICOOR} contienen las coordenadas geográficas, diferenciando
+entre la posición inicial, final y exacta. Para reorganizar esta
+información, aplicamos \texttt{pivot\_longer()}, que genera dos nuevas
+columnas: \texttt{Coordenadas}, donde se indica el tipo de coordenada
+(inicial, final o exacta), y \texttt{Valor\_coordenada}, que almacena su
+valor correspondiente.
 
 Además, observamos que cada coordenada incluye la latitud y la longitud
 separadas por un punto y coma. Por ello, utilizamos la función
-separate() para dividir \(Valor_coordenada\) en dos columnas
-adicionales: \(Latitud\) y \(Longitud\).
+\texttt{separate()} para dividir \texttt{Valor\_coordenada} en dos
+columnas adicionales: \texttt{Latitud} y \texttt{Longitud}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -457,12 +484,13 @@ adicionales: \(Latitud\) y \(Longitud\).
 \end{Highlighting}
 \end{Shaded}
 
-En cuanto a las \(REFINI\) y \(REFFI\) recogen las ubicaciones inicial y
-final del tramo donde se ha detectado el tráfico. Para reorganizar esta
-información, aplicamos pivot\_longer(), generando dos nuevas columnas:
-\(Tipo_Ubicacion\), que especifica si se trata de la ubicación inicial o
-final, y \(Ubicacion\), que que almacena el nombre de la vía o
-localización.
+En cuanto a las variables \texttt{REFINI} y \texttt{REFFI}, estas
+recogen las ubicaciones inicial y final del tramo donde se ha detectado
+el tráfico. Para reorganizar esta información, aplicamos
+\texttt{pivot\_longer()}, generando dos nuevas columnas:
+\texttt{Tipo\_Ubicacion}, que especifica si se trata de la ubicación
+inicial o final, y \texttt{Ubicacion}, que almacena el nombre de la vía
+o localización.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -472,15 +500,17 @@ localización.
 \end{Highlighting}
 \end{Shaded}
 
-Por último, las variables \(PKINI\), \(PKFI\) y \(PKE\) indican la
-posición inicial, final y exacta donde se registró el tráfico, tomando
-como referencia la placa kilométrica anterior en sentido ascendente,
-suponiendo que el tráfico es invariante en todo el tramo.
+Por último, las variables \texttt{PKINI}, \texttt{PKFI} y \texttt{PKE}
+indican la posición inicial, final y exacta donde se registró el
+tráfico, tomando como referencia la placa kilométrica anterior en
+sentido ascendente, suponiendo que el tráfico es invariante en todo el
+tramo.
 
-Mediante la función pivot\_longer(), se crean dos nuevas columnas:
-\(Tipo_Posicion_Punto_Quilometrico\), que especifica si la posición
-corresponde al punto inicial o final, y \(Valor_Punto_Quilometrico\),
-que contiene el valor asociado a dicha posición.
+Mediante la función \texttt{pivot\_longer()}, se crean dos nuevas
+columnas: \texttt{Tipo\_Posicion\_Punto\_Quilometrico}, que especifica
+si la posición corresponde al punto inicial o final, y
+\texttt{Valor\_Punto\_Quilometrico}, que contiene el valor asociado a
+dicha posición.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -491,12 +521,12 @@ que contiene el valor asociado a dicha posición.
 \end{Highlighting}
 \end{Shaded}
 
-La columna \(Valor_Coordenada\) contiene los valores de latitud y
+La columna \texttt{Valor\_Coordenada} contiene los valores de latitud y
 longitud, donde se utilizan comas como separador decimal. Por este
 motivo, R detecta la columna como tipo character, cuando en realidad
-debería ser numérica. Para solucionarlo, usamos la función sub() para
-reemplazar las comas por puntos, lo que nos permite convertir
-correctamente los valores a tipo numérico. Veámoslo:
+debería ser numérica. Para solucionarlo, usamos la función
+\texttt{sub()} para reemplazar las comas por puntos, lo que nos permite
+convertir correctamente los valores a tipo numérico. Veámoslo:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -521,13 +551,16 @@ correctamente los valores a tipo numérico. Veámoslo:
 \end{verbatim}
 
 Solo falta asegurarnos de que los nombres de las columnas sean
-representativos; para ello, utilizamos la función rename() y
+representativos; para ello, utilizamos la función \texttt{rename()} y
 reemplazamos algunos valores abreviados por descripciones completas
-mediante la función ifelse(). Por ejemplo, en las variables relacionadas
-con coordenadas y ubicación, los códigos INI, E y FI se sustituyeron por
-Inicial, Exacta y Final; en Sentido, los valores A y D pasaron a
-Ascendente y Descendente; y en Tipo\_Vehiculo, T y P se cambiaron por
-Todos y Pesados. Veámoslo:
+mediante la función \texttt{ifelse()}. Por ejemplo, en las variables
+relacionadas con coordenadas y ubicación, los códigos \emph{INI},
+\emph{E} y \emph{FI} se sustituyeron por \emph{Inicial}, \emph{Exacta} y
+\emph{Final}; en \texttt{Sentido}, los valores \emph{A} y \emph{D}
+pasaron a \emph{Ascendente} y \emph{Descendente}; y en
+\texttt{Tipo\_Vehiculo}, \emph{T} y \emph{P} se cambiaron por
+\emph{Todos} y \emph{Pesados.} En el caso de las coordenadas y
+ubicación, se hace de forma análoga.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -547,18 +580,6 @@ Todos y Pesados. Veámoslo:
 
 \NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Coordenadas }\OtherTok{\textless{}{-}}
 \NormalTok{  vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Coordenadas }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"INI"}\NormalTok{, }\StringTok{"Inicial"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"E"}\NormalTok{, }\StringTok{"Exacta"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"FI"}\NormalTok{, }\StringTok{"Final"}\NormalTok{)}
-
-\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Ubicacion }\OtherTok{\textless{}{-}}
-\NormalTok{  vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Ubicacion }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"INI"}\NormalTok{, }\StringTok{"Inicial"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"E"}\NormalTok{, }\StringTok{"Exacta"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"FI"}\NormalTok{, }\StringTok{"Final"}\NormalTok{)}
-
-\NormalTok{vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Posicion\_Punto\_Quilometrico }\OtherTok{\textless{}{-}}
-\NormalTok{  vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Posicion\_Punto\_Quilometrico }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"INI"}\NormalTok{, }\StringTok{"Inicial"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"E"}\NormalTok{, }\StringTok{"Exacta"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{replace}\NormalTok{(. }\SpecialCharTok{==} \StringTok{"FI"}\NormalTok{, }\StringTok{"Final"}\NormalTok{)}
@@ -590,11 +611,137 @@ dataset, usando la función head():
 ## 4 10        007       2025-03-07 Autovia  Espiras               Ascendente
 ## 5 10        007       2025-03-07 Autovia  Espiras               Ascendente
 ## 6 10        007       2025-03-07 Autovia  Espiras               Ascendente
-## # i 9 more variables: Tipo_Vehiculo <chr>, Intensidad <dbl>, Coordenadas <chr>,
-## #   Tipo_Coordenada <chr>, Valor_Coordenada <dbl>, Tipo_Ubicacion <chr>,
-## #   Ubicacion <chr>, Tipo_Posicion_Punto_Quilometrico <chr>,
-## #   Valor_Punto_Quilometrico <int>
+## # i 9 more variables: Tipo_Vehiculo <chr>, Flujo_Vehiculos <dbl>,
+## #   Coordenadas <chr>, Tipo_Coordenada <chr>, Valor_Coordenada <dbl>,
+## #   Tipo_Ubicacion <chr>, Ubicacion <chr>,
+## #   Tipo_Posicion_Punto_Quilometrico <chr>, Valor_Punto_Quilometrico <int>
 \end{verbatim}
+
+\section{Relación entre las
+variables}\label{relaciuxf3n-entre-las-variables}
+
+En este apartado estudiaremos si existe una relación lineal entre las
+variables de nuestro conjunto de datos. En primer lugar, comenzaremos
+con las variables numéricas:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vehiculos\_num }\OtherTok{\textless{}{-}}\NormalTok{ vehiculos\_tidy[}\FunctionTok{sapply}\NormalTok{(vehiculos\_tidy, is.numeric)]}
+\end{Highlighting}
+\end{Shaded}
+
+Obteniendo las variables \texttt{Flujo\_Vehiculos},
+\texttt{Valor\_Coordenada} y \texttt{Valor\_Punto\_Quilometrico}
+almacenadas en \texttt{vehiculos\_num}.
+
+A continuación, calculamos las matrices de correlación de Pearson y
+Spearman con la función cor() para determinar si existe o no una
+relación entre estas variables:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{matrizcorr1 }\OtherTok{\textless{}{-}}\FunctionTok{cor}\NormalTok{(vehiculos\_num,}\AttributeTok{use=}\StringTok{\textquotesingle{}complete.obs\textquotesingle{}}\NormalTok{,}\AttributeTok{method=}\StringTok{\textquotesingle{}pearson\textquotesingle{}}\NormalTok{)}
+\NormalTok{matrizcorr2 }\OtherTok{\textless{}{-}}\FunctionTok{cor}\NormalTok{(vehiculos\_num,}\AttributeTok{use=}\StringTok{\textquotesingle{}complete.obs\textquotesingle{}}\NormalTok{,}\AttributeTok{method=}\StringTok{\textquotesingle{}spearman\textquotesingle{}}\NormalTok{)}
+\NormalTok{matrizcorr1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                          Flujo_Vehiculos Valor_Coordenada
+## Flujo_Vehiculos             1.0000000000     0.0002915446
+## Valor_Coordenada            0.0002915446     1.0000000000
+## Valor_Punto_Quilometrico    0.0333949602     0.0021449420
+##                          Valor_Punto_Quilometrico
+## Flujo_Vehiculos                       0.033394960
+## Valor_Coordenada                      0.002144942
+## Valor_Punto_Quilometrico              1.000000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{matrizcorr2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                          Flujo_Vehiculos Valor_Coordenada
+## Flujo_Vehiculos              1.000000000    -0.0089011035
+## Valor_Coordenada            -0.008901103     1.0000000000
+## Valor_Punto_Quilometrico    -0.051720007    -0.0005810784
+##                          Valor_Punto_Quilometrico
+## Flujo_Vehiculos                     -0.0517200072
+## Valor_Coordenada                    -0.0005810784
+## Valor_Punto_Quilometrico             1.0000000000
+\end{verbatim}
+
+Si nos fijamos en la matriz de Pearson, podemos ver que las
+correlaciones toman valores muy próximos a cero, lo que indica la
+ausencia de una relación lineal significativa entre
+V\texttt{Valor\_Coordenada}-\texttt{Flujo\_Vehiculos},
+\texttt{Valor\_Punto\_Quilometrico}-\texttt{Flujo\_Vehiculos} y
+\texttt{Valor\_Punto\_Quilometrico}-\texttt{Valor\_Coordenada}. Sin
+embargo, al analizar la matriz de Spearman, los valores siguen siendo
+cercanos a cero, aunque los signos cambian. Lo que indica que, en
+algunos casos, cuando una variable aumenta, la otra tiende a disminuir,
+aunque la relación no sea fuerte. Podemos verlo gráficamente:
+
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf}}
+
+Ahora estudiaremos la dependencia o independencia entre algunas
+variables categóricas:
+\texttt{Tipo\_Via}-\texttt{Metodologia\_Captacion},
+\texttt{Tipo\_Via}-\texttt{Tipo\_Vehiculo},
+\texttt{Sentido}-\texttt{Tipo\_Vehiculo}. Comenzando con las dos
+primeras variables, calculamos el coeficiente V de Cramer (que está
+acotado entre 0 y 1):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tabla }\OtherTok{\textless{}{-}} \FunctionTok{table}\NormalTok{(vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Via, vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Metodologia\_Captacion)}
+\FunctionTok{CramerV}\NormalTok{(tabla)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.07673791
+\end{verbatim}
+
+Obteniendo \(0.076\), lo que nos indica que hay dependencia pero las
+variables prácticamente no se influyen entre sí.Veamos que ocurre con
+las otras variables:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tabla1 }\OtherTok{\textless{}{-}} \FunctionTok{table}\NormalTok{(vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Via, vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Vehiculo)}
+\FunctionTok{CramerV}\NormalTok{(tabla1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tabla2 }\OtherTok{\textless{}{-}} \FunctionTok{table}\NormalTok{(vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Sentido, vehiculos\_tidy}\SpecialCharTok{$}\NormalTok{Tipo\_Vehiculo)}
+\FunctionTok{CramerV}\NormalTok{(tabla2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+Obtenemos un valor del coeficiente para los pares de variables
+\texttt{Tipo\_Via}-\texttt{Tipo\_Vehiculo} y
+\texttt{Sentido}-\texttt{Tipo\_Vehiculo} de 0; por tanto, ambos pares
+son independientes. Podríamos pensar que existe alguna dependencia entre
+el tipo de vehículo y el tipo de vía por la que se circula (autovía,
+convecional o desdoblada), pero observamos que no. En cambio, ya
+esperábamos que el sentido de circulación (ascendente o descendente) y
+el tipo de vehículo fueran completamente independientes ya que el tipo
+de vehículo no depende del sentido del trayecto (los vehículos pueden
+circular indistintamente en un sentido o en otro).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -602,10 +749,6 @@ dataset, usando la función head():
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% optional
-\supplementary{The following supporting information can be downloaded
-at:\\
-\linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1:
-title.}
 
 % Only for the journal Methods and Protocols:
 % If you wish to submit a video article, please do so with any other supplementary material.
@@ -653,29 +796,15 @@ disponibles en
 %% Only for journal Encyclopedia
 %\entrylink{The Link to this entry published on the encyclopedia platform.}
 
-\abbreviations{Abbreviations}{
-The following abbreviations are used in this manuscript:\\
-
-\noindent
-\begin{tabular}{@{}ll}
-MDPI & Multidisciplinary Digital Publishing Institute \\
-DOAJ & Directory of open access journals \\
-TLA & Three letter acronym \\
-LD & linear dichroism \\
-\end{tabular}
-}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
-\input{"appendix.tex"}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{adjustwidth}{-\extralength}{0cm}
 
 %\printendnotes[custom] % Un-comment to print a list of endnotes
 
 
-\reftitle{References}
-\bibliography{mybibfile.bib}
 
 % If authors have biography, please use the format below
 %\section*{Short Biography of Authors}

@@ -294,8 +294,92 @@ sum(abs(vehiculos_tidy$Valor_Punto_Quilometrico-median(vehiculos_tidy$Valor_Punt
 
 
 
+# Gráficas exploratorias
 
+Cargamos el archivo
+```{r}
+vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
+str(vehiculos)
+library(dplyr)
+library(tidyr)
+```
+Renombramos para que los nombres sean más claros y pasamos `DIA` a formato `date`.
+```{r}
+new_names<-c(
+  Intensidad_Ascendente="INTA",
+  Intensidad_Ascendente_Pesada="INTAP",
+  Intensidad_Descendente="INTD",
+  Intensidad_Descendente_Pesada="INTDP",
+  Intensidad_Total="INTT",
+  Intensidad_Total_Pesados="INTTP",
+  Metodo_Capatacion="TIPUSE",
+  Tipo_Via="TIPUSV",
+  Pto_Kilometrico_Final="PKFI",
+  Pto_Kilometrico_Inicial="PKINI",
+  Referencia_Inicio="REFINI",
+  Referencia_Final="REFFI",
+  Coord_Medicion="PKECOOR",
+  Coord_Inicio="PKINICOOR",
+  Coord_Fin="PKFICOOR",
+  Pto_Kilometrico_Medicion="PKE",
+  Tramo="TRAM",
+  Fecha = "DIA"
+  )
+vehiculos2 <- vehiculos %>% 
+  mutate(DIA = as.Date(DIA,format="%d/%m/%Y")) %>% 
+  mutate(Mes=format(DIA,"%B")) %>% 
+  mutate(Mes = factor(
+    Mes, 
+    levels = c("January","February","March","April","May","June"),
+    labels=c("Enero","Febrero","Marzo","Abril","Mayo","Junio"),
+    ordered=TRUE
+    )) %>% 
+  rename(all_of(new_names))
+head(vehiculos2)
+```
+Lo primero que podríamos explorar es el número de observaciones dependiendo de la fecha, es decir, si todos los días se toman el mismo número de mediciones o hay algún patrón que nos indique que las mediciones están automatizadas. 
+```{r, echo=F}
+library(ggplot2)
+```
 
+```{r}
+vehiculos2 %>%
+  ggplot(aes(x = Fecha)) +
+  geom_bar(fill = "blue") +
+  labs(title = "Observaciones por mes") +
+  facet_wrap(~ Mes, ncol = 3, scales = "free_x") +
+  theme_minimal()
+```
+No parece que que haya ningún patrón. 
+Fijémonos ahora en la distribución del flujo de vehículos no pesados :
 
+```{r}
+vehiculos2 %>%
+  ggplot(aes(x = Intensidad_Total)) +
+  geom_histogram(fill = "lavender",color="blue",binwidth=30) +
+  labs(y="Recuento", x="Flujo total de vehículos no pesados") +
+  theme_minimal()
 
+vehiculos2 %>%
+  ggplot(aes(x = Intensidad_Total_Pesados)) +
+  geom_histogram(fill = "lavender",color="blue",binwidth = 30) +
+  labs(y="recuento", x="Flujo total de vehículos pesados") +
+  theme_minimal()
+```
+Notemos que claramente los datos sobre el flujo de vehículos, independientemente de que estos sean pesados o no, no siguen una distribución normal. Por otro lado, podríamos preguntarnos sobre la relación entre el flujo de vehículos y el momento en el que fue observado dicho flujo. 
+
+```{r}
+vehiculos2 %>% 
+  ggplot(aes(x=Fecha,y=Intensidad_Total)) +
+  geom_jitter() +
+  labs(title = "Flujo de vehículos por mes") +
+  facet_wrap(~ Mes, ncol = 3, scales = "free_x") +
+  theme_minimal()
+vehiculos2 %>% 
+  ggplot(aes(x=Fecha,y=Intensidad_Total_Pesados)) +
+  geom_jitter() +
+  labs(title = "Flujo de vehículos pesados por mes") +
+  facet_wrap(~ Mes, ncol = 3, scales = "free_x") +
+  theme_minimal()
+```
 

@@ -322,10 +322,10 @@ new_names<-c(
   Coord_Inicio="PKINICOOR",
   Coord_Fin="PKFICOOR",
   Pto_Kilometrico_Medicion="PKE",
-  Tramo="TRAM",
   Fecha = "DIA"
   )
 vehiculos2 <- vehiculos %>% 
+  separate(TRAM, into = c("CV","Tramo"), sep = 2) %>% 
   mutate(DIA = as.Date(DIA,format="%d/%m/%Y")) %>% 
   mutate(Mes=format(DIA,"%B")) %>% 
   mutate(Mes = factor(
@@ -342,15 +342,46 @@ Lo primero que podríamos explorar es el número de observaciones dependiendo de
 library(ggplot2)
 ```
 
+## Variables cualitativas
+Lo primero que podríamos explorar es el número de observaciones dependiendo de la fecha, es decir, si todos los días se toman el mismo número de mediciones o hay algún patrón que nos indique que las mediciones están automatizadas. 
 ```{r}
 vehiculos2 %>%
   ggplot(aes(x = Fecha)) +
-  geom_bar(fill = "blue") +
-  labs(title = "Observaciones por mes") +
+  geom_bar(color = "blue", fill = "lavender") +
+  labs(title = "Observaciones por mes", y="Recuento") +
   facet_wrap(~ Mes, ncol = 3, scales = "free_x") +
   theme_minimal()
 ```
 No parece que que haya ningún patrón. 
+
+```{r}
+vehiculos2 %>% 
+  ggplot(aes(Metodo_Capatacion)) + 
+  geom_bar(color = "blue", fill = "lavender") +
+  labs(x = "Método de captación", y = "Recuento") +
+  theme_minimal()
+
+vehiculos2 %>% 
+  ggplot(aes(Tipo_Via)) + 
+  geom_bar(color = "blue", fill = "lavender") +
+  labs(x = "Tipo de vía", y = "Recuento") +
+  theme_minimal()
+
+vehiculos2 %>% 
+  ggplot(aes(Referencia_Inicio)) + 
+  geom_bar(color = "blue", fill = "lavender") +
+  labs(x = "Punto de referencia inicial", y = "Recuento") +
+  theme_minimal()
+
+vehiculos2 %>% 
+  ggplot(aes(Referencia_Final)) + 
+  geom_bar(color = "blue", fill = "lavender") +
+  labs(x = "Punto de referencia final", y = "Recuento") +
+  theme_minimal()
+```
+
+
+## Variables cuantitativas
 Fijémonos ahora en la distribución del flujo de vehículos no pesados :
 
 ```{r}
@@ -363,23 +394,65 @@ vehiculos2 %>%
 vehiculos2 %>%
   ggplot(aes(x = Intensidad_Total_Pesados)) +
   geom_histogram(fill = "lavender",color="blue",binwidth = 30) +
-  labs(y="recuento", x="Flujo total de vehículos pesados") +
+  labs(y="Recuento", x="Flujo total de vehículos pesados") +
   theme_minimal()
 ```
 Notemos que claramente los datos sobre el flujo de vehículos, independientemente de que estos sean pesados o no, no siguen una distribución normal. Por otro lado, podríamos preguntarnos sobre la relación entre el flujo de vehículos y el momento en el que fue observado dicho flujo. 
 
 ```{r}
 vehiculos2 %>% 
-  ggplot(aes(x=Fecha,y=Intensidad_Total)) +
-  geom_jitter() +
-  labs(title = "Flujo de vehículos por mes") +
+  ggplot() +
+  geom_density(aes(y=Intensidad_Total),color="purple") +
   facet_wrap(~ Mes, ncol = 3, scales = "free_x") +
+  labs(title = "Flujo de vehículos total (dispuestos por mes)") +
   theme_minimal()
+# vehiculos2 %>% 
+#   ggplot(aes(x=Fecha,y=Intensidad_Total_Pesados)) +
+#   geom_density() +
+#   labs(title = "Flujo de vehículos pesados por mes") +
+#   facet_wrap(~ Mes, ncol = 3, scales = "free_x") +
+#   theme_minimal()
+
 vehiculos2 %>% 
-  ggplot(aes(x=Fecha,y=Intensidad_Total_Pesados)) +
-  geom_jitter() +
-  labs(title = "Flujo de vehículos pesados por mes") +
+  ggplot() +
+  geom_density(aes(y=Intensidad_Ascendente),color="blue") +
   facet_wrap(~ Mes, ncol = 3, scales = "free_x") +
+  labs(title = "Flujo de vehículos ascendente (dispuestos por mes)") +
+  theme_minimal()
+
+vehiculos2 %>% 
+  ggplot() +
+  geom_density(aes(y=Intensidad_Descendente),color="red") +
+  facet_wrap(~ Mes, ncol = 3, scales = "free_x") +
+  labs(title = "Flujo de vehículos descendente (dispuestos por mes)") +
+  theme_minimal()
+  
+ 
+```
+# mapita por si interesa
+
+```{r}
+vehiculos3 <- vehiculos2
+vehiculos3 <- vehiculos3 %>%
+  mutate(Coord_Medicion = gsub(",",".",Coord_Medicion)) %>%
+  separate(Coord_Medicion, into = c("Latitud","Longitud"), sep=";") %>%
+  mutate(Latitud = as.numeric(Latitud)) %>%
+  mutate(Longitud = as.numeric(Longitud))
+
+library(sf)
+library(mapSpain)
+valencia <- esp_get_munic_siane(region = "Comunidad Valenciana") %>%
+     # Homogeinizo labels
+    mutate(
+        Provincia = esp_dict_translate(ine.prov.name, "es")
+     )
+
+vehiculos3_sf <- st_as_sf(vehiculos3, coords = c("Longitud", "Latitud"), crs = 4326)
+
+ggplot() +
+  geom_sf(data = valencia, fill = "lavender") +
+  geom_sf(data = vehiculos3_sf, color = "blue", size = 1) +
   theme_minimal()
 ```
+
 

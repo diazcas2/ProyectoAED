@@ -4,7 +4,12 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-rm(list=ls)
+rm(list=ls())
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(sf)
+library(mapSpain)
 ```
 
 ## Cargamos los datos:
@@ -50,9 +55,6 @@ vehiculos2 <- vehiculos %>%
 head(vehiculos2)
 ```
 
-```{r, echo=F}
-library(ggplot2)
-```
 
 ## Variables cuantitativas
 Fijémonos ahora en la distribución del flujo de vehículos no pesados :
@@ -74,13 +76,6 @@ vehiculos2 %>%
 ```
 
 # mapita por si interesa
-
-```{r}
-# librerías especificas para esto
-library(sf)
-library(mapSpain)
-```
-
 
 ```{r}
 valencia <- esp_get_munic_siane(region = "Comunidad Valenciana") %>%
@@ -135,3 +130,5 @@ ggplot() +
   geom_sf(data = coord_fin_sf, color = "blue", size = 1) +
   theme_minimal()
 ```
+
+

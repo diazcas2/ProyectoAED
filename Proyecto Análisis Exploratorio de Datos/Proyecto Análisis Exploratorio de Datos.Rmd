@@ -7,10 +7,6 @@ author:
 journal: notspecified
 type: article
 status: submit
-simplesummary: |
-  Preparación y análisis exploratorio del tráfico diario de carreteras en Valencia 2025, obtenido de la página oficial de la Generalitat Valenciana.
-abstract: |
-  Este proyecto tiene como objetivo analizar el tráfico en Valencia durante 2025, utilizando datos del dataset público proporcionado por la Generalitat Valenciana. Se consideran 18 variables, de las que se incluyen el número de vehículos que transitan por cada tramo, el método de captación o las coordenadas iniciales y finales de cada registro, entre otras. En total, se han recopilado 15.235 observaciones asociadas a distintos momentos en los que se registró tráfico. Los datos se reestructuraron para facilitar un análisis exploratorio previo, identificando patrones de circulación y posibles anomalías, tratando de ofrecer información valiosa para mejorar la gestión del tráfico y la planificación de las carreteras en Valencia.
 
 keywords: null
 
@@ -22,7 +18,7 @@ output:
 ---
 
 # Introducción.
-El tráfico de vehículos va más allá de los números, muestra cómo Valencia se mueve, organiza y enfrenta cada día sus desafíos de desplazamiento. Este proyecto se centra en analizar la intensidad del tráfico en las carreteras de la Comunidad Valenciana durante 2025, a partir de datos públicos proporcionados por la Generalitat Valenciana. A través de un análisis exploratorio de 15.235 observaciones, se busca descubrir patrones de circulación, identificar posibles anomalías y generar información que sea útil para la gestión del transporte. Las visualizaciones y estadísticas que se presentan a lo largo del documento permiten observar de manera clara cómo se mueve Valencia por sus carreteras, ofreciendo una visión tanto cuantitativa como práctica del tráfico en 2025.
+El tráfico de vehículos va más allá de los números, muestra cómo Valencia se mueve, organiza y enfrenta cada día sus desafíos de desplazamiento. Este proyecto se centra en analizar la intensidad del tráfico en las carreteras de la Comunidad Valenciana durante el primer semestre de 2025, a partir de datos públicos proporcionados por la Generalitat Valenciana. A través de un análisis exploratorio de 15.235 observaciones, se busca detectar las posibles anomalías en el tráfico y explorar el comportamiento de la movilidad en Valencia.
 
 # Importación de los datos.
 Para importar los datos, primero se descarga el fichero ([aquí](https://dadesobertes.gva.es/dataset/tra-int-veh-2025)) y se verifica que los datos estén en el directorio adecuado. Es importante especificar el encoding (en nuestro caso es UTF-8), ya que, de lo contrario, algunos caracteres pueden no reconocerse correctamente. De esta forma, haciendo uso de la función de importación en R con los parámetros adecuados, obtenemos el dataset.

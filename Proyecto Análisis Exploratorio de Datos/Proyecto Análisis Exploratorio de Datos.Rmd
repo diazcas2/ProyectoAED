@@ -11,7 +11,7 @@ status: submit
 keywords: null
 
 dataavailability: |
-  Los datos usados en este estudio son públicos disponibles en  [https://dadesobertes.gva.es/dataset/20b91b5a-c26d-4624-bcf5-b76a74b3ec88/resource/abe57190-d53d-4d41-9266-d7c2254621ae/download/intensidad_vehiculos_en_carretera_2025.csv]
+  Los datos usados en este estudio son públicos disponibles en  [https://dadesobertes.gva.es/dataset/tra-int-veh-2025]
 
 output: 
   rticles::mdpi_article
@@ -21,11 +21,10 @@ output:
 El tráfico de vehículos va más allá de los números, muestra cómo Valencia se mueve, organiza y enfrenta cada día sus desafíos de desplazamiento. Este proyecto se centra en analizar la intensidad del tráfico en las carreteras de la Comunidad Valenciana durante el primer semestre de 2025, a partir de datos públicos proporcionados por la Generalitat Valenciana. A través de un análisis exploratorio de 15.235 observaciones, se busca detectar las posibles anomalías en el tráfico y explorar el comportamiento de la movilidad en Valencia.
 
 # Importación de los datos.
-Para importar los datos, primero se descarga el fichero ([aquí](https://dadesobertes.gva.es/dataset/tra-int-veh-2025)) y se verifica que los datos estén en el directorio adecuado. Es importante especificar el encoding (en nuestro caso es UTF-8), ya que, de lo contrario, algunos caracteres pueden no reconocerse correctamente. De esta forma, haciendo uso de la función de importación en R con los parámetros adecuados, obtenemos el dataset.
+Para importar los datos, primero se descarga el fichero y se verifica que los datos estén en el directorio adecuado. Es importante especificar el encoding (en nuestro caso es UTF-8), ya que, de lo contrario, algunos caracteres pueden no reconocerse correctamente. De esta forma, haciendo uso de la función de importación en R con los parámetros adecuados, obtenemos el dataset.
 
 ```{r, include=FALSE}
 library(readr)
-library(VIM)
 library(tidyr)
 library(dplyr)
 library(corrplot)
@@ -34,50 +33,44 @@ filename <-'../data/intensidad_vehiculos_en_carretera_2025.csv'
 vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
 ```
 
-Para empezar, echaremos un pequeño vistazo a los datos para ver cuántas variables tenemos y de qué tipo son. 
-
-```{r}
-glimpse(vehiculos)
-```
-Procedemos ahora a explicar qué signica cada columna. Las 18 variables del dataset se definen como sigue:
+Las variables de nuestro dataset son las siguientes:
 
 \begin{enumerate}
-\item \textbf{TRAM}: Código del tramo al que se le asocia el tráfico.
+\item \textbf{TRAM} (\textit{numérico}): Código del tramo al que se le asocia el tráfico.
 \subitem  Primer y segundo dígito: código CV- de la carretera; tres últimos dígitos: número de tramo.
-\item \textbf{DIA}: Fecha de los datos.
-\item \textbf{INTA}: Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
-\item \textbf{INTAP}: Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
-\item \textbf{INTD}: Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
-\item \textbf{INTDP}: Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
-\item \textbf{INTT}: Total de vehículos que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
-\item \textbf{INTTP}: Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
-\item \textbf{TIPUSV}: Tipo de vía (Autovía, Convencional o Desdoblada).
-\item \textbf{TIPUSE}: Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
-\item \textbf{PKE}: Posición exacta, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
-\item \textbf{PKECOOR}: Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
-\item \textbf{PKINI}: Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
-\item \textbf{REFINI}: Ubicación del inicio del tramo al que se asocia el tráfico.
-\item \textbf{PKINICOOR}: Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
-\item \textbf{PKFI}: Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
-\item \textbf{REFFI}: Ubicación del final del tramo al que se asocia el tráfico.
-\item \textbf{PKFICOOR}: Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
+\item \textbf{DIA}(\textit{carácter}): Fecha de los datos.
+\item \textbf{INTA}(\textit{numérico}): Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTAP}(\textit{numérico}): Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTD}(\textit{numérico}): Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTDP}(\textit{numérico}): Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTT}(\textit{numérico}): Total de vehículos que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{INTTP}(\textit{numérico}): Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{TIPUSV}(\textit{carácter}): Tipo de vía (Autovía, Convencional o Desdoblada).
+\item \textbf{TIPUSE}(\textit{carácter}): Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
+\item \textbf{PKE}(\textit{numérico}): Posición exacta, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
+\item \textbf{PKECOOR}(\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
+\item \textbf{PKINI}(\textit{numérico}): Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFINI}(\textit{carácter}): Ubicación del inicio del tramo al que se asocia el tráfico.
+\item \textbf{PKINICOOR}(\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
+\item \textbf{PKFI}(\textit{numérico}): Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFFI}(\textit{carácter}): Ubicación del final del tramo al que se asocia el tráfico.
+\item \textbf{PKFICOOR}(\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
 \end{enumerate}
 
+Si le echamos un vistazo a las variables, podemos ver que la variable $DIA$ es de tipo character, por lo que es necesario convertirla a formato de fecha. Para ello, usamos la función as.Date(). Por otro lado, es importante preguntarse con cuántos valores faltantes estamos trabajando, para ello usamos is.na() y sumamos los valores faltantes, obteniendo:
 
-
-Cuando hemos echado un vistazo al conjunto hemos podido observar que $DIA$ es de tipo character, por lo que es necesario convertirla a formato de fecha.
-
-```{r}
+```{r,include=FALSE}
 vehiculos$DIA <- as.Date(vehiculos$DIA, format = '%d/%m/%Y')
 class(vehiculos$DIA)
 ```
 
-Antes de proseguir modificando y explorando los datos vamos a considerar los valores faltantes haciendo uso de la función `aggr` del paquete `VIM`.
-
-```{r}
-a <- aggr(vehiculos, sortVars = TRUE, plot = FALSE)
-a$missings
+```{r,echo=FALSE}
+sum(is.na(vehiculos))
 ```
+
+
+
+
 
 Como puede apreciarse en el dataframe `missings`, que recuenta los valores faltantes de cada variable, nos encontramos en la feliz situación de no hallar ningún valor faltante, por lo que no será necesario llevar a cabo ningún proceso de imputación o similar. 
 

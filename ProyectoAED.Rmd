@@ -433,7 +433,7 @@ vehiculos2 <- vehiculos %>%
   rename(all_of(new_names))
 head(vehiculos2)
 ```
-Lo primero que podríamos explorar es el número de observaciones dependiendo de la fecha, es decir, si todos los días se toman el mismo número de mediciones o hay algún patrón que nos indique que las mediciones están automatizadas. 
+
 ```{r, echo=F}
 library(ggplot2)
 ```
@@ -485,16 +485,18 @@ vehiculos2 %>%
   ggplot(aes(x = Intensidad_Total)) +
   geom_histogram(fill = "lavender",color="blue",binwidth=30) +
   labs(y="Recuento", x="Flujo total de vehículos no pesados") +
+  facet_wrap(~ Tipo_Via, ncol = 3, scales = "free_x") +
   theme_minimal()
 
 vehiculos2 %>%
   ggplot(aes(x = Intensidad_Total_Pesados)) +
   geom_histogram(fill = "lavender",color="blue",binwidth = 30) +
   labs(y="Recuento", x="Flujo total de vehículos pesados") +
+  facet_wrap(~ Tipo_Via, ncol = 3, scales = "free_x") +
   theme_minimal()
 ```
 Notemos que claramente los datos sobre el flujo de vehículos, independientemente de que estos sean pesados o no, no siguen una distribución normal. Por otro lado, podríamos preguntarnos sobre la relación entre el flujo de vehículos y el momento en el que fue observado dicho flujo. 
-
+ **Aquí la gráfica del flujo temporal de Mari**
 ```{r}
 vehiculos2 %>% 
   ggplot() +

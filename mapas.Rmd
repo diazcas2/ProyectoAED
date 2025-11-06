@@ -1,0 +1,137 @@
+---
+title: "Mapas"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+rm(list=ls)
+```
+
+## Cargamos los datos:
+```{r}
+library(readr)
+filename <-'data/intensidad_vehiculos_en_carretera_2025.csv'
+vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
+guess_encoding(filename)
+```
+
+Renombramos para que los nombres sean más claros y pasamos `DIA` a formato `date`.
+```{r}
+new_names<-c(
+  Intensidad_Ascendente="INTA",
+  Intensidad_Ascendente_Pesada="INTAP",
+  Intensidad_Descendente="INTD",
+  Intensidad_Descendente_Pesada="INTDP",
+  Intensidad_Total="INTT",
+  Intensidad_Total_Pesados="INTTP",
+  Metodo_Capatacion="TIPUSE",
+  Tipo_Via="TIPUSV",
+  Pto_Kilometrico_Final="PKFI",
+  Pto_Kilometrico_Inicial="PKINI",
+  Referencia_Inicio="REFINI",
+  Referencia_Final="REFFI",
+  Coord_Medicion="PKECOOR",
+  Coord_Inicio="PKINICOOR",
+  Coord_Fin="PKFICOOR",
+  Pto_Kilometrico_Medicion="PKE",
+  Fecha = "DIA"
+  )
+vehiculos2 <- vehiculos %>% 
+  separate(TRAM, into = c("CV","Tramo"), sep = 2) %>% 
+  mutate(DIA = as.Date(DIA,format="%d/%m/%Y")) %>% 
+  mutate(Mes=format(DIA,"%B")) %>% 
+  mutate(Mes = factor(
+    Mes, 
+    levels = c("January","February","March","April","May","June"),
+    labels=c("Enero","Febrero","Marzo","Abril","Mayo","Junio"),
+    ordered=TRUE
+    )) %>% 
+  rename(all_of(new_names))
+head(vehiculos2)
+```
+
+```{r, echo=F}
+library(ggplot2)
+```
+
+## Variables cuantitativas
+Fijémonos ahora en la distribución del flujo de vehículos no pesados :
+
+```{r}
+vehiculos2 %>%
+  ggplot(aes(x = Intensidad_Total)) +
+  geom_histogram(fill = "lavender",color="blue",binwidth=30) +
+  labs(y="Recuento", x="Flujo total de vehículos no pesados") +
+  facet_wrap(~ Tipo_Via, ncol = 3) +
+  theme_minimal()
+
+vehiculos2 %>%
+  ggplot(aes(x = Intensidad_Total_Pesados)) +
+  geom_histogram(fill = "lavender",color="blue",binwidth = 30) +
+  labs(y="Recuento", x="Flujo total de vehículos pesados") +
+  facet_wrap(~ Tipo_Via, ncol = 3) +
+  theme_minimal()
+```
+
+# mapita por si interesa
+
+```{r}
+# librerías especificas para esto
+library(sf)
+library(mapSpain)
+```
+
+
+```{r}
+valencia <- esp_get_munic_siane(region = "Comunidad Valenciana") %>%
+     # Homogeinizo labels
+    mutate(
+        Provincia = esp_dict_translate(ine.prov.name, "es")
+     )
+
+vehiculos3 <- vehiculos2
+coord_medicion <- vehiculos3 %>%
+  mutate(Coord_Medicion = gsub(",",".",Coord_Medicion)) %>%
+  separate(Coord_Medicion, into = c("Latitud","Longitud"), sep=";") %>%
+  mutate(Latitud = as.numeric(Latitud)) %>%
+  mutate(Longitud = as.numeric(Longitud)) %>% 
+  select("Latitud", "Longitud") %>%
+  distinct
+
+coord_medicion_sf <- st_as_sf(coord_medicion, coords = c("Longitud", "Latitud"), crs = 4326)
+
+ggplot() +
+  geom_sf(data = valencia, fill = "lavender") +
+  geom_sf(data = coord_medicion_sf, color = "blue", size = 1) +
+  theme_minimal()
+
+coord_inicio <- vehiculos3 %>%
+  mutate(Coord_Inicio = gsub(",",".",Coord_Inicio)) %>%
+  separate(Coord_Inicio, into = c("Latitud","Longitud"), sep=";") %>%
+  mutate(Latitud = as.numeric(Latitud)) %>%
+  mutate(Longitud = as.numeric(Longitud)) %>% 
+  select("Latitud", "Longitud") %>%
+  distinct
+
+coord_inicio_sf <- st_as_sf(coord_inicio, coords = c("Longitud", "Latitud"), crs = 4326)
+
+ggplot() +
+  geom_sf(data = valencia, fill = "lavender") +
+  geom_sf(data = coord_inicio_sf, color = "blue", size = 1) +
+  theme_minimal()
+
+coord_fin <- vehiculos3 %>%
+  mutate(Coord_Fin = gsub(",",".",Coord_Fin)) %>%
+  separate(Coord_Fin, into = c("Latitud","Longitud"), sep=";") %>%
+  mutate(Latitud = as.numeric(Latitud)) %>%
+  mutate(Longitud = as.numeric(Longitud)) %>% 
+  select("Latitud", "Longitud") %>%
+  distinct
+
+coord_fin_sf <- st_as_sf(coord_fin, coords = c("Longitud", "Latitud"), crs = 4326)
+
+ggplot() +
+  geom_sf(data = valencia, fill = "lavender") +
+  geom_sf(data = coord_fin_sf, color = "blue", size = 1) +
+  theme_minimal()
+```

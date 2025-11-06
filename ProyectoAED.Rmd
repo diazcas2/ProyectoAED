@@ -247,6 +247,7 @@ sum(vehiculos_tidy$Flujo_Vehiculos<Flujo_vehiculos_Q[[1]]-1.5*Flujo_vehiculos_IQ
 sum(abs(vehiculos_tidy$Flujo_Vehiculos-median(vehiculos_tidy$Flujo_Vehiculos))>3*mad(vehiculos_tidy$Flujo_Vehiculos))
 
 df <- vehiculos_tidy %>% filter(Flujo_Vehiculos>Flujo_vehiculos_Q[[3]]+1.5*Flujo_vehiculos_IQR)
+table(sapply(unique(df$Fecha),weekdays))
 
 sabado <- 0
 lunes <- 0
@@ -279,6 +280,7 @@ order(suma)
 vehiculos2 <- vehiculos2 %>% mutate(fecha = vehiculos$DIA)
 vehiculos2$fecha <- as.Date(vehiculos2$fecha, format='%d/%m/%Y')
 df2 <- vehiculos2 %>% filter(abs(vehiculos2$Intensidad_Total-median(vehiculos2$Intensidad_Total))>3*mad(vehiculos2$Intensidad_Total))
+table(sapply(unique(df2$fecha),weekdays))
 boxplot(vehiculos2$Intensidad_Total)
 sum(abs(vehiculos2$Intensidad_Total-median(vehiculos2$Intensidad_Total))>3*mad(vehiculos2$Intensidad_Total))
 
@@ -289,12 +291,15 @@ miercoles1 <- 0
 jueves1 <- 0
 viernes1 <- 0
 domingo1 <- 0
+
+
+
 for (i in 1:181){
-  if(weekdays(unique(df2$fecha[i]))=='Saturday'){
+  if(weekdays(unique(df2$fecha)[i])=='Saturday'){
     sabado1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + sabado1
-  }else if(weekdays(unique(df2$fecha[i]))=='Monday'){
+  }else if(weekdays(unique(df2$fecha)[i])=='Monday'){
     lunes1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + lunes1
-  }else if(weekdays(unique(df2$fecha[i]))=='Tuesday'){
+  }else if(weekdays(unique(df2$fecha)[i])=='Tuesday'){
     martes1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + martes1
   }else if(weekdays(unique(df2$fecha[i]))=='Wednesday'){
     miercoles1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + miercoles1

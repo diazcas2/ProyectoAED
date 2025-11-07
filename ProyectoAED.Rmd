@@ -281,171 +281,45 @@ Fechas_ordenadas[length(Fechas_ordenadas)] #último día con datos: 30 de junio 
 ```
 
 ################# APARTADO 5: OUTLIERS ################
-# VARIABLE FLUJO VEHICULOS
 ```{r}
-###### Regla 3 sigma ######
-Flujo_Vehiculos_Media <- mean(vehiculos_tidy$Flujo_Vehiculos)
-Flujo_Vehiculos_sd <- sd(vehiculos_tidy$Flujo_Vehiculos)
 
-# Comprobamos que valores son outliers
-sum(abs(vehiculos_tidy$Flujo_Vehiculos-Flujo_Vehiculos_Media)>3*Flujo_Vehiculos_sd)
-# en principio con este método no aparece ningún outlier (método poco agresivo)
-
-###### Regla boxplot ######
-boxplot(vehiculos_tidy$Flujo_Vehiculos)
-Flujo_vehiculos_IQR <- IQR(vehiculos_tidy$Flujo_Vehiculos)
-Flujo_vehiculos_Q <- quantile(vehiculos_tidy$Flujo_Vehiculos, probs = c(0.25, 0.5, 0.75))
-
-S<-sum(vehiculos_tidy$Flujo_Vehiculos>Flujo_vehiculos_Q[[3]]+1.5*Flujo_vehiculos_IQR)
-sum(vehiculos_tidy$Flujo_Vehiculos<Flujo_vehiculos_Q[[1]]-1.5*Flujo_vehiculos_IQR)
-
-###### Identificador Hampel ######
-sum(abs(vehiculos_tidy$Flujo_Vehiculos-median(vehiculos_tidy$Flujo_Vehiculos))>3*mad(vehiculos_tidy$Flujo_Vehiculos))
-
-df <- vehiculos_tidy %>% filter(Flujo_Vehiculos>Flujo_vehiculos_Q[[3]]+1.5*Flujo_vehiculos_IQR)
-table(sapply(unique(df$Fecha),weekdays))
-
-sabado <- 0
-lunes <- 0
-martes <- 0
-miercoles <- 0
-jueves <- 0
-viernes <- 0
-domingo <- 0
-#for (i in 1:287352){
- # if(weekdays(unique(df$Fecha[i]))=='Saturday'){
-  #  sabado <- sum(df$Fecha==unique(df$Fecha)[i])/287352 + sabado
- # }else if(weekdays(unique(df$Fecha[i]))=='Monday'){
-#    lunes <- sum(df$Fecha==unique(df$Fecha)[i])/287352 + lunes
- # }else if(weekdays(unique(df$Fecha[i]))=='Tuesday'){
-#    martes <- sum(df$Fecha==unique(df$Fecha)[i])/287352 + martes
- # }else if(weekdays(unique(df$Fecha[i]))=='Wednesday'){
-  #  miercoles <- sum(df$Fecha==unique(df$Fecha)[i])/287352 + miercoles
-#  }else if(weekdays(unique(df$Fecha[i]))=='Thursday'){
-#    jueves <- sum(df$Fecha==unique(df$Fecha)[i])/287352 + jueves
-  #}else if(weekdays(unique(df$Fecha[i]))=='Friday'){
-#    viernes <- sum(df$Fecha==unique(df$Fecha)[i])/287352 + viernes
- # }else if(weekdays(unique(df$Fecha[i]))=='Sunday'){
-  #  domingo <- sum(df$Fecha==unique(df$Fecha)[i])/287352 + domingo
- # }
-#}
-suma <- c(lunes, martes, miercoles, jueves, viernes, sabado, domingo)
-print(suma)
-order(suma)
-
-vehiculos2 <- vehiculos2 %>% mutate(fecha = vehiculos$DIA)
-vehiculos2$fecha <- as.Date(vehiculos2$fecha, format='%d/%m/%Y')
-df2 <- vehiculos2 %>% filter(abs(vehiculos2$Intensidad_Total-median(vehiculos2$Intensidad_Total))>3*mad(vehiculos2$Intensidad_Total))
-table(sapply(unique(df2$fecha),weekdays))
-boxplot(vehiculos2$Intensidad_Total)
-sum(abs(vehiculos2$Intensidad_Total-median(vehiculos2$Intensidad_Total))>3*mad(vehiculos2$Intensidad_Total))
-
-sabado1 <- 0
-lunes1 <- 0
-martes1 <- 0
-miercoles1 <- 0
-jueves1 <- 0
-viernes1 <- 0
-domingo1 <- 0
-
-
-
-for (i in 1:181){
-  if(weekdays(unique(df2$fecha)[i])=='Saturday'){
-    sabado1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + sabado1
-  }else if(weekdays(unique(df2$fecha)[i])=='Monday'){
-    lunes1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + lunes1
-  }else if(weekdays(unique(df2$fecha)[i])=='Tuesday'){
-    martes1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + martes1
-  }else if(weekdays(unique(df2$fecha[i]))=='Wednesday'){
-    miercoles1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + miercoles1
-  }else if(weekdays(unique(df2$fecha[i]))=='Thursday'){
-    jueves1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + jueves1
-  }else if(weekdays(unique(df2$fecha[i]))=='Friday'){
-    viernes1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + viernes1
-  }else if(weekdays(unique(df2$fecha[i]))=='Sunday'){
-    domingo1 <- sum(df2$fecha==unique(df2$fecha)[i])/2656 + domingo1
-  }
+# outliers con hampel
+# Identificador Hampel
+reglahampel <- function(x){
+  mediana <- median(x, na.rm=T)
+  madm <- mad(x, na.rm=T)
+  res <- abs(x-mediana)>3*madm
+  return(res)
 }
-suma1 <- c(lunes1, martes1, miercoles1, jueves1, viernes1, sabado1, domingo1)
-print(suma1)
-order(suma1)
 
-df3 <- vehiculos2 %>% filter(abs(vehiculos2$Intensidad_Total_Pesados-median(vehiculos2$Intensidad_Total_Pesados))>3*mad(vehiculos2$Intensidad_Total_Pesados))
-boxplot(vehiculos2$Intensidad_Total_Pesados)
-sum(abs(vehiculos2$Intensidad_Total_Pesados-median(vehiculos2$Intensidad_Total_Pesados))>3*mad(vehiculos2$Intensidad_Total_Pesados))
+###################### con el conjunto no tidy
+###################### intensidad_total
+sum(reglahampel(vehiculos2$Intensidad_Total))
+df2 <- vehiculos2 %>% filter(reglahampel(vehiculos2$Intensidad_Total))
 
-sabado2 <- 0
-lunes2 <- 0
-martes2 <- 0
-miercoles2 <- 0
-jueves2 <- 0
-viernes2 <- 0
-domingo2 <- 0
-for (i in 1:181){
-  if(weekdays(unique(df3$fecha[i]))=='Saturday'){
-    sabado2 <- sum(df3$fecha==unique(df3$fecha)[i])/3221 + sabado2
-  }else if(weekdays(unique(df3$fecha[i]))=='Monday'){
-    lunes2 <- sum(df3$fecha==unique(df3$fecha)[i])/3221 + lunes2
-  }else if(weekdays(unique(df3$fecha[i]))=='Tuesday'){
-    martes2 <- sum(df3$fecha==unique(df3$fecha)[i])/3221 + martes2
-  }else if(weekdays(unique(df3$fecha[i]))=='Wednesday'){
-    miercoles2 <- sum(df3$fecha==unique(df3$fecha)[i])/3221 + miercoles2
-  }else if(weekdays(unique(df3$fecha[i]))=='Thursday'){
-    jueves2 <- sum(df3$fecha==unique(df3$fecha)[i])/3221 + jueves2
-  }else if(weekdays(unique(df3$fecha[i]))=='Friday'){
-    viernes2 <- sum(df3$fecha==unique(df3$fecha)[i])/3221 + viernes2
-  }else if(weekdays(unique(df3$fecha[i]))=='Sunday'){
-    domingo2 <- sum(df3$fecha==unique(df3$fecha)[i])/3221 + domingo2
-  }
-}
-suma2 <- c(lunes2, martes2, miercoles2, jueves2, viernes2, sabado2, domingo2)
-print(suma2)
-order(suma2)
-```
+# relación con el día de la semana? 
+table(sapply((df2$fecha),weekdays))
 
-# VARIABLE VALOR COORDENADAS
-```{r}
-###### Regla 3 sigma ######
-Valor_Coordenada_Media <- mean(vehiculos_tidy$Valor_Coordenada)
-Valor_Coordenada_sd <- sd(vehiculos_tidy$Valor_Coordenada)
+ggplot(as.data.frame(table(sapply((df2$fecha),weekdays))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por día de la semana",  x = "Día de la semana", y = "Frecuencia") + theme_minimal()
+# relación con el tipo de vía?
+table((df2$Tipo_Via))
 
-# Comprobamos que valores son outliers
-sum(abs(vehiculos_tidy$Valor_Coordenada-Valor_Coordenada_Media)>3*Valor_Coordenada_sd)
-# en principio con este método no aparece ningún outlier (método poco agresivo)
+ggplot(as.data.frame(table((df2$Tipo_Via))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por tipo de vía",  x = "Tipo de vía", y = "Frecuencia") + theme_minimal()
 
-###### Regla boxplot ######
-boxplot(vehiculos_tidy$Valor_Coordenada)
-Valor_Coordenada_IQR <- IQR(vehiculos_tidy$Valor_Coordenada)
-Valor_Coordenada_Q <- quantile(vehiculos_tidy$Valor_Coordenada, probs = c(0.25, 0.5, 0.75))
+####################### intensidad_total_pesados
+sum(reglahampel(vehiculos2$Intensidad_Total_Pesados))
 
-sum(vehiculos_tidy$Valor_Coordenada>Valor_Coordenada_Q[[3]]+1.5*Valor_Coordenada_IQR)
-sum(vehiculos_tidy$Valor_Coordenada<Valor_Coordenada_Q[[1]]-1.5*Valor_Coordenada_IQR)
+df3 <- vehiculos2 %>% filter(reglahampel(vehiculos2$Intensidad_Total_Pesados))
 
-###### Identificador Hampel ######
-sum(abs(vehiculos_tidy$Valor_Coordenada-median(vehiculos_tidy$Valor_Coordenada))>3*mad(vehiculos_tidy$Valor_Coordenada))
-```
+# relación con el día de la semana? 
+table(sapply((df3$fecha),weekdays))
 
-# VARIABLE VALOR PUNTO QUILOMÉTRICO
-```{r}
-###### Regla 3 sigma #######
-Valor_Punto_Quilometrico_Media <- mean(vehiculos_tidy$Valor_Punto_Quilometrico)
-Valor_Punto_Quilometrico_sd <- sd(vehiculos_tidy$Valor_Punto_Quilometrico)
+ggplot(as.data.frame(table(sapply((df3$fecha),weekdays))/3221), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por día de la semana",  x = "Día de la semana", y = "Frecuencia") + theme_minimal()
 
-# Comprobamos que valores son outliers
-sum(abs(vehiculos_tidy$Valor_Punto_Quilometrico-Valor_Punto_Quilometrico_Media)>3*Valor_Punto_Quilometrico_sd)
-# en principio con este método no aparece ningún outlier (método poco agresivo)
+# relación con el tipo de vía?
+table((df3$Tipo_Via))
 
-###### Regla boxplot ######
-boxplot(vehiculos_tidy$Valor_Punto_Quilometrico)
-Valor_Punto_Quilometrico_IQR <- IQR(vehiculos_tidy$Valor_Punto_Quilometrico)
-Valor_Punto_Quilometrico_Q <- quantile(vehiculos_tidy$Valor_Punto_Quilometrico, probs = c(0.25, 0.5, 0.75))
-
-sum(vehiculos_tidy$Valor_Punto_Quilometrico>Valor_Punto_Quilometrico_Q[[3]]+1.5*Valor_Punto_Quilometrico_IQR)
-sum(vehiculos_tidy$Valor_Punto_Quilometrico<Valor_Punto_Quilometrico_Q[[1]]-1.5*Valor_Punto_Quilometrico_IQR)
-
-###### Identificador Hampel ######
-sum(abs(vehiculos_tidy$Valor_Punto_Quilometrico-median(vehiculos_tidy$Valor_Punto_Quilometrico))>3*mad(vehiculos_tidy$Valor_Punto_Quilometrico))
+ggplot(as.data.frame(table((df3$Tipo_Via))/3221), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por tipo de vía",  x = "Tipo de vía", y = "Frecuencia") + theme_minimal()
 ```
 
 
@@ -492,6 +366,8 @@ vehiculos2 <- vehiculos %>%
     ordered=TRUE
     )) %>% 
   rename(all_of(new_names))
+vehiculos2 <- vehiculos2 %>% mutate(fecha = vehiculos$DIA)
+vehiculos2$fecha <- as.Date(vehiculos2$fecha, format='%d/%m/%Y')
 head(vehiculos2)
 ```
 

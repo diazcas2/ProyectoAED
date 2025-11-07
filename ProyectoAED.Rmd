@@ -641,5 +641,9 @@ names(which.max(table(vehiculos_tidy$Metodologia_Captacion)))
 ```
 Se han recogido muchos más datos en el método de espiras que de gomas
 
-
+```{r}
+library(lubridate)
+table(month(vehiculos_tidy$Fecha, label = TRUE))
+```
+Cabe destacar que en abril, el valor desciende a 312.480, lo que puede estar relacionado con Semana Santa o fallas. Sin embargo, en junio, se observa el valor máximo (384.192),indicando un incremento posiblemente debido a las vacaciones de verano.
 

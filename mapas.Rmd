@@ -10,11 +10,11 @@ library(tidyr)
 library(ggplot2)
 library(sf)
 library(mapSpain)
+library(readr)
 ```
 
 ## Cargamos los datos:
 ```{r}
-library(readr)
 filename <-'data/intensidad_vehiculos_en_carretera_2025.csv'
 vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
 guess_encoding(filename)
@@ -111,7 +111,7 @@ coord_inicio <- vehiculos3 %>%
 coord_inicio_sf <- st_as_sf(coord_inicio, coords = c("Longitud", "Latitud"), crs = 4326)
 
 ggplot() +
-  geom_sf(data = valencia, fill = "lavender") +
+  geom_sf(data = valencia, fill = "beige") +
   geom_sf(data = coord_inicio_sf, color = "blue", size = 1) +
   theme_minimal()
 
@@ -126,7 +126,7 @@ coord_fin <- vehiculos3 %>%
 coord_fin_sf <- st_as_sf(coord_fin, coords = c("Longitud", "Latitud"), crs = 4326)
 
 ggplot() +
-  geom_sf(data = valencia, fill = "lavender") +
+  geom_sf(data = valencia, fill = "beige") +
   geom_sf(data = coord_fin_sf, color = "blue", size = 1) +
   theme_minimal()
 ```

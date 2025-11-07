@@ -214,6 +214,62 @@ CramerV(tabla2)
 
 Faltaría ver un poco la relación entre una categórica y numérica, como el tipo de vía con el flujo de vehículos, pero eso es con un box_plot y se hará en gráficos.
 
+##Sin el tidy:
+```{r}
+library(tidyr)
+library(dplyr)
+new_names<-c(
+  Flujo_Ascendente="INTA",
+  Flujo_Pesada="INTAP",
+  Flujo_Descendente="INTD",
+  Flujo_Descendente_Pesada="INTDP",
+  Flujo_Total="INTT",
+  Flujo_Total_Pesados="INTTP",
+  Metodo_Capatacion="TIPUSE",
+  Tipo_Via="TIPUSV",
+  Pto_Kilometrico_Final="PKFI",
+  Pto_Kilometrico_Inicial="PKINI",
+  Referencia_Inicio="REFINI",
+  Referencia_Final="REFFI",
+  Coord_Medicion="PKECOOR",
+  Coord_Inicio="PKINICOOR",
+  Coord_Fin="PKFICOOR",
+  Pto_Kilometrico_Medicion="PKE",
+  Fecha = "DIA"
+  )
+
+vehiculos2 <- vehiculos %>% 
+  separate(TRAM, into = c("CV","Tramo"), sep = 2) %>% 
+  mutate(DIA = as.Date(DIA,format="%d/%m/%Y")) %>% 
+  mutate(Mes=format(DIA,"%B")) %>% 
+  mutate(Mes = factor(
+    Mes, 
+    levels = c("January","February","March","April","May","June"),
+    labels=c("Enero","Febrero","Marzo","Abril","Mayo","Junio"),
+    ordered=TRUE
+    )) %>% 
+  rename(all_of(new_names))
+
+vehiculos_num<-vehiculos2[sapply(vehiculos2, is.numeric)]
+matrizcorr1 <-cor(vehiculos_num,use='complete.obs',method='pearson')
+matrizcorr2 <-cor(vehiculos_num,use='complete.obs',method='spearman')
+
+par(mfrow = c(1, 2))
+corrplot(
+  matrizcorr1,type = "lower",
+  tl.col = "black",
+  col = colorRampPalette(c("red", "gray", "navyblue"))(200),
+  tl.cex = 0.7
+)
+corrplot(
+  matrizcorr2,type = "lower",
+  tl.col = "black",
+  col = colorRampPalette(c("red", "gray", "navyblue"))(200),
+  tl.cex = 0.7
+)
+```
+
+
 # detallitos random
 
 Tenemos observaciones **solo** del primer semestre de 2025:
@@ -557,5 +613,9 @@ ggplot() +
   geom_sf(data = vehiculos3_sf, color = "blue", size = 1) +
   theme_minimal()
 ```
+
+
+######### ANÁLISIS UNIVARIANTE
+
 
 

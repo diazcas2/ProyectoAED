@@ -76,14 +76,9 @@ La estructura tidy se caracteriza por tener cada variable en una columna, cada o
 Comenzamos reorganizando las variables relacionadas con la intensidad del tráfico (`INTA`, `INTAP`, `INTD`, `INTDP`, `INTT` y `INTTP`). Estas columnas almacenan información sobre el sentido del tráfico (ascendente, descendente o total) y el tipo de vehículo (pesado o total), por lo que están estrechamente relacionadas entre sí.
 
 Para convertir el conjunto de datos en tidy, optamos por transformar el formato ancho en uno largo, de modo que cada fila represente una combinación única de tramo, sentido y tipo de vehículo. Para ello aplicamos la función pivot_longer(), que nos permite condensar varias columnas en dos nuevas variables: Sentido, que indica la dirección del tráfico, y Tipo_Vehiculo, que diferencia entre vehículos pesados (P) y el total (T). 
-```{r,include=FALSE}
-all(length(vehiculos$TRAM == 5))
-vehiculos_tidy <- vehiculos %>%
-  separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2)
-```
 
-```{r}
-vehiculos_tidy <- vehiculos_tidy %>%
+```{r,include=FALSE}
+vehiculos_tidy <- vehiculos %>%
   pivot_longer(col = starts_with('INT'), 
     names_to = c('Sentido', 'Tipo_Vehiculo'), 
     names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Flujo_Vehiculos')%>%
@@ -94,7 +89,13 @@ vehiculos_tidy <- vehiculos_tidy %>%
 De forma análoga, se aplicaron transformaciones similares a otras variables, como `TRAM`, las ubicaciones (`REFINI, REFFI`) y los puntos kilométricos (`PKINI, PKFI, PKE`).
 En el caso de las variables de coordenadas (`PKECOOR, PKINICOOR, PKFICOOR`), que distinguen entre la posición inicial, final y exacta, se siguió un razonamiento equivalente. Sin embargo, como cada coordenada incluye la latitud y la longitud separadas por un punto y coma, usamos la función separate() para dividir `Valor_coordenada` en dos columnas adicionales: `Latitud` y `Longitud`.
 
-```{r}
+```{r,include=FALSE}
+all(length(vehiculos$TRAM == 5))
+vehiculos_tidy <- vehiculos_tidy %>%
+  separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2)
+```
+
+```{r,include=FALSE}
 vehiculos_tidy <- vehiculos_tidy %>%
   pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', 
                names_pattern = '^PK(E|INI|FI)COOR$',  
@@ -126,9 +127,9 @@ vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
 str(vehiculos_tidy$Valor_Coordenada)
 ```
 
-Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función `rename()` y reemplazamos algunos valores abreviados por descripciones completas mediante la función `ifelse()`. Por ejemplo, en las variables relacionadas con coordenadas y ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ Los códigos utilizados son análogos al que se muestra a continuación.
+Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función `rename()` y reemplazamos algunos valores abreviados por descripciones completas mediante la función `ifelse()`. Por ejemplo, en las variables relacionadas con coordenadas y ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ 
 
-```{r}
+```{r,include=FALSE}
 vehiculos_tidy <- vehiculos_tidy %>%
   dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
 
@@ -138,7 +139,6 @@ vehiculos_tidy$Coordenadas <-
   replace(. == "E", "Exacta") %>%
   replace(. == "FI", "Final")
 ```
-
 
 ```{r,include=FALSE}
 # Rescribimos algunos valores:
@@ -176,7 +176,7 @@ vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <-
 
 A continuación, se muestra un fragmento de las primeras filas del dataset, usando la función head():
 
-```{r}
+```{r,echo=FALSE}
 head(vehiculos_tidy)
 ```
 
@@ -219,7 +219,7 @@ tabla <- table(vehiculos_tidy$Tipo_Via, vehiculos_tidy$Metodologia_Captacion)
 CramerV(tabla)
 ```
 Lo que nos indica que hay dependencia pero las variables prácticamente no se influyen entre sí.Veamos que ocurre con las otras variables:
-```{r}
+```{r,echo=FALSE}
 tabla1 <- table(vehiculos_tidy$Tipo_Via, vehiculos_tidy$Tipo_Vehiculo)
 CramerV(tabla1)
 tabla2 <- table(vehiculos_tidy$Sentido, vehiculos_tidy$Tipo_Vehiculo)

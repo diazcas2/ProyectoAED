@@ -90,15 +90,15 @@ coord_medicion <- vehiculos3 %>%
   separate(Coord_Medicion, into = c("Latitud","Longitud"), sep=";") %>%
   mutate(Latitud = as.numeric(Latitud)) %>%
   mutate(Longitud = as.numeric(Longitud)) %>% 
-  select("Latitud", "Longitud") %>%
+  select("Latitud", "Longitud","Tipo_Via") %>%
   distinct
 
 coord_medicion_sf <- st_as_sf(coord_medicion, coords = c("Longitud", "Latitud"), crs = 4326)
 
-ggplot() +
-  geom_sf(data = valencia, fill = "lavender") +
-  geom_sf(data = coord_medicion_sf, color = "blue", size = 1) +
-  theme_minimal()
+# ggplot() +
+#   geom_sf(data = valencia, fill = "lavender") +
+#   geom_sf(data = coord_medicion_sf, col = Tipo_Via, size = 1) +
+#   theme_minimal()
 
 coord_inicio <- vehiculos3 %>%
   mutate(Coord_Inicio = gsub(",",".",Coord_Inicio)) %>%
@@ -131,4 +131,32 @@ ggplot() +
   theme_minimal()
 ```
 
+```{r}
+vehiculos3 <- vehiculos2
+coord_medicion <- vehiculos3 %>%
+  mutate(Coord_Medicion = gsub(",",".",Coord_Medicion)) %>%
+  separate(Coord_Medicion, into = c("Latitud","Longitud"), sep=";") %>%
+  mutate(Latitud = as.numeric(Latitud)) %>%
+  mutate(Longitud = as.numeric(Longitud)) %>% 
+  mutate(Tipo_Via = factor(Tipo_Via, levels=c("Aut.", "Conv.", "Desd."), labels= c("Autovía", "Convencional", "Desdoblada"))) %>% 
+  select("Latitud", "Longitud","Tipo_Via") %>%
+  distinct
+
+coord_medicion_sf <- st_as_sf(coord_medicion, coords = c("Longitud", "Latitud"), crs = 4326)
+
+par(mfrow = c(1, 2))
+
+ggplot() +
+  geom_sf(data = valencia, fill = "beige") +
+  geom_sf(data = coord_medicion_sf, aes(col = Tipo_Via), size = 1) +
+  scale_color_manual("Tipos de vía",values=c("#d87373","#63b0b8","blue")) +
+  theme_minimal()
+
+ggplot() +
+  geom_sf(data = valencia, fill = "beige") +
+  geom_sf(data = coord_medicion_sf,aes(col = Tipo_Via), size = 1) +
+  scale_color_manual(guide="none",values=c("#d87373","#63b0b8","blue")) +
+  facet_wrap(~ Tipo_Via, ncol = 3) +
+  theme_minimal()
+```
 

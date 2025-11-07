@@ -11,6 +11,8 @@ library(ggplot2)
 library(sf)
 library(mapSpain)
 library(readr)
+library(VIM)
+library(ggmosaic)
 ```
 
 ## Cargamos los datos:
@@ -74,6 +76,96 @@ vehiculos2 %>%
   facet_wrap(~ Tipo_Via, ncol = 3) +
   theme_minimal()
 ```
+# Plots con los datos en formato tidy
+
+```{r}
+vehiculos_tidy <- vehiculos %>% separate(col = TRAM, into = c('Codigo_CV', 'Num_Tramo'), sep = 2)
+
+# INTA, INTAP, INTD, INTDP, INTT, INTTP: no son variables (hacemos lo mismo que con TRAM)
+vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = starts_with('INT'), names_to = c('Sentido', 'Tipo_Vehiculo'), names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Flujo_Vehiculos')
+
+# En la columna Tipo_vehículo solo aparece si es pesado (P). Rellenamos el resto con T (= todos vehículos)
+vehiculos_tidy <- vehiculos_tidy %>% mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))
+
+# Elimino las filas que en la variable Sentido tienen T(=ambos sentidos)
+vehiculos_tidy <- vehiculos_tidy %>% filter(Sentido != 'T')
+
+vehiculos_tidy <- vehiculos_tidy %>% pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', names_pattern = '^PK(E|INI|FI)COOR$',  values_to = 'Valor_coordenada')%>% separate(col = Valor_coordenada, into = c('Latitud', 'Longitud'), sep=';') %>% pivot_longer(col = c(Latitud, Longitud), names_to = 'Tipo_Coordenada', values_to = 'Valor_Coordenada')%>% pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',names_to = 'Tipo_Ubicacion', values_to = 'Ubicacion')%>% pivot_longer(col = matches('^PK(INI|FI|E)'), names_pattern = '^PK(INI|FI|E)',names_to = 'Tipo_Posicion_Punto_Quilometrico', values_to = 'Valor_Punto_Quilometrico')
+
+str(vehiculos_tidy$Valor_Coordenada)
+vehiculos_tidy$Valor_Coordenada <- sub(',', '.', vehiculos_tidy$Valor_Coordenada)
+vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
+str(vehiculos_tidy$Valor_Coordenada)
+
+#Renombramos algunas variables
+vehiculos_tidy <- vehiculos_tidy %>% dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
+
+vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <-
+  vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+
+vehiculos_tidy$Sentido <-
+  vehiculos_tidy$Sentido %>%
+  replace(. == "A", "Ascendente") %>%
+  replace(. == "D", "Descendente")
+
+vehiculos_tidy$Tipo_Vehiculo <-
+  vehiculos_tidy$Tipo_Vehiculo %>%
+  replace(. == "T", "Todos") %>%
+  replace(. == "P", "Pesados")
+
+vehiculos_tidy$Coordenadas <-
+  vehiculos_tidy$Coordenadas %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+
+vehiculos_tidy$Tipo_Ubicacion <-
+  vehiculos_tidy$Tipo_Ubicacion %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+
+vehiculos_tidy$Tipo_Via <-
+  vehiculos_tidy$Tipo_Via %>%
+  replace(. == "Aut.", "Autovia") %>%
+  replace(. == "Conv.", "Convencional") %>%
+  replace(. == "Desd.", "Desdoblada")
+```
+
+```{r}
+mosaicplot(~ Metodologia_Captacion + Tipo_Via, data = vehiculos_tidy, color = c("#63b0b8","#d87373","#79a9c9"), las = 1)
+
+mosaicplot(~ Metodo_Capatacion + Tipo_Via, data = vehiculos2, color = c("#63b0b8","#d87373","#79a9c9"), las = 1)
+
+vehiculos2 %>% 
+  ggplot(aes(Metodo_Capatacion)) + 
+  geom_bar(color = "blue", fill = "lavender") +
+  labs(x = "Método de captación", y = "Recuento") +
+  theme_minimal()
+
+vehiculos2 %>% 
+  ggplot(aes(Tipo_Via)) + 
+  geom_bar(color = "blue", fill = "lavender") +
+  labs(x = "Tipo de vía", y = "Recuento") +
+  theme_minimal()
+```
+
+
+
+```{r}
+vehiculos_tidy %>% 
+  ggplot() +
+  geom_boxplot(aes(x=Tipo_Vehiculo, y=Flujo_Vehiculos)) +
+  labs(x="Tipo de vehículos", y = "Flujo de vehículos")
+  theme_minimal()
+
+```
+
+
+
 
 # mapita por si interesa
 
@@ -152,6 +244,7 @@ ggplot() +
   scale_color_manual("Tipos de vía",values=c("#d87373","#63b0b8","blue")) +
   theme_minimal()
 
+# esta es la buena
 ggplot() +
   geom_sf(data = valencia, fill = "beige") +
   geom_sf(data = coord_medicion_sf,aes(col = Tipo_Via), size = 1) +

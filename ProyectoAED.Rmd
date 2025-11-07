@@ -617,5 +617,29 @@ ggplot() +
 
 ######### ANÁLISIS UNIVARIANTE
 
+```{r}
+vehiculos_num_tidy<-vehiculos_tidy[sapply(vehiculos_tidy, is.numeric)]
+summary(vehiculos_num_tidy)
+```
+El valor_coordenada y el valor_punto_quilométrico las obviamos porque se tratan de valores numéricos pero no tienen un significado. Sin embargo, en flujo_vehiculos podemos ver que la media (142.7) es mucho mayor que la mediana (16.6)(valor central), lo que nos indica que la mayoría de los tramos registran flujos bajos, pero que existen algunos tramos con valores muy altos (outliers) que quizás dependen del tipo de vía que elevan la media.
+
+```{r}
+summary(vehiculos_num)
+```
+
+DECIDO HACERLO CON EL TIDY PORQUE NO HAY MUCHA DIFERENCIA EN EL NUMÉRICO
+
+```{r}
+table(vehiculos_tidy$Tipo_Via)
+names(which.max(table(vehiculos_tidy$Tipo_Via)))
+```
+Podemos ver que se ha captado más tráfico en la convencional, luego en la desdoblada y luego en la autovía.
+
+```{r}
+table(vehiculos_tidy$Metodologia_Captacion)
+names(which.max(table(vehiculos_tidy$Metodologia_Captacion)))
+```
+Se han recogido muchos más datos en el método de espiras que de gomas
+
 
 

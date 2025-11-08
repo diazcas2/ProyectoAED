@@ -254,14 +254,34 @@ En esta sección empezaremos a explorar los datos mediante un análisis univaria
 description<- vehiculos_tidy2 %>% 
   psych::describe(na.rm = TRUE, interp=FALSE,skew = FALSE, ranges = TRUE,trim=0,
               type=3,check=TRUE,fast=NULL,quant=c(0.25,0.75),IQR=TRUE,omit=TRUE) 
+
 description %>% 
   select("min","max","range","IQR","Q0.25","median","mean", "Q0.75","sd") %>% 
-  rename(Media=mean,Min=min,Max=max,Mediana=median,Rango = range)
+  rename(Media=mean,Mínimo=min,Máximo=max,Mediana=median,Rango = range,Desviación_típica=sd)
 ```
 
 Si nos fijamos en el rango, vemos que tanto en la longitud como en la latitud (y sobre todo en esta última) de las coordenadas que marcan el final del tramo se observa una mayor variación. Esto nos indica que es probable que haya algún problema con los datos de las coordenadas del tramo final, que veremos más adelante.
 
+Pasemos ahora a representar gráficamente aquellas variables en cuyo caso sea posible. Empezando con las numéricas, nos fijaremos primeramente en `Flujo_Vehiculos`:
 
+```{r,echo=FALSE,fig.width=10, fig.height=4}
+vehiculos_tidy2 %>%
+  ggplot(aes(x = Flujo_Vehiculos)) +
+  geom_histogram(fill = "lavender",color="blue",binwidth=30) +
+  labs(y="Recuento", x="Flujo total  vehículos") 
+  # facet_grid(Tipo_Vehiculo ~ Tipo_Via)
+  # #facet_wrap(~ Tipo_Via, ncol = 3) +
+  # theme_minimal()
+
+# g2 <- vehiculos_tidy2 %>%
+#   ggplot(aes(x = Intensidad_Total_Pesados)) +
+#   geom_histogram(fill = "lavender",color="blue",binwidth = 30) +
+#   labs(y="Recuento", x="Flujo total de vehículos pesados") +
+#   facet_wrap(~ Tipo_Via, ncol = 3) +
+#   theme_minimal()
+# 
+# npar(mfrow=c(1,2))
+```
 
 
 # Relación entre las variables

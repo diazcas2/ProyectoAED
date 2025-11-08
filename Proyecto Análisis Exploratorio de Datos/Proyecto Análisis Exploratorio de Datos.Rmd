@@ -255,9 +255,11 @@ description<- vehiculos_tidy2 %>%
   psych::describe(na.rm = TRUE, interp=FALSE,skew = FALSE, ranges = TRUE,trim=0,
               type=3,check=TRUE,fast=NULL,quant=c(0.25,0.75),IQR=TRUE,omit=TRUE) 
 description %>% 
-  select("mean","sd","min","max","range","IQR","Q0.25","median", "Q0.75") %>% 
-  rename(Media=mean,Min=min,Max=max,Mediana=median)
+  select("min","max","range","IQR","Q0.25","median","mean", "Q0.75","sd") %>% 
+  rename(Media=mean,Min=min,Max=max,Mediana=median,Rango = range)
 ```
+
+Si nos fijamos en el rango, vemos que tanto en la longitud como en la latitud (y sobre todo en esta última) de las coordenadas que marcan el final del tramo se observa una mayor variación. Esto nos indica que es probable que haya algún problema con los datos de las coordenadas del tramo final, que veremos más adelante.
 
 
 

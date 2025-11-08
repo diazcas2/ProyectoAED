@@ -18,7 +18,7 @@ output:
 ---
 
 # Introducción.
-El tráfico de vehículos va más allá de los números, muestra cómo Valencia se mueve, organiza y enfrenta cada día sus desafíos de desplazamiento. Este proyecto se centra en analizar la intensidad del tráfico en las carreteras de la Comunidad Valenciana durante el primer semestre de 2025, a partir de datos públicos proporcionados por la Generalitat Valenciana. A través de un análisis exploratorio de 15.235 observaciones, se busca detectar las posibles anomalías en el tráfico y explorar el comportamiento de la movilidad en Valencia.
+El tráfico de vehículos va más allá de los números, muestra cómo Valencia se mueve, organiza y enfrenta cada día sus desafíos de desplazamiento. Este proyecto se centra en analizar la intensidad del tráfico en las carreteras de la Comunidad Valenciana durante el primer semestre de 2025, a partir de datos públicos proporcionados por la Generalidad Valenciana. A través de un análisis exploratorio de 15.235 observaciones, se busca detectar las posibles anomalías en el tráfico y explorar el comportamiento de la movilidad en Valencia.
 
 # Importación de los datos.
 Para importar los datos, primero se descarga el fichero y se verifica que los datos estén en el directorio adecuado. Es importante especificar el encoding (en nuestro caso es UTF-8), ya que, de lo contrario, algunos caracteres pueden no reconocerse correctamente. De esta forma, haciendo uso de la función de importación en R con los parámetros adecuados, obtenemos el dataset.
@@ -70,7 +70,8 @@ class(vehiculos$DIA)
 ```{r,echo=FALSE}
 sum(is.na(vehiculos))
 ```
-Como no tenemos valores faltantes,no será necesario llevar a cabo ningún proceso de imputación o similar. 
+Como no tenemos valores faltantes, no será necesario llevar a cabo ningún proceso de imputación o similar. 
+
 
 # Conversión de los datos a estructura Tidy.
 La estructura tidy se caracteriza por tener cada variable en una columna, cada observación en una fila y nombres de columnas que sean representativos. Para obtener un conjunto tidy, vamos a realizar diversas transformaciones en nuestros datos para facilitar su análisis.
@@ -183,9 +184,71 @@ A continuación, se muestra un fragmento de las primeras filas del dataset, usan
 head(vehiculos_tidy)
 ```
 
-# Gráficos exploratorios
+# Análisis univariante y gráficos exploratorios
 
-En esta sección empezaremos a explorar los datos mediante el uso de gráficos. Empezaremos representando 
+En esta sección empezaremos a explorar los datos mediante un análisis univariante de las variables númericas y el uso de gráficos. Las variables numéricas de las que disponemos son `Flujo_Vehiculos`, `Valor_Punto_Quilometrico`, y las coordenadas geográficas de los puntos en los que se mide el flujo, así como las de los puntos que se han designado como inicio y fin del tramo en el que se asume que el tráfico es invariante.
+
+```{r, include=FALSE}
+# mi propuesta
+vehiculos_tidy2 <- vehiculos %>%
+  pivot_longer(col = starts_with('INT'), 
+    names_to = c('Sentido', 'Tipo_Vehiculo'), 
+    names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Flujo_Vehiculos')%>%
+  mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))%>%
+  filter(Sentido != 'T')
+
+vehiculos_tidy2 <- vehiculos_tidy2 %>%
+  separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2) %>%
+  pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',
+               names_to = 'Tipo_Ubicacion', values_to = 'Ubicacion') 
+
+vehiculos_tidy2 <- vehiculos_tidy2 %>%
+   pivot_longer(col = matches('^PK(INI|FI|E)$'), names_pattern = '^PK(INI|FI|E)',
+                names_to = 'Tipo_Posicion_Punto_Quilometrico', 
+                values_to = 'Valor_Punto_Quilometrico') 
+
+vehiculos_tidy2 <- vehiculos_tidy2 %>%
+  mutate(PKINICOOR = gsub(",",".",PKINICOOR)) %>%
+  separate(PKINICOOR, into = c("Latitud_Inicio","Longitud_Inicio"), sep=";") %>%
+  mutate(Latitud_Inicio = as.numeric(Latitud_Inicio)) %>%
+  mutate(Longitud_Inicio = as.numeric(Longitud_Inicio)) %>% 
+  mutate(PKFICOOR = gsub(",",".",PKFICOOR)) %>%
+  separate(PKFICOOR, into = c("Latitud_Final","Longitud_Final"), sep=";") %>%
+  mutate(Latitud_Final = as.numeric(Latitud_Final)) %>%
+  mutate(Longitud_Final = as.numeric(Longitud_Final)) %>% 
+  mutate(PKECOOR = gsub(",",".",PKECOOR)) %>%
+  separate(PKECOOR, into = c("Latitud_Exacta","Longitud_Exacta"), sep=";") %>%
+  mutate(Latitud_Exacta = as.numeric(Latitud_Exacta)) %>%
+  mutate(Longitud_Exacta = as.numeric(Longitud_Exacta))
+
+vehiculos_tidy2 <- vehiculos_tidy2 %>%
+  dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
+
+# Rescribimos algunos valores:
+vehiculos_tidy2$Sentido <-
+  vehiculos_tidy2$Sentido %>%
+  replace(. == "A", "Ascendente") %>%
+  replace(. == "D", "Descendente")
+
+vehiculos_tidy2$Tipo_Vehiculo <-
+  vehiculos_tidy2$Tipo_Vehiculo %>%
+  replace(. == "T", "Todos") %>%
+  replace(. == "P", "Pesados")
+
+vehiculos_tidy2$Tipo_Via <-
+  vehiculos_tidy2$Tipo_Via %>%
+  replace(. == "Aut.", "Autovia") %>%
+  replace(. == "Conv.", "Convencional") %>%
+  replace(. == "Desd.", "Desdoblada")
+
+
+vehiculos_tidy2$Tipo_Posicion_Punto_Quilometrico <-
+  vehiculos_tidy2$Tipo_Posicion_Punto_Quilometrico %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+```
+
 
 # Relación entre las variables
 En este apartado estudiaremos si existe una relación lineal entre las variables  de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman con la función cor() para determinar si existe o no una relación entre estas variables.
@@ -295,7 +358,7 @@ df2 <- vehiculos2 %>% filter(reglahampel(Intensidad_Total))
 
 ```{r, echo=FALSE,fig.width = 3.5,fig.height = 2}
 datos <- as.data.frame(table(sapply((df2$fecha),weekdays))/2656)
-datos$Var1 <- factor(datos$Var1, levels = c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"))
+datos$Var1 <- factor(datos$Var1, levels = c("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"))
 
 ggplot(datos, aes(x = Var1, y = Freq, fill = Var1),options(repr.plot.width = 9, repr.plot.height =4)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por día de la semana",  x = "Día de la semana", y = "Frecuencia relativa") + theme_minimal()
 ```
@@ -312,7 +375,7 @@ Por otro lado, tenemos la varibale Intensidad_Total_Pesados, donde detectamos un
 ```{r, echo=FALSE,fig.width = 3.5,fig.height = 2}
 df3 <- vehiculos2 %>% filter(reglahampel(Intensidad_Total_Pesados))
 datos1 <- as.data.frame(table(sapply((df3$fecha),weekdays))/3221)
-datos1$Var1 <- factor(datos1$Var1, levels = c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"))
+datos1$Var1 <- factor(datos1$Var1, levels = c("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"))
 
 ggplot(datos1, aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por día de la semana",  x = "Día de la semana", y = "Frecuencia relativa") + theme_minimal()
 ```

@@ -215,7 +215,7 @@ Valencia se mueve, organiza y enfrenta cada día sus desafíos de
 desplazamiento. Este proyecto se centra en analizar la intensidad del
 tráfico en las carreteras de la Comunidad Valenciana durante el primer
 semestre de 2025, a partir de datos públicos proporcionados por la
-Generalitat Valenciana. A través de un análisis exploratorio de 15.235
+Generalidad Valenciana. A través de un análisis exploratorio de 15.235
 observaciones, se busca detectar las posibles anomalías en el tráfico y
 explorar el comportamiento de la movilidad en Valencia.
 
@@ -263,8 +263,8 @@ obteniendo:
 ## [1] 0
 \end{verbatim}
 
-Como no tenemos valores faltantes,no será necesario llevar a cabo ningún
-proceso de imputación o similar.
+Como no tenemos valores faltantes, no será necesario llevar a cabo
+ningún proceso de imputación o similar.
 
 \section{Conversión de los datos a estructura
 Tidy.}\label{conversiuxf3n-de-los-datos-a-estructura-tidy.}
@@ -293,11 +293,17 @@ De forma análoga, se aplicaron transformaciones similares a otras
 variables, como \texttt{TRAM}, las ubicaciones (\texttt{REFINI,\ REFFI})
 y los puntos kilométricos (\texttt{PKINI,\ PKFI,\ PKE}). En el caso de
 las variables de coordenadas (\texttt{PKECOOR,\ PKINICOOR,\ PKFICOOR}),
-que distinguen entre la posición inicial, final y exacta, se siguió un
-razonamiento equivalente. Sin embargo, como cada coordenada incluye la
-latitud y la longitud separadas por un punto y coma, usamos la función
-separate() para dividir \texttt{Valor\_coordenada} en dos columnas
-adicionales: \texttt{Latitud} y \texttt{Longitud}.
+que distinguen entre la posición inicial, final y exacta, como cada
+coordenada incluye la latitud y la longitud separadas por un punto y
+coma, usamos la función \texttt{separate()} para dividir cada columna en
+longitud y latitud. El separador decimal del conjunto eran las comas,
+por lo que R detectaba las columnas como tipo carácter. Lo solucionamos
+usando la función \texttt{sub()} para reemplazar las comas por puntos,
+lo que nos permite convertir correctamente los valores a tipo numérico.
+Después de convertirlas a tipo numérico, acabamos con las variables
+\texttt{Latitud\_Inicio}, \texttt{Longitud\_Inicio},
+\texttt{Latitud\_Final}, \texttt{Longitud\_Final},
+\texttt{Latitud\_Exacta} y \texttt{Longitud\_Exacta}.
 
 De esta forma, como \texttt{Valor\_Coordenada} utiliza comas como
 separador decimal, R detecta la columna como tipo character, cuando en
@@ -309,36 +315,123 @@ Solo falta asegurarnos de que los nombres de las columnas sean
 representativos; para ello, utilizamos la función \texttt{rename()} y
 reemplazamos algunos valores abreviados por descripciones completas
 mediante la función \texttt{ifelse()}. Por ejemplo, en las variables
-relacionadas con coordenadas y ubicación, los códigos \emph{INI},
-\emph{E} y \emph{FI} se sustituyeron por \emph{Inicial}, \emph{Exacta} y
-\emph{Final}; en \texttt{Sentido}, los valores \emph{A} y \emph{D}
-pasaron a \emph{Ascendente} y \emph{Descendente}; y en
-\texttt{Tipo\_Vehiculo}, \emph{T} y \emph{P} se cambiaron por
-\emph{Todos} y \emph{Pesados.}
+relacionadas con ubicación, los códigos \emph{INI}, \emph{E} y \emph{FI}
+se sustituyeron por \emph{Inicial}, \emph{Exacta} y \emph{Final}; en
+\texttt{Sentido}, los valores \emph{A} y \emph{D} pasaron a
+\emph{Ascendente} y \emph{Descendente}; y en \texttt{Tipo\_Vehiculo},
+\emph{T} y \emph{P} se cambiaron por \emph{Todos} y \emph{Pesados.}
+
+Comenzamos reorganizando las variables relacionadas con la intensidad
+del tráfico (\texttt{INTA}, \texttt{INTAP}, \texttt{INTD},
+\texttt{INTDP}, \texttt{INTT} y \texttt{INTTP}). Estas columnas
+almacenan información sobre el sentido del tráfico (ascendente,
+descendente o total) y el tipo de vehículo (pesado o total), por lo que
+están estrechamente relacionadas entre sí.
+
+Para convertir el conjunto de datos en tidy, optamos por transformar el
+formato ancho en uno largo, de modo que cada fila represente una
+combinación única de tramo, sentido y tipo de vehículo. Para ello
+aplicamos la función pivot\_longer(), que nos permite condensar varias
+columnas en dos nuevas variables: Sentido, que indica la dirección del
+tráfico, y Tipo\_Vehiculo, que diferencia entre vehículos pesados (P) y
+el total (T).
+
+De forma análoga, se aplicaron transformaciones similares a otras
+variables, como \texttt{TRAM}, las ubicaciones (\texttt{REFINI,\ REFFI})
+y los puntos kilométricos (\texttt{PKINI,\ PKFI,\ PKE}). En el caso de
+las variables de coordenadas (\texttt{PKECOOR,\ PKINICOOR,\ PKFICOOR}),
+que distinguen entre la posición inicial, final y exacta, como cada
+coordenada incluye la latitud y la longitud separadas por un punto y
+coma, usamos la función \texttt{separate()} para dividir cada columna en
+longitud y latitud. El separador decimal del conjunto eran las comas,
+por lo que R detectaba las columnas como tipo carácter. Lo solucionamos
+usando la función \texttt{sub()} para reemplazar las comas por puntos,
+lo que nos permite convertir correctamente los valores a tipo numérico.
+Después de convertirlas a tipo numérico, acabamos con las variables
+\texttt{Latitud\_Inicio}, \texttt{Longitud\_Inicio},
+\texttt{Latitud\_Final}, \texttt{Longitud\_Final},
+\texttt{Latitud\_Exacta} y \texttt{Longitud\_Exacta}.
+
+Solo falta asegurarnos de que los nombres de las columnas sean
+representativos; para ello, utilizamos la función \texttt{rename()} y
+reemplazamos algunos valores abreviados por descripciones completas
+mediante la función \texttt{ifelse()}. Por ejemplo, en las variables
+relacionadas con ubicación, los códigos \emph{INI}, \emph{E} y \emph{FI}
+se sustituyeron por \emph{Inicial}, \emph{Exacta} y \emph{Final}; en
+\texttt{Sentido}, los valores \emph{A} y \emph{D} pasaron a
+\emph{Ascendente} y \emph{Descendente}; y en \texttt{Tipo\_Vehiculo},
+\emph{T} y \emph{P} se cambiaron por \emph{Todos} y \emph{Pesados.}
 
 A continuación, se muestra un fragmento de las primeras filas del
-dataset, usando la función head():
+dataset, usando la función \texttt{head()}:
 
 \begin{verbatim}
-## # A tibble: 6 x 15
-##   Codigo_CV Num_tramo Fecha      Tipo_Via Metodologia_Captacion Sentido   
-##   <chr>     <chr>     <date>     <chr>    <chr>                 <chr>     
-## 1 10        007       2025-03-07 Autovia  Espiras               Ascendente
-## 2 10        007       2025-03-07 Autovia  Espiras               Ascendente
-## 3 10        007       2025-03-07 Autovia  Espiras               Ascendente
-## 4 10        007       2025-03-07 Autovia  Espiras               Ascendente
-## 5 10        007       2025-03-07 Autovia  Espiras               Ascendente
-## 6 10        007       2025-03-07 Autovia  Espiras               Ascendente
-## # i 9 more variables: Tipo_Vehiculo <chr>, Flujo_Vehiculos <dbl>,
-## #   Coordenadas <chr>, Tipo_Coordenada <chr>, Valor_Coordenada <dbl>,
+## # A tibble: 6 x 18
+##   Codigo_CV Num_tramo Fecha      Tipo_Via Metodologia_Captacion Latitud_Exacta
+##   <chr>     <chr>     <date>     <chr>    <chr>                          <dbl>
+## 1 10        007       2025-03-07 Autovia  Espiras                         39.9
+## 2 10        007       2025-03-07 Autovia  Espiras                         39.9
+## 3 10        007       2025-03-07 Autovia  Espiras                         39.9
+## 4 10        007       2025-03-07 Autovia  Espiras                         39.9
+## 5 10        007       2025-03-07 Autovia  Espiras                         39.9
+## 6 10        007       2025-03-07 Autovia  Espiras                         39.9
+## # i 12 more variables: Longitud_Exacta <dbl>, Latitud_Inicio <dbl>,
+## #   Longitud_Inicio <dbl>, Latitud_Final <dbl>, Longitud_Final <dbl>,
+## #   Sentido <chr>, Tipo_Vehiculo <chr>, Flujo_Vehiculos <dbl>,
 ## #   Tipo_Ubicacion <chr>, Ubicacion <chr>,
 ## #   Tipo_Posicion_Punto_Quilometrico <chr>, Valor_Punto_Quilometrico <int>
 \end{verbatim}
 
-\section{Gráficos exploratorios}\label{gruxe1ficos-exploratorios}
+\section{Análisis univariante y gráficos
+exploratorios}\label{anuxe1lisis-univariante-y-gruxe1ficos-exploratorios}
 
-En esta sección empezaremos a explorar los datos mediante el uso de
-gráficos. Empezaremos representando
+En esta sección exploraremos los datos mediante un análisis univariante
+de las variables númericas y el uso de gráficos. Las variables numéricas
+de las que disponemos son \texttt{Flujo\_Vehiculos},
+\texttt{Valor\_Punto\_Quilometrico}, y las coordenadas geográficas de
+los puntos en los que se mide el flujo, así como las de los puntos que
+se han designado como inicio y fin del tramo en el que se asume que el
+tráfico es invariante.
+
+\begin{verbatim}
+##                          Mínimo   Máximo    Rango      IQR   Q0.25  Mediana
+## Latitud_Exacta            37.89    40.71     2.82     0.81   38.87    39.54
+## Longitud_Exacta           -1.20     0.43     1.63     0.29   -0.64    -0.50
+## Latitud_Inicio            37.89    40.65     2.76     0.81   38.86    39.53
+## Longitud_Inicio           -1.21     0.43     1.65     0.28   -0.62    -0.49
+## Latitud_Final             37.13    40.73     3.60     0.80   38.89    39.54
+## Longitud_Final            -1.25     0.44     1.69     0.29   -0.64    -0.50
+## Flujo_Vehiculos            0.00   999.00   999.00   175.84    4.16    16.63
+## Valor_Punto_Quilometrico   0.00 95090.00 95090.00 22910.00 3500.00 10200.00
+##                             Media    Q0.75 Desviación_típica
+## Latitud_Exacta              39.32    39.68              0.65
+## Longitud_Exacta             -0.47    -0.35              0.26
+## Latitud_Inicio              39.32    39.66              0.64
+## Longitud_Inicio             -0.47    -0.34              0.26
+## Latitud_Final               39.32    39.69              0.65
+## Longitud_Final              -0.47    -0.35              0.26
+## Flujo_Vehiculos            142.66   180.00            232.95
+## Valor_Punto_Quilometrico 18883.69 26410.00          21939.30
+\end{verbatim}
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#HABLA DE ALGO MÁS GENERAL, EN PLAN QUE VEAS
+LOS RESULTADOS QUE TE SALEN UN POCO POR ENCIMA LO DESTACABLE
+
+Si nos fijamos en el rango, vemos que tanto en la longitud como en la
+latitud (y sobre todo en esta última) de las coordenadas que marcan el
+final del tramo se observa una mayor variación. Esto nos indica que es
+probable que haya algún problema con los datos de las coordenadas del
+tramo final, que veremos más adelante.
+
+Pasemos ahora a representar gráficamente aquellas variables en cuyo caso
+sea posible. Empezando con las numéricas, nos fijaremos primeramente en
+\texttt{Flujo\_Vehiculos}:
+
+\textless\textless\textless\textless\textless\textless\textless{} HEAD
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf}}
+En la gráfica podemos observar que lo más común es que el flujo, oscile
+entre 0 y 250, aunque también hay registros de observaciones en los que
+el valor del flujo está cerca de 1000.
 
 \section{Relación entre las
 variables}\label{relaciuxf3n-entre-las-variables}
@@ -347,42 +440,35 @@ En este apartado estudiaremos si existe una relación lineal entre las
 variables de nuestro conjunto de datos. En primer lugar, comenzaremos
 con las variables numéricas, calculando las matrices de correlación de
 Pearson y Spearman con la función cor() para determinar si existe o no
-una relación entre estas variables.
+una relación entre estas variables y las representaremos. Veámoslo:
 
-\begin{verbatim}
-##                          Flujo_Vehiculos Valor_Coordenada
-## Flujo_Vehiculos             1.0000000000     0.0002915446
-## Valor_Coordenada            0.0002915446     1.0000000000
-## Valor_Punto_Quilometrico    0.0333949602     0.0021449420
-##                          Valor_Punto_Quilometrico
-## Flujo_Vehiculos                       0.033394960
-## Valor_Coordenada                      0.002144942
-## Valor_Punto_Quilometrico              1.000000000
-\end{verbatim}
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-25-1.pdf}}
 
-\begin{verbatim}
-##                          Flujo_Vehiculos Valor_Coordenada
-## Flujo_Vehiculos              1.000000000    -0.0089011035
-## Valor_Coordenada            -0.008901103     1.0000000000
-## Valor_Punto_Quilometrico    -0.051720007    -0.0005810784
-##                          Valor_Punto_Quilometrico
-## Flujo_Vehiculos                     -0.0517200072
-## Valor_Coordenada                    -0.0005810784
-## Valor_Punto_Quilometrico             1.0000000000
-\end{verbatim}
+En la matriz de Pearson (izquierda) se observa una alta correlación
+positiva entre las variables de latitud y longitud en sus diferentes
+versiones. Lo que indica que dichas variables están estrechamente
+relacionadas de manera lineal, lo cual tiene sentido por su naturaleza
+geográfica. Por otro lado, la variable
+\texttt{Valor\_Punto\_Quilométrico} presenta una correlación negativa
+moderada a alta con las coordenadas geográficas. Esto puede deberse a
+que a medida que varía el punto kilométrico, también se produce una
+variación inversa en la posición (latitud o longitud), lo que indica que
+los puntos de medición están ordenados espacialmente a lo largo del
+trazado de la vía. Sin embargo, la variable \texttt{Flujo\_Vehículos} no
+muestra una correlación lineal significativa con el resto de las
+variables, lo que indica que el flujo de vehículos no depende
+directamente de la posición geográfica de los puntos de medición.
 
-Si nos fijamos en la matriz de Pearson, podemos ver que las
-correlaciones toman valores muy próximos a cero, lo que indica la
-ausencia de una relación lineal significativa entre
-\texttt{Valor\_Coordenada}-\texttt{Flujo\_Vehiculos},
-\texttt{Valor\_Punto\_Quilometrico}-\texttt{Flujo\_Vehiculos} y
-\texttt{Valor\_Punto\_Quilometrico}-\texttt{Valor\_Coordenada}. Sin
-embargo, al analizar la matriz de Spearman, los valores siguen siendo
-cercanos a cero, aunque los signos cambian. Lo que indica que, en
-algunos casos, cuando una variable aumenta, la otra tiende a disminuir,
-aunque la relación no sea fuerte. Podemos verlo gráficamente:
-
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf}}
+No obstante, la matriz de Spearman (derecha) mantiene un patrón de
+correlaciones similar al obtenido con Pearson, aunque con ligeras
+variaciones en la magnitud de los coeficientes. Esto sugiere que las
+relaciones entre las coordenadas mantienen su monotonía, aunque no de
+forma estrictamente lineal. Cabe destacar la correlación negativa entre
+\texttt{Valor\_Punto\_Quilométrico} y las coordenadas se conserva,
+confirmando la tendencia inversa entre ambas variables. De igual forma,
+\texttt{Flujo\_Vehículos} sigue mostrando baja relación con las demás
+variables, confirmando su independencia respecto a la localización
+geográfica.
 
 Ahora estudiaremos la dependencia o independencia entre algunas
 variables categóricas:
@@ -446,7 +532,15 @@ Para ver si hay algún tipo de relación con el día de la semana podemos
 ver la proporción de outliers (frecuencia relativa) con respecto al
 total de outliers según el día:
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf}}
+\begin{verbatim}
+## [1] 118878
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "es_ES.UTF-8"
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-28-1.pdf}}
 
 En este caso, vemos que en los días laborales (de lunes a viernes) hay
 una mayor proporción con respecto a los días correspondientes al fin de
@@ -462,32 +556,39 @@ que en carretera convencional hay menos carriles, el límite de velocidad
 máxima es inferior y, por tanto, tiene una menor capacidad de tráfico.
 Así que, este tipo de vía tiende a tener un flujo de vehículos más
 uniforme que en los otros tipos de vía, en general.
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf}}
 
-Por otro lado, tenemos la varibale Intensidad\_Total\_Pesados, donde
-detectamos un total de 3221 outliers. Realizando un procedimiento
-completamente análogo al de la variable anterior, obtenemos un resultado
-parecido determinando la proporción de outliers según el día de la
-semana. Aunque podemos ver que en domingo la proporción es menor ya que
-en este día los vehículos pesados no suelen circular ya que no es día
-laboral.
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-29-1.pdf}}
 
-Observando los resultados con respecto al tipo de vía, vemos que los
-outliers se concentran cuando la carretera es convencional. Aunque los
-vehículos pesados suelen circular más por autovía, podemos entender que
-los picos de flujo se encuentren en convencional por una concentración
-de vehículos puntual.
+Por otro lado, tenemos la variable \texttt{Tipo\_Vehiculo} que almacena
+si el vehículo es pesado o no. Haciendo uso de la misma junto con
+\texttt{Flujo\_Vehículos}, podemos representar la frecuencia relativa de
+outliers de vehículos pesados por día de la semana, al igual que del
+resto de vehículos. Veámoslo:
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf}}
+\begin{verbatim}
+## [1] "es_ES.UTF-8"
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-30-1.pdf}}
+
+Podemos ver que obtenemos un resultado parecido determinando la
+proporción de outliers según el día de la semana. Aunque podemos ver que
+en domingo la proporción es menor ya que en este día los vehículos
+pesados no suelen circular ya que no es día laboral.
+
+De esta forma, podríamos mirar que ocurre con los resultados con
+respecto al tipo de vía, vemos que los outliers se concentran cuando la
+carretera es convencional. Aunque los vehículos pesados suelen circular
+más por autovía, podemos entender que los picos de flujo se encuentren
+en convencional por una concentración de vehículos puntual.
+
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-31-1.pdf}}
 
 Por último, también podemos verificar si las coordendas (latitud y
 longitud) son correctas, es decir, si todos los puntos se encuentran
 dentro de la Comunidad Valenciana mediante un mapa. Observamos un único
 punto fuera del territorio a estudiar, que puede deberse a un error en
 la recopilación de datos.
-
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

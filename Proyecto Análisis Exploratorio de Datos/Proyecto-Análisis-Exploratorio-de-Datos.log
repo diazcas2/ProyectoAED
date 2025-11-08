@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.6)  8 NOV 2025 14:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.6)  8 NOV 2025 19:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1139,10 +1139,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 205--205
 
 Package marginnote Info: xpos seems to be 167.01753pt on input line 205.
 Package epstopdf Info: Source file: <Definitions/logo-mdpi.eps>
-(epstopdf)                    date: 2025-11-06 16:45:04
+(epstopdf)                    date: 2025-11-08 18:58:39
 (epstopdf)                    size: 563678 bytes
 (epstopdf)             Output file: <Definitions/logo-mdpi-eps-converted-to.pdf>
-(epstopdf)                    date: 2025-11-06 16:45:04
+(epstopdf)                    date: 2025-11-08 18:58:39
 (epstopdf)                    size: 13060 bytes
 (epstopdf)             Command: <repstopdf --outfile=Definitions/logo-mdpi-eps-converted-to.pdf Definitions/logo-mdpi.eps>
 (epstopdf)             \includegraphics on input line 205.
@@ -1186,37 +1186,47 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
 [2]
-Overfull \hbox (9.79608pt too wide) in paragraph at lines 336--336
-[]\T1/cmtt/m/n/10 ## 1 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+Overfull \hbox (30.79095pt too wide) in paragraph at lines 383--383
+[]\T1/cmtt/m/n/10 ##   Codigo_CV Num_tramo Fecha      Tipo_Via Metodologia_Captacion Latitud_Exacta[] 
  []
 
 
-Overfull \hbox (9.79608pt too wide) in paragraph at lines 336--336
-[]\T1/cmtt/m/n/10 ## 2 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+Overfull \hbox (30.79095pt too wide) in paragraph at lines 383--383
+[]\T1/cmtt/m/n/10 ##   <chr>     <chr>     <date>     <chr>    <chr>                          <dbl>[] 
  []
 
 
-Overfull \hbox (9.79608pt too wide) in paragraph at lines 336--336
-[]\T1/cmtt/m/n/10 ## 3 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+Overfull \hbox (30.79095pt too wide) in paragraph at lines 383--383
+[]\T1/cmtt/m/n/10 ## 1 10        007       2025-03-07 Autovia  Espiras                         39.9[] 
  []
 
 
-Overfull \hbox (9.79608pt too wide) in paragraph at lines 336--336
-[]\T1/cmtt/m/n/10 ## 4 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+Overfull \hbox (30.79095pt too wide) in paragraph at lines 383--383
+[]\T1/cmtt/m/n/10 ## 2 10        007       2025-03-07 Autovia  Espiras                         39.9[] 
  []
 
 
-Overfull \hbox (9.79608pt too wide) in paragraph at lines 336--336
-[]\T1/cmtt/m/n/10 ## 5 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+Overfull \hbox (30.79095pt too wide) in paragraph at lines 383--383
+[]\T1/cmtt/m/n/10 ## 3 10        007       2025-03-07 Autovia  Espiras                         39.9[] 
  []
 
 
-Overfull \hbox (9.79608pt too wide) in paragraph at lines 336--336
-[]\T1/cmtt/m/n/10 ## 6 10        007       2025-03-07 Autovia  Espiras               Ascendente[] 
+Overfull \hbox (30.79095pt too wide) in paragraph at lines 383--383
+[]\T1/cmtt/m/n/10 ## 4 10        007       2025-03-07 Autovia  Espiras                         39.9[] 
  []
 
 
-Overfull \hbox (9.79608pt too wide) in paragraph at lines 336--336
+Overfull \hbox (30.79095pt too wide) in paragraph at lines 383--383
+[]\T1/cmtt/m/n/10 ## 5 10        007       2025-03-07 Autovia  Espiras                         39.9[] 
+ []
+
+
+Overfull \hbox (30.79095pt too wide) in paragraph at lines 383--383
+[]\T1/cmtt/m/n/10 ## 6 10        007       2025-03-07 Autovia  Espiras                         39.9[] 
+ []
+
+
+Overfull \hbox (9.79608pt too wide) in paragraph at lines 383--383
 []\T1/cmtt/m/n/10 ## #   Tipo_Posicion_Punto_Quilometrico <chr>, Valor_Punto_Quilometrico <int>[] 
  []
 
@@ -1228,30 +1238,105 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
 [3]
-<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf, id=79, 722.7pt x 289.08pt>
-File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pdf)
-<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf>
-Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf  used on input line 385.
-(pdftex.def)             Requested size: 722.69823pt x 289.07928pt.
+Overfull \hbox (15.0448pt too wide) in paragraph at lines 415--415
+[]\T1/cmtt/m/n/10 ##                          M�nimo   M�ximo    Rango      IQR   Q0.25  Mediana[] 
+ []
 
-Overfull \hbox (21.33875pt too wide) in paragraph at lines 385--386
+
+Overfull \hbox (15.0448pt too wide) in paragraph at lines 415--415
+[]\T1/cmtt/m/n/10 ## Latitud_Exacta            37.89    40.71     2.82     0.81   38.87    39.54[] 
+ []
+
+
+Overfull \hbox (15.0448pt too wide) in paragraph at lines 415--415
+[]\T1/cmtt/m/n/10 ## Longitud_Exacta           -1.20     0.43     1.63     0.29   -0.64    -0.50[] 
+ []
+
+
+Overfull \hbox (15.0448pt too wide) in paragraph at lines 415--415
+[]\T1/cmtt/m/n/10 ## Latitud_Inicio            37.89    40.65     2.76     0.81   38.86    39.53[] 
+ []
+
+
+Overfull \hbox (15.0448pt too wide) in paragraph at lines 415--415
+[]\T1/cmtt/m/n/10 ## Longitud_Inicio           -1.21     0.43     1.65     0.28   -0.62    -0.49[] 
+ []
+
+
+Overfull \hbox (15.0448pt too wide) in paragraph at lines 415--415
+[]\T1/cmtt/m/n/10 ## Latitud_Final             37.13    40.73     3.60     0.80   38.89    39.54[] 
+ []
+
+
+Overfull \hbox (15.0448pt too wide) in paragraph at lines 415--415
+[]\T1/cmtt/m/n/10 ## Longitud_Final            -1.25     0.44     1.69     0.29   -0.64    -0.50[] 
+ []
+
+
+Overfull \hbox (15.0448pt too wide) in paragraph at lines 415--415
+[]\T1/cmtt/m/n/10 ## Flujo_Vehiculos            0.00   999.00   999.00   175.84    4.16    16.63[] 
+ []
+
+
+Overfull \hbox (15.0448pt too wide) in paragraph at lines 415--415
+[]\T1/cmtt/m/n/10 ## Valor_Punto_Quilometrico   0.00 95090.00 95090.00 22910.00 3500.00 10200.00[] 
+ []
+
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf, id=79, 578.16pt x 289.08pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf  used on input line 431.
+(pdftex.def)             Requested size: 578.15858pt x 289.07928pt.
+
+Overfull \hbox (75.12553pt too wide) in paragraph at lines 430--435
+[]\T1/ppl/m/n/10 (-20) <<<<<<< HEAD []
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[4 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf>]
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-25-1.pdf, id=89, 722.7pt x 433.62pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-25-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-25-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-25-1.pdf  used on input line 445.
+(pdftex.def)             Requested size: 722.69823pt x 433.61894pt.
+
+Overfull \hbox (21.33875pt too wide) in paragraph at lines 445--446
 [][] 
  []
 
 
-Overfull \hbox (11.14143pt too wide) in paragraph at lines 387--394
+Overfull \hbox (11.14143pt too wide) in paragraph at lines 473--480
 \T1/ppl/m/n/10 (-20) cas: \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Metodologia_Captacion\T1/ppl/m/n/10 (-20) , \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo\T1/ppl/m/n/10 (-20) , \T1/cmtt/m/n/10 Sentido\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo\T1/ppl/m/n/10 (-20) .
  []
 
 
-Overfull \hbox (7.61987pt too wide) in paragraph at lines 410--420
+Overfull \hbox (7.61987pt too wide) in paragraph at lines 496--506
 []\T1/ppl/m/n/10 (-20) Obtenemos un valor del co-e-fi-ciente para los pares de vari-ables \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo
  []
 
-<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf, id=80, 252.945pt x 144.54pt>
-File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf Graphic file (type pdf)
-<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf>
-Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf  used on input line 449.
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[5 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-25-1.pdf>]
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-28-1.pdf, id=99, 252.945pt x 144.54pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-28-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-28-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-28-1.pdf  used on input line 543.
+(pdftex.def)             Requested size: 252.94438pt x 144.53963pt.
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-29-1.pdf, id=100, 252.945pt x 144.54pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-29-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-29-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-29-1.pdf  used on input line 560.
 (pdftex.def)             Requested size: 252.94438pt x 144.53963pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1260,48 +1345,25 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[4 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf>]
-<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf, id=90, 252.945pt x 144.54pt>
-File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf Graphic file (type pdf)
-<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf>
-Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf  used on input line 465.
+[6 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-28-1.pdf>]
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-30-1.pdf, id=110, 252.945pt x 144.54pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-30-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-30-1.pdf  used on input line 572.
 (pdftex.def)             Requested size: 252.94438pt x 144.53963pt.
-<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf, id=91, 252.945pt x 144.54pt>
-File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf Graphic file (type pdf)
-<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf>
-Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf  used on input line 474.
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-31-1.pdf, id=111, 252.945pt x 144.54pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-31-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-31-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-31-1.pdf  used on input line 585.
 (pdftex.def)             Requested size: 252.94438pt x 144.53963pt.
-<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf, id=92, 252.945pt x 144.54pt>
-File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf Graphic file (type pdf)
-<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf>
-Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf  used on input line 482.
-(pdftex.def)             Requested size: 252.94438pt x 144.53963pt.
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 16.18796pt, for example:
-(fancyhdr)                \setlength{\headheight}{16.18796pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
-
-[5 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf> <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf> <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf>]
-<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf, id=112, 469.755pt x 325.215pt>
-File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf Graphic file (type pdf)
-<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf>
-Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf  used on input line 490.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Overfull \hbox (21.33931pt too wide) in paragraph at lines 490--491
-[][] 
- []
-
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 526.
+(Font)              scaled to size 9.37807pt on input line 627.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 526.
+(Font)              scaled to size 7.29405pt on input line 627.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 526.
+(Font)              scaled to size 9.37807pt on input line 627.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 526.
+(Font)              scaled to size 7.29405pt on input line 627.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1309,7 +1371,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[6 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf> <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf>] 
+[7 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-29-1.pdf> <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-30-1.pdf> <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-31-1.pdf>]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[8] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./Proyecto-Análisis-Exploratorio-de-Datos.aux)
  ***********
@@ -1317,21 +1387,21 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-10-24>
  ***********
 Package rerunfilecheck Info: File `Proyecto-Análisis-Exploratorio-de-Datos.out' has not changed.
-(rerunfilecheck)             Checksum: 905DE22EFC00286B159893EB54054D9C;996.
+(rerunfilecheck)             Checksum: 054E81D139E709705F599456B11FBEF4;1123.
  ) 
 Here is how much of TeX's memory you used:
- 33441 strings out of 469519
- 633664 string characters out of 5468256
+ 33464 strings out of 469519
+ 633917 string characters out of 5468256
  1129606 words of memory out of 5000000
  61181 multiletter control sequences out of 15000+600000
- 686381 words of font info for 321 fonts, out of 8000000 for 9000
+ 687490 words of font info for 335 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 123i,12n,121p,4660b,865s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 123i,13n,121p,4660b,865s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.375pk><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on Proyecto-Análisis-Exploratorio-de-Datos.pdf (6 pages, 202814 bytes).
+Output written on Proyecto-Análisis-Exploratorio-de-Datos.pdf (8 pages, 154460 bytes).
 PDF statistics:
- 233 PDF objects out of 1000 (max. 8388607)
- 129 compressed objects within 2 object streams
- 31 named destinations out of 1000 (max. 500000)
+ 247 PDF objects out of 1000 (max. 8388607)
+ 136 compressed objects within 2 object streams
+ 33 named destinations out of 1000 (max. 500000)
  85600 words of extra memory for PDF output out of 89155 (max. 10000000)
 

@@ -90,13 +90,6 @@ vehiculos_tidy2 <- vehiculos %>%
     names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Flujo_Vehiculos')%>%
   mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))%>%
   filter(Sentido != 'T')
-
-vehiculos_tidy <- vehiculos %>%
-  pivot_longer(col = starts_with('INT'), 
-    names_to = c('Sentido', 'Tipo_Vehiculo'), 
-    names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Flujo_Vehiculos')%>%
-  mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))%>%
-  filter(Sentido != 'T')
 ```
 
 De forma análoga, se aplicaron transformaciones similares a otras variables, como `TRAM`, las ubicaciones (`REFINI, REFFI`) y los puntos kilométricos (`PKINI, PKFI, PKE`).
@@ -107,10 +100,6 @@ vehiculos_tidy2 <- vehiculos_tidy2 %>%
   separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2) %>%
   pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',
                names_to = 'Tipo_Ubicacion', values_to = 'Ubicacion') 
-
-all(length(vehiculos$TRAM == 5))
-vehiculos_tidy <- vehiculos_tidy %>%
-  separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2)
 ```
 
 ```{r,include=FALSE}
@@ -128,23 +117,8 @@ vehiculos_tidy2 <- vehiculos_tidy2 %>%
   separate(PKECOOR, into = c("Latitud_Exacta","Longitud_Exacta"), sep=";") %>%
   mutate(Latitud_Exacta = as.numeric(Latitud_Exacta)) %>%
   mutate(Longitud_Exacta = as.numeric(Longitud_Exacta))
-
-
-
-vehiculos_tidy <- vehiculos_tidy %>%
-  pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', 
-               names_pattern = '^PK(E|INI|FI)COOR$',  
-               values_to = 'Valor_coordenada')%>%
-  separate(col = Valor_coordenada, into = c('Latitud', 'Longitud'), sep=';')%>%
-  pivot_longer(col = c(Latitud, Longitud), names_to = 'Tipo_Coordenada', 
-               values_to = 'Valor_Coordenada') 
 ```
 
-```{r,include=FALSE}
-vehiculos_tidy <- vehiculos_tidy %>%
-  pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',
-               names_to = 'Tipo_Ubicacion', values_to = 'Ubicacion')
-```
 
 ```{r,include=FALSE}
 vehiculos_tidy2 <- vehiculos_tidy2 %>%
@@ -152,22 +126,6 @@ vehiculos_tidy2 <- vehiculos_tidy2 %>%
                 names_to = 'Tipo_Posicion_Punto_Quilometrico', 
                 values_to = 'Valor_Punto_Quilometrico') 
 
-
-vehiculos_tidy <- vehiculos_tidy %>%
-   pivot_longer(col = matches('^PK(INI|FI|E)'), names_pattern = '^PK(INI|FI|E)',
-                names_to = 'Tipo_Posicion_Punto_Quilometrico', 
-                values_to = 'Valor_Punto_Quilometrico')
-```
-
-De esta forma, como `Valor_Coordenada` utiliza comas como separador decimal, R detecta la columna como tipo character, cuando en realidad debería ser numérica. Para solucionarlo, usamos la función `sub()` para reemplazar las comas por puntos, lo que nos permite convertir correctamente los valores a tipo numérico.
-
-```{r,include=FALSE} 
-###ESTE CHUNK SE ELIMINARÍA
-
-str(vehiculos_tidy$Valor_Coordenada)
-vehiculos_tidy$Valor_Coordenada <- sub(',', '.', vehiculos_tidy$Valor_Coordenada)
-vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
-str(vehiculos_tidy$Valor_Coordenada)
 ```
 
 Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función `rename()` y reemplazamos algunos valores abreviados por descripciones completas mediante la función `ifelse()`. Por ejemplo, en las variables relacionadas con ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ 
@@ -176,18 +134,6 @@ Solo falta asegurarnos de que los nombres de las columnas sean representativos; 
 vehiculos_tidy2 <- vehiculos_tidy2 %>%
   dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
 
-
-vehiculos_tidy <- vehiculos_tidy %>%
-  dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
-
-vehiculos_tidy$Coordenadas <-
-  vehiculos_tidy$Coordenadas %>%
-  replace(. == "INI", "Inicial") %>%
-  replace(. == "E", "Exacta") %>%
-  replace(. == "FI", "Final")
-```
-
-```{r,include=FALSE}
 # Rescribimos algunos valores:
 vehiculos_tidy2$Sentido <-
   vehiculos_tidy2$Sentido %>%
@@ -208,105 +154,6 @@ vehiculos_tidy2$Tipo_Via <-
 
 vehiculos_tidy2$Tipo_Posicion_Punto_Quilometrico <-
   vehiculos_tidy2$Tipo_Posicion_Punto_Quilometrico %>%
-  replace(. == "INI", "Inicial") %>%
-  replace(. == "E", "Exacta") %>%
-  replace(. == "FI", "Final")
-```
-
-Comenzamos reorganizando las variables relacionadas con la intensidad del tráfico (`INTA`, `INTAP`, `INTD`, `INTDP`, `INTT` y `INTTP`). Estas columnas almacenan información sobre el sentido del tráfico (ascendente, descendente o total) y el tipo de vehículo (pesado o total), por lo que están estrechamente relacionadas entre sí.
-
-Para convertir el conjunto de datos en tidy, optamos por transformar el formato ancho en uno largo, de modo que cada fila represente una combinación única de tramo, sentido y tipo de vehículo. Para ello aplicamos la función pivot_longer(), que nos permite condensar varias columnas en dos nuevas variables: Sentido, que indica la dirección del tráfico, y Tipo_Vehiculo, que diferencia entre vehículos pesados (P) y el total (T). 
-
-```{r,include=FALSE}
-vehiculos_tidy <- vehiculos %>%
-  pivot_longer(col = starts_with('INT'), 
-    names_to = c('Sentido', 'Tipo_Vehiculo'), 
-    names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Flujo_Vehiculos')%>%
-  mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))%>%
-  filter(Sentido != 'T')
-```
-
-De forma análoga, se aplicaron transformaciones similares a otras variables, como `TRAM`, las ubicaciones (`REFINI, REFFI`) y los puntos kilométricos (`PKINI, PKFI, PKE`).
-En el caso de las variables de coordenadas (`PKECOOR, PKINICOOR, PKFICOOR`), que distinguen entre la posición inicial, final y exacta, como cada coordenada incluye la latitud y la longitud separadas por un punto y coma, usamos la función `separate()` para dividir cada columna en longitud y latitud. El separador decimal del conjunto eran las comas, por lo que R detectaba las columnas como tipo carácter. Lo solucionamos usando la función `sub()` para reemplazar las comas por puntos, lo que nos permite convertir correctamente los valores a tipo numérico. Después de convertirlas a tipo numérico, acabamos con las variables `Latitud_Inicio`, `Longitud_Inicio`, `Latitud_Final`, `Longitud_Final`, `Latitud_Exacta` y `Longitud_Exacta`.
-```{r,include=FALSE}
-all(length(vehiculos$TRAM == 5))
-vehiculos_tidy <- vehiculos_tidy %>%
-  separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2)
-```
-
-```{r,include=FALSE}
-vehiculos_tidy <- vehiculos_tidy %>%
-  pivot_longer(col = ends_with('COOR'), names_to = 'Coordenadas', 
-               names_pattern = '^PK(E|INI|FI)COOR$',  
-               values_to = 'Valor_coordenada')%>%
-  separate(col = Valor_coordenada, into = c('Latitud', 'Longitud'), sep=';')%>%
-  pivot_longer(col = c(Latitud, Longitud), names_to = 'Tipo_Coordenada', 
-               values_to = 'Valor_Coordenada') 
-```
-
-```{r,include=FALSE}
-vehiculos_tidy <- vehiculos_tidy %>%
-  pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',
-               names_to = 'Tipo_Ubicacion', values_to = 'Ubicacion')
-```
-
-```{r,include=FALSE}
-vehiculos_tidy <- vehiculos_tidy %>%
-   pivot_longer(col = matches('^PK(INI|FI|E)'), names_pattern = '^PK(INI|FI|E)',
-                names_to = 'Tipo_Posicion_Punto_Quilometrico', 
-                values_to = 'Valor_Punto_Quilometrico')
-```
-
-```{r,include=FALSE}
-str(vehiculos_tidy$Valor_Coordenada)
-vehiculos_tidy$Valor_Coordenada <- sub(',', '.', vehiculos_tidy$Valor_Coordenada)
-vehiculos_tidy$Valor_Coordenada <-as.numeric(vehiculos_tidy$Valor_Coordenada)
-str(vehiculos_tidy$Valor_Coordenada)
-```
-
-Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función `rename()` y reemplazamos algunos valores abreviados por descripciones completas mediante la función `ifelse()`. Por ejemplo, en las variables relacionadas con ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ 
-
-```{r,include=FALSE}
-vehiculos_tidy <- vehiculos_tidy %>%
-  dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
-
-vehiculos_tidy$Coordenadas <-
-  vehiculos_tidy$Coordenadas %>%
-  replace(. == "INI", "Inicial") %>%
-  replace(. == "E", "Exacta") %>%
-  replace(. == "FI", "Final")
-
-
-
-# Rescribimos algunos valores:
-vehiculos_tidy$Sentido <-
-  vehiculos_tidy$Sentido %>%
-  replace(. == "A", "Ascendente") %>%
-  replace(. == "D", "Descendente")
-
-vehiculos_tidy$Tipo_Vehiculo <-
-  vehiculos_tidy$Tipo_Vehiculo %>%
-  replace(. == "T", "Todos") %>%
-  replace(. == "P", "Pesados")
-
-vehiculos_tidy$Tipo_Via <-
-  vehiculos_tidy$Tipo_Via %>%
-  replace(. == "Aut.", "Autovia") %>%
-  replace(. == "Conv.", "Convencional") %>%
-  replace(. == "Desd.", "Desdoblada")
-
-
-```
-
-```{r,include=FALSE}
-vehiculos_tidy$Tipo_Ubicacion <-
-  vehiculos_tidy$Tipo_Ubicacion %>%
-  replace(. == "INI", "Inicial") %>%
-  replace(. == "E", "Exacta") %>%
-  replace(. == "FI", "Final")
-
-vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <-
-  vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico %>%
   replace(. == "INI", "Inicial") %>%
   replace(. == "E", "Exacta") %>%
   replace(. == "FI", "Final")

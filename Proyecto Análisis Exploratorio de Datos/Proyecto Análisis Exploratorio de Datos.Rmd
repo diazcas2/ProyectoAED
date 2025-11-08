@@ -181,6 +181,10 @@ A continuación, se muestra un fragmento de las primeras filas del dataset, usan
 head(vehiculos_tidy)
 ```
 
+# Gráficos exploratorios
+
+En esta sección empezaremos a explorar los datos mediante el uso de gráficos. Empezaremos representando 
+
 # Relación entre las variables
 En este apartado estudiaremos si existe una relación lineal entre las variables  de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman con la función cor() para determinar si existe o no una relación entre estas variables.
 ```{r,include=FALSE}

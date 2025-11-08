@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.6)  7 NOV 2025 18:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.6)  8 NOV 2025 14:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1147,7 +1147,7 @@ Package epstopdf Info: Source file: <Definitions/logo-mdpi.eps>
 (epstopdf)             Command: <repstopdf --outfile=Definitions/logo-mdpi-eps-converted-to.pdf Definitions/logo-mdpi.eps>
 (epstopdf)             \includegraphics on input line 205.
 Package epstopdf Info: Output file is already uptodate.
-<Definitions/logo-mdpi-eps-converted-to.pdf, id=30, 74.2775pt x 49.18375pt>
+<Definitions/logo-mdpi-eps-converted-to.pdf, id=38, 74.2775pt x 49.18375pt>
 File: Definitions/logo-mdpi-eps-converted-to.pdf Graphic file (type pdf)
 <use Definitions/logo-mdpi-eps-converted-to.pdf>
 Package pdftex.def Info: Definitions/logo-mdpi-eps-converted-to.pdf  used on input line 205.
@@ -1220,16 +1220,6 @@ Overfull \hbox (9.79608pt too wide) in paragraph at lines 336--336
 []\T1/cmtt/m/n/10 ## #   Tipo_Posicion_Punto_Quilometrico <chr>, Valor_Punto_Quilometrico <int>[] 
  []
 
-<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf, id=67, 722.7pt x 289.08pt>
-File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pdf)
-<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf>
-Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf  used on input line 380.
-(pdftex.def)             Requested size: 722.69823pt x 289.07928pt.
-
-Overfull \hbox (21.33875pt too wide) in paragraph at lines 380--381
-[][] 
- []
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1238,23 +1228,31 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
 [3]
-Overfull \hbox (11.14143pt too wide) in paragraph at lines 382--389
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf, id=79, 722.7pt x 289.08pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf  used on input line 385.
+(pdftex.def)             Requested size: 722.69823pt x 289.07928pt.
+
+Overfull \hbox (21.33875pt too wide) in paragraph at lines 385--386
+[][] 
+ []
+
+
+Overfull \hbox (11.14143pt too wide) in paragraph at lines 387--394
 \T1/ppl/m/n/10 (-20) cas: \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Metodologia_Captacion\T1/ppl/m/n/10 (-20) , \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo\T1/ppl/m/n/10 (-20) , \T1/cmtt/m/n/10 Sentido\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo\T1/ppl/m/n/10 (-20) .
  []
 
 
-Overfull \hbox (7.61987pt too wide) in paragraph at lines 405--415
+Overfull \hbox (7.61987pt too wide) in paragraph at lines 410--420
 []\T1/ppl/m/n/10 (-20) Obtenemos un valor del co-e-fi-ciente para los pares de vari-ables \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo
  []
 
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 450.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 450.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 450.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 450.
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf, id=80, 252.945pt x 144.54pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf  used on input line 449.
+(pdftex.def)             Requested size: 252.94438pt x 144.53963pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1262,7 +1260,56 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[4 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf>] 
+[4 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-16-1.pdf>]
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf, id=90, 252.945pt x 144.54pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf  used on input line 465.
+(pdftex.def)             Requested size: 252.94438pt x 144.53963pt.
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf, id=91, 252.945pt x 144.54pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf  used on input line 474.
+(pdftex.def)             Requested size: 252.94438pt x 144.53963pt.
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf, id=92, 252.945pt x 144.54pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf  used on input line 482.
+(pdftex.def)             Requested size: 252.94438pt x 144.53963pt.
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[5 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-20-1.pdf> <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-21-1.pdf> <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf>]
+<Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf, id=112, 469.755pt x 325.215pt>
+File: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf Graphic file (type pdf)
+<use Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf>
+Package pdftex.def Info: Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf  used on input line 490.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+Overfull \hbox (21.33931pt too wide) in paragraph at lines 490--491
+[][] 
+ []
+
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 526.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 526.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 526.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 526.
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[6 <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-23-1.pdf> <./Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-24-1.pdf>] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./Proyecto-Análisis-Exploratorio-de-Datos.aux)
  ***********
@@ -1270,21 +1317,21 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-10-24>
  ***********
 Package rerunfilecheck Info: File `Proyecto-Análisis-Exploratorio-de-Datos.out' has not changed.
-(rerunfilecheck)             Checksum: 22AA559A36E413C05A10289B6B957587;756.
+(rerunfilecheck)             Checksum: 905DE22EFC00286B159893EB54054D9C;996.
  ) 
 Here is how much of TeX's memory you used:
- 33389 strings out of 469519
- 630250 string characters out of 5468256
+ 33441 strings out of 469519
+ 633664 string characters out of 5468256
  1129606 words of memory out of 5000000
- 61139 multiletter control sequences out of 15000+600000
- 685985 words of font info for 317 fonts, out of 8000000 for 9000
+ 61181 multiletter control sequences out of 15000+600000
+ 686381 words of font info for 321 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  123i,12n,121p,4660b,865s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.375pk><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on Proyecto-Análisis-Exploratorio-de-Datos.pdf (4 pages, 112010 bytes).
+Output written on Proyecto-Análisis-Exploratorio-de-Datos.pdf (6 pages, 202814 bytes).
 PDF statistics:
- 184 PDF objects out of 1000 (max. 8388607)
- 93 compressed objects within 1 object stream
- 27 named destinations out of 1000 (max. 500000)
- 85559 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 233 PDF objects out of 1000 (max. 8388607)
+ 129 compressed objects within 2 object streams
+ 31 named destinations out of 1000 (max. 500000)
+ 85600 words of extra memory for PDF output out of 89155 (max. 10000000)
 

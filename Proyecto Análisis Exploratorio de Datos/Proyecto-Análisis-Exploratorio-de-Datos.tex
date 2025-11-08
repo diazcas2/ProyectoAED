@@ -427,7 +427,6 @@ Pasemos ahora a representar gráficamente aquellas variables en cuyo caso
 sea posible. Empezando con las numéricas, nos fijaremos primeramente en
 \texttt{Flujo\_Vehiculos}:
 
-\textless\textless\textless\textless\textless\textless\textless{} HEAD
 \pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf}}
 En la gráfica podemos observar que lo más común es que el flujo, oscile
 entre 0 y 250, aunque también hay registros de observaciones en los que
@@ -532,15 +531,7 @@ Para ver si hay algún tipo de relación con el día de la semana podemos
 ver la proporción de outliers (frecuencia relativa) con respecto al
 total de outliers según el día:
 
-\begin{verbatim}
-## [1] 118878
-\end{verbatim}
-
-\begin{verbatim}
-## [1] "es_ES.UTF-8"
-\end{verbatim}
-
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-28-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-29-1.pdf}}
 
 En este caso, vemos que en los días laborales (de lunes a viernes) hay
 una mayor proporción con respecto a los días correspondientes al fin de
@@ -557,7 +548,7 @@ máxima es inferior y, por tanto, tiene una menor capacidad de tráfico.
 Así que, este tipo de vía tiende a tener un flujo de vehículos más
 uniforme que en los otros tipos de vía, en general.
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-29-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-30-1.pdf}}
 
 Por otro lado, tenemos la variable \texttt{Tipo\_Vehiculo} que almacena
 si el vehículo es pesado o no. Haciendo uso de la misma junto con
@@ -569,7 +560,7 @@ resto de vehículos. Veámoslo:
 ## [1] "es_ES.UTF-8"
 \end{verbatim}
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-30-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-31-1.pdf}}
 
 Podemos ver que obtenemos un resultado parecido determinando la
 proporción de outliers según el día de la semana. Aunque podemos ver que
@@ -582,7 +573,7 @@ carretera es convencional. Aunque los vehículos pesados suelen circular
 más por autovía, podemos entender que los picos de flujo se encuentren
 en convencional por una concentración de vehículos puntual.
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-31-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-32-1.pdf}}
 
 Por último, también podemos verificar si las coordendas (latitud y
 longitud) son correctas, es decir, si todos los puntos se encuentran

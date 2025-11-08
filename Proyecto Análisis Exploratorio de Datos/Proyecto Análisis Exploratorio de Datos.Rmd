@@ -338,7 +338,6 @@ Si nos fijamos en el rango, vemos que tanto en la longitud como en la latitud (y
 
 Pasemos ahora a representar gráficamente aquellas variables en cuyo caso sea posible. Empezando con las numéricas, nos fijaremos primeramente en `Flujo_Vehiculos`:
 
-<<<<<<< HEAD
 ```{r,echo=FALSE,fig.width=8, fig.height=4}
 vehiculos_tidy2 %>%
   ggplot(aes(x = Flujo_Vehiculos)) +
@@ -415,7 +414,7 @@ Respecto a la variable `Intensidad_Total` aparecen un total de 2656 outliers. Es
 
 Para ver si hay algún tipo de relación con el día de la semana podemos ver la proporción de outliers (frecuencia relativa) con respecto al total de outliers según el día:
 
-```{r, echo=FALSE,fig.width = 3.5,fig.height = 2}
+```{r,include=FALSE}
 vehiculos_tidy2$Fecha <- as.Date(vehiculos_tidy2$Fecha, format='%d/%m/%Y')
 reglahampel <- function(x){
   mediana <- median(x, na.rm=T)
@@ -426,8 +425,11 @@ reglahampel <- function(x){
 
 sum(reglahampel(vehiculos_tidy2$Flujo_Vehiculos))
 df <- vehiculos_tidy2 %>% filter(reglahampel(Flujo_Vehiculos))
-
 Sys.setlocale("LC_TIME", "es_ES.UTF-8")
+```
+
+```{r, echo=FALSE,fig.width = 3.5,fig.height = 2}
+
 datos <- as.data.frame(table(sapply((df$Fecha),weekdays))/2656)
 datos$Var1 <- factor(datos$Var1, levels = c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"))
 
@@ -435,6 +437,7 @@ ggplot(datos, aes(x = Var1, y = Freq, fill = Var1),options(repr.plot.width = 9, 
 
 
 ```
+
 
 En este caso, vemos que en los días laborales (de lunes a viernes) hay una mayor proporción con respecto a los días correspondientes al fin de semana (sábado y domingo). Esto puede deberse a que, entre semana, hay desplazaminetos diaros de trabajadores o transportes de mercancías, repartos... que no se observan en fin de semana, y por ello, estos picos de flujo de vehículos se pueden encontrar en esos días.
 

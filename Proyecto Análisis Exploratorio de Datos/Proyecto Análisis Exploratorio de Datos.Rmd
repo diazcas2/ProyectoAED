@@ -29,6 +29,7 @@ library(tidyr)
 library(dplyr)
 library(corrplot)
 library(DescTools)
+library(ggplot2)
 filename <-'../data/intensidad_vehiculos_en_carretera_2025.csv'
 vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
 ```

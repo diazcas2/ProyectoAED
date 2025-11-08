@@ -212,7 +212,7 @@ myplot3 <- ggplot(vehiculos_tidy2, aes(x=Tipo_Via,y=Valor_Punto_Quilometrico)) +
   geom_boxplot(fill = "lavender",color="blue") +
   labs(y = "Valor del punto quilométrico", x = "Tipo de vía", main = "Dispersión del punto quilométrico dependiendo del tipo de vía") +
   theme_minimal()
-ggsave("punto_quilometrico.eps", plot= myplot2, device="eps",width =12, height = 8, units="cm")
+ggsave("punto_quilometrico.eps", plot= myplot3, device="eps",width =12, height = 8, units="cm")
 ```
 ![](punto_quilometrico.eps)
 
@@ -227,7 +227,7 @@ matrizcorr1 <-cor(vehiculos_num,use='complete.obs',method='pearson')
 matrizcorr2 <-cor(vehiculos_num,use='complete.obs',method='spearman')
 ```
 
-```{r, include=FALSE}
+```{r, echo=FALSE,fig.height = 4, fig.width=12}
 par(mfrow = c(1, 2))
 corrplot(
   matrizcorr1,
@@ -241,9 +241,7 @@ corrplot(
   col = colorRampPalette(c("red", "gray", "navyblue"))(200),
   tl.cex = 0.7
 )
-ggsave("cor.eps",device="eps",width =12, height = 8, units="cm")
 ```
-![](cor.eps)
 
 En la matriz de Pearson (izquierda) se observa una alta correlación positiva entre las variables de latitud y longitud en sus diferentes versiones. Lo que indica que dichas variables están estrechamente relacionadas linealmente, lo cual tiene sentido por su naturaleza geográfica. Por otro lado, la variable `Valor_Punto_Quilométrico` presenta una correlación negativa moderada a alta con las coordenadas geográficas. Esto puede deberse a que a medida que varía el punto kilométrico, también se produce una variación inversa en la posición (latitud o longitud), lo que indica que los puntos de medición están ordenados espacialmente a lo largo del trazado de la vía. Sin embargo, la variable `Flujo_Vehículos` no muestra una correlación lineal significativa con el resto de las variables, lo que indica que el flujo de vehículos no depende directamente de la posición geográfica de los puntos de medición.
 
@@ -304,7 +302,7 @@ Ahora, si observamos la proporción de outliers según el tipo de vía, podemos 
 
 ```{r, include=FALSE}
 ggplot(as.data.frame(table((df$Tipo_Via))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
-ggsave("freq_vias.eps", plot= plot1, device="eps",width =12, height = 8, units="cm")
+ggsave("freq_vias.eps", device="eps",width =12, height = 8, units="cm")
 ```
 ![](freq_vias.eps)
 Por otro lado, tenemos la variable `Tipo_Vehiculo` que almacena si el vehículo es pesado o no. Haciendo uso de la misma junto con `Flujo_Vehiculos`, podemos representar la frecuencia relativa de outliers de vehículos pesados por día de la semana, al igual que del resto de vehículos. Veámoslo:
@@ -334,7 +332,7 @@ ggplot(datos_pesados, aes(x = Dia, y = Frecuencia)) +
        x = "Día de la semana", y = "Frecuencia relativa") +
   theme_minimal()
 
-ggsave("freq_dias_pesados.eps", plot= plot1, device="eps",width =12, height = 8, units="cm")
+ggsave("freq_dias_pesados.eps", device="eps",width =12, height = 8, units="cm")
 
 ```
 ![](freq_dias_pesados.eps)
@@ -348,7 +346,7 @@ De esta forma, podríamos mirar que ocurre con los resultados con respecto al ti
 
 ```{r, include=FALSE}
 ggplot(as.data.frame(table((df$Tipo_Via))/3221), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
-ggsave("freq_vias_pesados.eps", plot= plot1, device="eps",width =12, height = 8, units="cm")
+ggsave("freq_vias_pesados.eps",  device="eps",width =12, height = 8, units="cm")
 ```
 ![](freq_vias_pesados.eps)
 

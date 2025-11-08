@@ -339,8 +339,7 @@ Si nos fijamos en el rango, vemos que tanto en la longitud como en la latitud (y
 Pasemos ahora a representar gráficamente aquellas variables en cuyo caso sea posible. Empezando con las numéricas, nos fijaremos primeramente en `Flujo_Vehiculos`:
 
 ```{r,echo=FALSE,fig.width=8, fig.height=4}
-vehiculos_tidy2 %>%
-  ggplot(aes(x = Flujo_Vehiculos)) +
+  ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
   geom_histogram(fill = "lavender",color="blue",binwidth=30) +
   labs(y="Recuento", x="Flujo total  vehículos") +
   theme_minimal()
@@ -357,7 +356,23 @@ vehiculos_tidy2 %>%
 # 
 # npar(mfrow=c(1,2))
 ```
-En la gráfica podemos observar que lo más común es que el flujo, oscile entre 0 y 250, aunque también hay registros de observaciones en los que el valor del flujo está cerca de 1000.
+En la gráfica podemos observar que lo más común es que el flujo, oscile entre 0 y 250, aunque también hay registros de observaciones en los que el valor del flujo está cerca de 1000. 
+
+```{r,echo=FALSE,fig.width=8, fig.height=4}
+  ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
+  geom_histogram(fill = "lavender",color="blue",binwidth=30) +
+  labs(y="Recuento", x="Flujo total  vehículos") +
+  facet_grid(Tipo_Vehiculo ~ Tipo_Via)+
+  theme_minimal()
+```
+Si además tenemos en cuenta el tipo de vía y el tipo de vehículo, observamos que el flujo de vehículos pesados suele ser mayor en carreteras convencionales, mientras que los vehículos no pesados transitan más las autovías y carreteras desdobladas.
+
+```{r}
+ggplot(vehiculos_tidy2, aes(x=Tipo_Via,y=Valor_Punto_Quilometrico)) +
+  geom_boxplot(fill = "lavender",color="blue") +
+  labs(y = "Valor del punto quilométrico", x = "Tipo de vía", main = "Dispersión del punto quilométrico dependiendo del tipo de vía") +
+  theme_minimal()
+```
 
 # Relación entre las variables
 En este apartado estudiaremos si existe una relación lineal entre las variables  de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman con la función cor() para determinar si existe o no una relación entre estas variables y las representaremos. Veámoslo:

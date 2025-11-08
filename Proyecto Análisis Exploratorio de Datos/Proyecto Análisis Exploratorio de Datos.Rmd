@@ -32,6 +32,7 @@ library(DescTools)
 library(ggplot2)
 library(mapSpain)
 library(sf)
+library(psych)
 filename <-'../data/intensidad_vehiculos_en_carretera_2025.csv'
 vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
 ```
@@ -186,8 +187,6 @@ head(vehiculos_tidy)
 
 # Análisis univariante y gráficos exploratorios
 
-En esta sección empezaremos a explorar los datos mediante un análisis univariante de las variables númericas y el uso de gráficos. Las variables numéricas de las que disponemos son `Flujo_Vehiculos`, `Valor_Punto_Quilometrico`, y las coordenadas geográficas de los puntos en los que se mide el flujo, así como las de los puntos que se han designado como inicio y fin del tramo en el que se asume que el tráfico es invariante.
-
 ```{r, include=FALSE}
 # mi propuesta
 vehiculos_tidy2 <- vehiculos %>%
@@ -248,6 +247,19 @@ vehiculos_tidy2$Tipo_Posicion_Punto_Quilometrico <-
   replace(. == "E", "Exacta") %>%
   replace(. == "FI", "Final")
 ```
+
+En esta sección empezaremos a explorar los datos mediante un análisis univariante de las variables númericas y el uso de gráficos. Las variables numéricas de las que disponemos son `Flujo_Vehiculos`, `Valor_Punto_Quilometrico`, y las coordenadas geográficas de los puntos en los que se mide el flujo, así como las de los puntos que se han designado como inicio y fin del tramo en el que se asume que el tráfico es invariante.
+
+```{r, echo=FALSE,fig.width=10, fig.height=4}
+description<- vehiculos_tidy2 %>% 
+  psych::describe(na.rm = TRUE, interp=FALSE,skew = FALSE, ranges = TRUE,trim=0,
+              type=3,check=TRUE,fast=NULL,quant=c(0.25,0.75),IQR=TRUE,omit=TRUE) 
+description %>% 
+  select("mean","sd","min","max","range","IQR","Q0.25","median", "Q0.75") %>% 
+  rename(Media=mean,Min=min,Max=max,Mediana=median)
+```
+
+
 
 
 # Relación entre las variables

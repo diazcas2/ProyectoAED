@@ -256,7 +256,7 @@ ggplot() +
   scale_color_manual(guide="none",values=c("#d87373","#63b0b8","blue")) +
   facet_wrap(~ Tipo_Via, ncol = 3) +
   theme_minimal()
-ggsave("mapa_por_via.pdf", device="pdf",width =15, height = 10, units="cm")
+ggsave("mapa_por_via.pdf", device="pdf",width =14, height = 10, units="cm")
 ```
 ![](mapa_por_via.pdf)
 

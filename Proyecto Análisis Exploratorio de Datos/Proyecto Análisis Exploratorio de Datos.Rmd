@@ -39,23 +39,23 @@ Las variables de nuestro dataset son las siguientes:
 \begin{enumerate}
 \item \textbf{TRAM} (\textit{numérico}): Código del tramo al que se le asocia el tráfico.
 \subitem  Primer y segundo dígito: código CV- de la carretera; tres últimos dígitos: número de tramo.
-\item \textbf{DIA}(\textit{carácter}): Fecha de los datos.
-\item \textbf{INTA}(\textit{numérico}): Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
-\item \textbf{INTAP}(\textit{numérico}): Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
-\item \textbf{INTD}(\textit{numérico}): Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
-\item \textbf{INTDP}(\textit{numérico}): Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
-\item \textbf{INTT}(\textit{numérico}): Total de vehículos que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
-\item \textbf{INTTP}(\textit{numérico}): Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
-\item \textbf{TIPUSV}(\textit{carácter}): Tipo de vía (Autovía, Convencional o Desdoblada).
-\item \textbf{TIPUSE}(\textit{carácter}): Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
-\item \textbf{PKE}(\textit{numérico}): Posición exacta, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
-\item \textbf{PKECOOR}(\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
-\item \textbf{PKINI}(\textit{numérico}): Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
-\item \textbf{REFINI}(\textit{carácter}): Ubicación del inicio del tramo al que se asocia el tráfico.
-\item \textbf{PKINICOOR}(\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
-\item \textbf{PKFI}(\textit{numérico}): Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
-\item \textbf{REFFI}(\textit{carácter}): Ubicación del final del tramo al que se asocia el tráfico.
-\item \textbf{PKFICOOR}(\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
+\item \textbf{DIA} (\textit{carácter}): Fecha de los datos.
+\item \textbf{INTA} (\textit{numérico}): Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTAP} (\textit{numérico}): Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTD} (\textit{numérico}): Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTDP} (\textit{numérico}): Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTT} (\textit{numérico}): Total de vehículos que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{INTTP} (\textit{numérico}): Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{TIPUSV} (\textit{carácter}): Tipo de vía (Autovía, Convencional o Desdoblada).
+\item \textbf{TIPUSE} (\textit{carácter}): Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
+\item \textbf{PKE} (\textit{numérico}): Posición exacta, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
+\item \textbf{PKECOOR} (\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
+\item \textbf{PKINI} (\textit{numérico}): Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFINI} (\textit{carácter}): Ubicación del inicio del tramo al que se asocia el tráfico.
+\item \textbf{PKINICOOR} (\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
+\item \textbf{PKFI} (\textit{numérico}): Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFFI} (\textit{carácter}): Ubicación del final del tramo al que se asocia el tráfico.
+\item \textbf{PKFICOOR} (\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
 \end{enumerate}
 
 Si le echamos un vistazo a las variables, podemos ver que la variable $DIA$ es de tipo character, por lo que es necesario convertirla a formato de fecha. Para ello, usamos la función as.Date(). Por otro lado, es importante preguntarse con cuántos valores faltantes estamos trabajando, para ello usamos is.na() y sumamos los valores faltantes, obteniendo:
@@ -194,7 +194,7 @@ matrizcorr1
 matrizcorr2
 ```
 
-Si nos fijamos en la matriz de Pearson, podemos ver que las correlaciones toman valores muy próximos a cero, lo que indica la ausencia de una relación lineal significativa entre V`Valor_Coordenada`-`Flujo_Vehiculos`, `Valor_Punto_Quilometrico`-`Flujo_Vehiculos` y `Valor_Punto_Quilometrico`-`Valor_Coordenada`. Sin embargo, al analizar la matriz de Spearman, los valores siguen siendo cercanos a cero, aunque los signos cambian. Lo que indica que, en algunos casos, cuando una variable aumenta, la otra tiende a disminuir, aunque la relación no sea fuerte. Podemos verlo gráficamente:
+Si nos fijamos en la matriz de Pearson, podemos ver que las correlaciones toman valores muy próximos a cero, lo que indica la ausencia de una relación lineal significativa entre `Valor_Coordenada`-`Flujo_Vehiculos`, `Valor_Punto_Quilometrico`-`Flujo_Vehiculos` y `Valor_Punto_Quilometrico`-`Valor_Coordenada`. Sin embargo, al analizar la matriz de Spearman, los valores siguen siendo cercanos a cero, aunque los signos cambian. Lo que indica que, en algunos casos, cuando una variable aumenta, la otra tiende a disminuir, aunque la relación no sea fuerte. Podemos verlo gráficamente:
 
 ```{r, echo=FALSE, fig.width=10, fig.height=4}
 par(mfrow = c(1, 2))
@@ -233,7 +233,7 @@ En este último apartado determinaremos los outliers (datos atípicos) de alguna
 
 Para detectar los outliers aplicaremos la regla de Hampel ya que utiliza estimadores robustos y, además, no presupone que los datos siguen una distribución gaussiana. Podremos observar los picos extremos de flujo de vehículos tanto en el flujo total de vehículos como en el de vehículos pesados.
 
-Respecto a la variable `Intensidad_Total` aparecen un total de 2656 outliers. Esta cantidad elevada (aunque representa el 5.7% del total de registros) puede deberse a que tenemos un conjunto de datos muy segado como podemos ver en las Figuras .... Para interpretar este resultado podemos ver si los outliers presentan alguna relación con alguna otra variable, como por ejemplo, el día de la semana (lunes, martes, etc.) o el tipo de vía.
+Respecto a la variable `Intensidad_Total` aparecen un total de 2656 outliers. Esta cantidad elevada (aunque representa el 17.4% del total de registros) puede deberse a que tenemos un conjunto de datos muy segado como podemos ver en las Figuras .... Para interpretar este resultado podemos ver si los outliers presentan alguna relación con alguna otra variable, como por ejemplo, el día de la semana (lunes, martes, etc.) o el tipo de vía.
 
 Para ver si hay algún tipo de relación con el día de la semana podemos ver la proporción de outliers con respecto al total de outliers según el día:
 ```{r, include=FALSE}
@@ -287,6 +287,8 @@ df2 <- vehiculos2 %>% filter(reglahampel(Intensidad_Total))
 ```
 
 ```{r, echo=FALSE}
+options(repr.plot.width = 0.5, repr.plot.height =0.27)
+
 ggplot(as.data.frame(table(sapply((df2$fecha),weekdays))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por día de la semana",  x = "Día de la semana", y = "Frecuencia") + theme_minimal()
 ```
 

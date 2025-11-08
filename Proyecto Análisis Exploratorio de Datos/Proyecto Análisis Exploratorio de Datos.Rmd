@@ -13,7 +13,7 @@ keywords: null
 dataavailability: |
   Los datos usados en este estudio son públicos disponibles en  [https://dadesobertes.gva.es/dataset/tra-int-veh-2025]
 
-output: 
+output:
   rticles::mdpi_article
 ---
 
@@ -183,8 +183,6 @@ vehiculos_tidy <- vehiculos_tidy %>%
                 values_to = 'Valor_Punto_Quilometrico')
 ```
 
-De esta forma, como `Valor_Coordenada` utiliza comas como separador decimal, R detecta la columna como tipo character, cuando en realidad debería ser numérica. Para solucionarlo, usamos la función `sub()` para reemplazar las comas por puntos, lo que nos permite convertir correctamente los valores a tipo numérico.
-
 ```{r,include=FALSE}
 str(vehiculos_tidy$Valor_Coordenada)
 vehiculos_tidy$Valor_Coordenada <- sub(',', '.', vehiculos_tidy$Valor_Coordenada)
@@ -239,7 +237,7 @@ vehiculos_tidy$Tipo_Posicion_Punto_Quilometrico <-
   replace(. == "FI", "Final")
 ```
 
-A continuación, se muestra un fragmento de las primeras filas del dataset, usando la función head():
+A continuación, se muestra un fragmento de las primeras filas del dataset, usando la función `head()`:
 
 ```{r,echo=FALSE}
 head(vehiculos_tidy2)
@@ -265,11 +263,12 @@ Si nos fijamos en el rango, vemos que tanto en la longitud como en la latitud (y
 
 Pasemos ahora a representar gráficamente aquellas variables en cuyo caso sea posible. Empezando con las numéricas, nos fijaremos primeramente en `Flujo_Vehiculos`:
 
-```{r,echo=FALSE,fig.width=10, fig.height=4}
+```{r,echo=FALSE,fig.width=7, fig.height=2.75}
 vehiculos_tidy2 %>%
   ggplot(aes(x = Flujo_Vehiculos)) +
   geom_histogram(fill = "lavender",color="blue",binwidth=30) +
-  labs(y="Recuento", x="Flujo total  vehículos") 
+  labs(y="Recuento", x="Flujo total  vehículos") +
+  theme_minimal()
   # facet_grid(Tipo_Vehiculo ~ Tipo_Via)
   # #facet_wrap(~ Tipo_Via, ncol = 3) +
   # theme_minimal()
@@ -283,7 +282,7 @@ vehiculos_tidy2 %>%
 # 
 # npar(mfrow=c(1,2))
 ```
-
+En la gráfica podemos observar que lo más común es que el flujo, oscile entre 0 y 250, aunque también hay registros de observaciones en los que el valor del flujo está cerca de 1000.
 
 # Relación entre las variables
 En este apartado estudiaremos si existe una relación lineal entre las variables  de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman con la función cor() para determinar si existe o no una relación entre estas variables.
@@ -300,7 +299,7 @@ matrizcorr2
 
 Si nos fijamos en la matriz de Pearson, podemos ver que las correlaciones toman valores muy próximos a cero, lo que indica la ausencia de una relación lineal significativa entre `Valor_Coordenada`-`Flujo_Vehiculos`, `Valor_Punto_Quilometrico`-`Flujo_Vehiculos` y `Valor_Punto_Quilometrico`-`Valor_Coordenada`. Sin embargo, al analizar la matriz de Spearman, los valores siguen siendo cercanos a cero, aunque los signos cambian. Lo que indica que, en algunos casos, cuando una variable aumenta, la otra tiende a disminuir, aunque la relación no sea fuerte. Podemos verlo gráficamente:
 
-```{r, echo=FALSE, fig.width=10, fig.height=4}
+```{r, echo=FALSE, fig.width=7, fig.height=3.5}
 par(mfrow = c(1, 2))
 corrplot(
   matrizcorr1,

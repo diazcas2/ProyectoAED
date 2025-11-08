@@ -227,7 +227,8 @@ matrizcorr1 <-cor(vehiculos_num,use='complete.obs',method='pearson')
 matrizcorr2 <-cor(vehiculos_num,use='complete.obs',method='spearman')
 ```
 
-```{r, echo=FALSE,fig.height = 4, fig.width=12}
+```{r, include=FALSE}
+png("rplot.png",width = 700, height = 480)
 par(mfrow = c(1, 2))
 corrplot(
   matrizcorr1,
@@ -241,7 +242,13 @@ corrplot(
   col = colorRampPalette(c("red", "gray", "navyblue"))(200),
   tl.cex = 0.7
 )
+dev.off()
 ```
+
+```{r,fig.width=6, fig.height=3, echo=FALSE}
+knitr::include_graphics("rplot.png")
+```
+
 
 En la matriz de Pearson (izquierda) se observa una alta correlación positiva entre las variables de latitud y longitud en sus diferentes versiones. Lo que indica que dichas variables están estrechamente relacionadas linealmente, lo cual tiene sentido por su naturaleza geográfica. Por otro lado, la variable `Valor_Punto_Quilométrico` presenta una correlación negativa moderada a alta con las coordenadas geográficas. Esto puede deberse a que a medida que varía el punto kilométrico, también se produce una variación inversa en la posición (latitud o longitud), lo que indica que los puntos de medición están ordenados espacialmente a lo largo del trazado de la vía. Sin embargo, la variable `Flujo_Vehículos` no muestra una correlación lineal significativa con el resto de las variables, lo que indica que el flujo de vehículos no depende directamente de la posición geográfica de los puntos de medición.
 

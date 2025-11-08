@@ -177,6 +177,47 @@ Blasco Vega}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Pandoc syntax highlighting
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 
 % tightlist command for lists without linebreak
 \providecommand{\tightlist}{%
@@ -184,20 +225,6 @@ Blasco Vega}
 
 
 % Add imagehandling
-% Custom command from Pandoc 3.2.1 to scale images if necessary
-\usepackage{graphicx}
-\makeatletter
-\newsavebox\pandoc@box
-\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
-  \sbox\pandoc@box{#1}%
-  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
-  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
-  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
-  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
-  \else\usebox{\pandoc@box}%
-  \fi%
-}
-\makeatother
 
 
 
@@ -305,53 +332,6 @@ Después de convertirlas a tipo numérico, acabamos con las variables
 \texttt{Latitud\_Final}, \texttt{Longitud\_Final},
 \texttt{Latitud\_Exacta} y \texttt{Longitud\_Exacta}.
 
-De esta forma, como \texttt{Valor\_Coordenada} utiliza comas como
-separador decimal, R detecta la columna como tipo character, cuando en
-realidad debería ser numérica. Para solucionarlo, usamos la función
-\texttt{sub()} para reemplazar las comas por puntos, lo que nos permite
-convertir correctamente los valores a tipo numérico.
-
-Solo falta asegurarnos de que los nombres de las columnas sean
-representativos; para ello, utilizamos la función \texttt{rename()} y
-reemplazamos algunos valores abreviados por descripciones completas
-mediante la función \texttt{ifelse()}. Por ejemplo, en las variables
-relacionadas con ubicación, los códigos \emph{INI}, \emph{E} y \emph{FI}
-se sustituyeron por \emph{Inicial}, \emph{Exacta} y \emph{Final}; en
-\texttt{Sentido}, los valores \emph{A} y \emph{D} pasaron a
-\emph{Ascendente} y \emph{Descendente}; y en \texttt{Tipo\_Vehiculo},
-\emph{T} y \emph{P} se cambiaron por \emph{Todos} y \emph{Pesados.}
-
-Comenzamos reorganizando las variables relacionadas con la intensidad
-del tráfico (\texttt{INTA}, \texttt{INTAP}, \texttt{INTD},
-\texttt{INTDP}, \texttt{INTT} y \texttt{INTTP}). Estas columnas
-almacenan información sobre el sentido del tráfico (ascendente,
-descendente o total) y el tipo de vehículo (pesado o total), por lo que
-están estrechamente relacionadas entre sí.
-
-Para convertir el conjunto de datos en tidy, optamos por transformar el
-formato ancho en uno largo, de modo que cada fila represente una
-combinación única de tramo, sentido y tipo de vehículo. Para ello
-aplicamos la función pivot\_longer(), que nos permite condensar varias
-columnas en dos nuevas variables: Sentido, que indica la dirección del
-tráfico, y Tipo\_Vehiculo, que diferencia entre vehículos pesados (P) y
-el total (T).
-
-De forma análoga, se aplicaron transformaciones similares a otras
-variables, como \texttt{TRAM}, las ubicaciones (\texttt{REFINI,\ REFFI})
-y los puntos kilométricos (\texttt{PKINI,\ PKFI,\ PKE}). En el caso de
-las variables de coordenadas (\texttt{PKECOOR,\ PKINICOOR,\ PKFICOOR}),
-que distinguen entre la posición inicial, final y exacta, como cada
-coordenada incluye la latitud y la longitud separadas por un punto y
-coma, usamos la función \texttt{separate()} para dividir cada columna en
-longitud y latitud. El separador decimal del conjunto eran las comas,
-por lo que R detectaba las columnas como tipo carácter. Lo solucionamos
-usando la función \texttt{sub()} para reemplazar las comas por puntos,
-lo que nos permite convertir correctamente los valores a tipo numérico.
-Después de convertirlas a tipo numérico, acabamos con las variables
-\texttt{Latitud\_Inicio}, \texttt{Longitud\_Inicio},
-\texttt{Latitud\_Final}, \texttt{Longitud\_Final},
-\texttt{Latitud\_Exacta} y \texttt{Longitud\_Exacta}.
-
 Solo falta asegurarnos de que los nombres de las columnas sean
 representativos; para ello, utilizamos la función \texttt{rename()} y
 reemplazamos algunos valores abreviados por descripciones completas
@@ -425,12 +405,30 @@ tramo final, que veremos más adelante.
 
 Pasemos ahora a representar gráficamente aquellas variables en cuyo caso
 sea posible. Empezando con las numéricas, nos fijaremos primeramente en
-\texttt{Flujo\_Vehiculos}:
+\texttt{Flujo\_Vehiculos}: \includegraphics{flujo.eps}
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-22-1.pdf}}
 En la gráfica podemos observar que lo más común es que el flujo, oscile
 entre 0 y 250, aunque también hay registros de observaciones en los que
 el valor del flujo está cerca de 1000.
+
+\includegraphics{flujo_via_vehiculo.eps}
+
+Si además tenemos en cuenta el tipo de vía y el tipo de vehículo,
+observamos que el flujo de vehículos pesados suele ser mayor en
+carreteras convencionales, mientras que los vehículos no pesados
+transitan más las autovías y carreteras desdobladas.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{myplot3 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(vehiculos\_tidy2, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{Tipo\_Via,}\AttributeTok{y=}\NormalTok{Valor\_Punto\_Quilometrico)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{fill =} \StringTok{"lavender"}\NormalTok{,}\AttributeTok{color=}\StringTok{"blue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Valor del punto quilométrico"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Tipo de vía"}\NormalTok{, }\AttributeTok{main =} \StringTok{"Dispersión del punto quilométrico dependiendo del tipo de vía"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\FunctionTok{ggsave}\NormalTok{(}\StringTok{"punto\_quilometrico.eps"}\NormalTok{, }\AttributeTok{plot=}\NormalTok{ myplot2, }\AttributeTok{device=}\StringTok{"eps"}\NormalTok{,}\AttributeTok{width =}\DecValTok{12}\NormalTok{, }\AttributeTok{height =} \DecValTok{8}\NormalTok{, }\AttributeTok{units=}\StringTok{"cm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{punto_quilometrico.eps}
 
 \section{Relación entre las
 variables}\label{relaciuxf3n-entre-las-variables}
@@ -441,12 +439,12 @@ con las variables numéricas, calculando las matrices de correlación de
 Pearson y Spearman con la función cor() para determinar si existe o no
 una relación entre estas variables y las representaremos. Veámoslo:
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-25-1.pdf}}
+\includegraphics{cor.eps}
 
 En la matriz de Pearson (izquierda) se observa una alta correlación
 positiva entre las variables de latitud y longitud en sus diferentes
 versiones. Lo que indica que dichas variables están estrechamente
-relacionadas de manera lineal, lo cual tiene sentido por su naturaleza
+relacionadas linealmente, lo cual tiene sentido por su naturaleza
 geográfica. Por otro lado, la variable
 \texttt{Valor\_Punto\_Quilométrico} presenta una correlación negativa
 moderada a alta con las coordenadas geográficas. Esto puede deberse a
@@ -506,12 +504,10 @@ circular indistintamente en un sentido o en otro).
 \section{Outliers}\label{outliers}
 
 En este último apartado determinaremos los outliers (datos atípicos) de
-algunas variables numéricas. Comenzaremos con \texttt{Intensidad\_Total}
-e \texttt{Intensidad\_Total\_Pesados} (flujo de vehículos total sumando
-ambos sentidos de circulación para todos los vehículos y para los
-vehículos pesados, respectivamente), que son ``variables'' del conjunto
-no tidy. Utilizaremos este conjunto para interpretar de una forma más
-sencilla los resultados.
+algunas variables numéricas. Haremos el análisis con la variable
+\texttt{Flujo\_Vehiculos} y, también, estudiaremos los outliers de esta
+variable pero considerando solo los vehículos pesados. Así podremos
+interpretar de una forma más sencilla los resultados.
 
 Para detectar los outliers aplicaremos la regla de Hampel ya que utiliza
 estimadores robustos y, además, no presupone que los datos siguen una
@@ -519,7 +515,7 @@ distribución gaussiana. Podremos observar los picos extremos de flujo de
 vehículos tanto en el flujo total de vehículos como en el de vehículos
 pesados.
 
-Respecto a la variable \texttt{Intensidad\_Total} aparecen un total de
+Respecto a la variable \texttt{Flujo\_Vehiculos} aparecen un total de
 2656 outliers. Esta cantidad elevada (aunque representa el 17.4\% del
 total de registros) puede deberse a que tenemos un conjunto de datos muy
 segado como podemos ver en las Figuras \ldots. Para interpretar este
@@ -531,7 +527,7 @@ Para ver si hay algún tipo de relación con el día de la semana podemos
 ver la proporción de outliers (frecuencia relativa) con respecto al
 total de outliers según el día:
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-29-1.pdf}}
+\includegraphics{freq_dias.eps}
 
 En este caso, vemos que en los días laborales (de lunes a viernes) hay
 una mayor proporción con respecto a los días correspondientes al fin de
@@ -548,19 +544,13 @@ máxima es inferior y, por tanto, tiene una menor capacidad de tráfico.
 Así que, este tipo de vía tiende a tener un flujo de vehículos más
 uniforme que en los otros tipos de vía, en general.
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-30-1.pdf}}
+\includegraphics{freq_vias.eps} Por otro lado, tenemos la variable
+\texttt{Tipo\_Vehiculo} que almacena si el vehículo es pesado o no.
+Haciendo uso de la misma junto con \texttt{Flujo\_Vehiculos}, podemos
+representar la frecuencia relativa de outliers de vehículos pesados por
+día de la semana, al igual que del resto de vehículos. Veámoslo:
 
-Por otro lado, tenemos la variable \texttt{Tipo\_Vehiculo} que almacena
-si el vehículo es pesado o no. Haciendo uso de la misma junto con
-\texttt{Flujo\_Vehículos}, podemos representar la frecuencia relativa de
-outliers de vehículos pesados por día de la semana, al igual que del
-resto de vehículos. Veámoslo:
-
-\begin{verbatim}
-## [1] "es_ES.UTF-8"
-\end{verbatim}
-
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-31-1.pdf}}
+\includegraphics{freq_dias_pesados.eps}
 
 Podemos ver que obtenemos un resultado parecido determinando la
 proporción de outliers según el día de la semana. Aunque podemos ver que
@@ -573,7 +563,7 @@ carretera es convencional. Aunque los vehículos pesados suelen circular
 más por autovía, podemos entender que los picos de flujo se encuentren
 en convencional por una concentración de vehículos puntual.
 
-\pandocbounded{\includegraphics[keepaspectratio]{Proyecto-Análisis-Exploratorio-de-Datos_files/figure-latex/unnamed-chunk-32-1.pdf}}
+\includegraphics{freq_vias_pesados.eps}
 
 Por último, también podemos verificar si las coordendas (latitud y
 longitud) son correctas, es decir, si todos los puntos se encuentran

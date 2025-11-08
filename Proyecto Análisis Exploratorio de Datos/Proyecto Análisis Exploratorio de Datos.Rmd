@@ -184,42 +184,37 @@ description %>%
 Si nos fijamos en el rango, vemos que tanto en la longitud como en la latitud (y sobre todo en esta última) de las coordenadas que marcan el final del tramo se observa una mayor variación. Esto nos indica que es probable que haya algún problema con los datos de las coordenadas del tramo final, que veremos más adelante.
 
 Pasemos ahora a representar gráficamente aquellas variables en cuyo caso sea posible. Empezando con las numéricas, nos fijaremos primeramente en `Flujo_Vehiculos`:
+![](flujo.eps)
 
-```{r,echo=FALSE,fig.width=8, fig.height=4}
-  ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
+```{r,include=FALSE}
+  myplot1 <- ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
   geom_histogram(fill = "lavender",color="blue",binwidth=30) +
   labs(y="Recuento", x="Flujo total  vehículos") +
   theme_minimal()
-  # facet_grid(Tipo_Vehiculo ~ Tipo_Via)
-  # #facet_wrap(~ Tipo_Via, ncol = 3) +
-  # theme_minimal()
-
-# g2 <- vehiculos_tidy2 %>%
-#   ggplot(aes(x = Intensidad_Total_Pesados)) +
-#   geom_histogram(fill = "lavender",color="blue",binwidth = 30) +
-#   labs(y="Recuento", x="Flujo total de vehículos pesados") +
-#   facet_wrap(~ Tipo_Via, ncol = 3) +
-#   theme_minimal()
-# 
-# npar(mfrow=c(1,2))
+ggsave("flujo.eps",plot= myplot1, device="eps",width =12, height = 8, units="cm")
 ```
 En la gráfica podemos observar que lo más común es que el flujo, oscile entre 0 y 250, aunque también hay registros de observaciones en los que el valor del flujo está cerca de 1000. 
 
-```{r,echo=FALSE,fig.width=8, fig.height=4}
-  ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
+```{r,include=FALSE}
+  myplot2 <- ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
   geom_histogram(fill = "lavender",color="blue",binwidth=30) +
   labs(y="Recuento", x="Flujo total  vehículos") +
   facet_grid(Tipo_Vehiculo ~ Tipo_Via)+
   theme_minimal()
+ggsave("flujo_via_vehiculo.eps", plot= myplot2, device="eps",width =12, height = 8, units="cm")
 ```
+![](flujo_via_vehiculo.eps)
+
 Si además tenemos en cuenta el tipo de vía y el tipo de vehículo, observamos que el flujo de vehículos pesados suele ser mayor en carreteras convencionales, mientras que los vehículos no pesados transitan más las autovías y carreteras desdobladas.
 
 ```{r}
-ggplot(vehiculos_tidy2, aes(x=Tipo_Via,y=Valor_Punto_Quilometrico)) +
+myplot3 <- ggplot(vehiculos_tidy2, aes(x=Tipo_Via,y=Valor_Punto_Quilometrico)) +
   geom_boxplot(fill = "lavender",color="blue") +
   labs(y = "Valor del punto quilométrico", x = "Tipo de vía", main = "Dispersión del punto quilométrico dependiendo del tipo de vía") +
   theme_minimal()
+ggsave("punto_quilometrico.eps", plot= myplot2, device="eps",width =12, height = 8, units="cm")
 ```
+![](punto_quilometrico.eps)
 
 # Relación entre las variables
 En este apartado estudiaremos si existe una relación lineal entre las variables  de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman con la función cor() para determinar si existe o no una relación entre estas variables y las representaremos. Veámoslo:
@@ -232,7 +227,7 @@ matrizcorr1 <-cor(vehiculos_num,use='complete.obs',method='pearson')
 matrizcorr2 <-cor(vehiculos_num,use='complete.obs',method='spearman')
 ```
 
-```{r, echo=FALSE, fig.width=8, fig.height=6}
+```{r, include=FALSE}
 par(mfrow = c(1, 2))
 corrplot(
   matrizcorr1,
@@ -246,8 +241,9 @@ corrplot(
   col = colorRampPalette(c("red", "gray", "navyblue"))(200),
   tl.cex = 0.7
 )
-
+ggsave("cor.eps",device="eps",width =12, height = 8, units="cm")
 ```
+![](cor.eps)
 
 En la matriz de Pearson (izquierda) se observa una alta correlación positiva entre las variables de latitud y longitud en sus diferentes versiones. Lo que indica que dichas variables están estrechamente relacionadas linealmente, lo cual tiene sentido por su naturaleza geográfica. Por otro lado, la variable `Valor_Punto_Quilométrico` presenta una correlación negativa moderada a alta con las coordenadas geográficas. Esto puede deberse a que a medida que varía el punto kilométrico, también se produce una variación inversa en la posición (latitud o longitud), lo que indica que los puntos de medición están ordenados espacialmente a lo largo del trazado de la vía. Sin embargo, la variable `Flujo_Vehículos` no muestra una correlación lineal significativa con el resto de las variables, lo que indica que el flujo de vehículos no depende directamente de la posición geográfica de los puntos de medición.
 
@@ -290,29 +286,31 @@ df <- vehiculos_tidy2 %>% filter(reglahampel(Flujo_Vehiculos))
 Sys.setlocale("LC_TIME", "es_ES.UTF-8")
 ```
 
-```{r, echo=FALSE,fig.width = 4.65,fig.height = 2}
+```{r, include=FALSE}
 
 datos <- as.data.frame(table(sapply((df$Fecha),weekdays))/2656)
 datos$Var1 <- factor(datos$Var1, levels = c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"))
 
-ggplot(datos, aes(x = Var1, y = Freq, fill = Var1),options(repr.plot.width = 9, repr.plot.height =4)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por día de la semana",  x = "Día de la semana", y = "Frecuencia relativa") + theme_minimal()
+plot1 <-ggplot(datos, aes(x = Var1, y = Freq, fill = Var1),options(repr.plot.width = 9, repr.plot.height =4)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por día de la semana",  x = "Día de la semana", y = "Frecuencia relativa") + theme_minimal()
 
+ggsave("freq_dias.eps", plot= plot1, device="eps",width =12, height = 8, units="cm")
 
 ```
-
+![](freq_dias.eps)
 
 En este caso, vemos que en los días laborales (de lunes a viernes) hay una mayor proporción con respecto a los días correspondientes al fin de semana (sábado y domingo). Esto puede deberse a que, entre semana, hay desplazaminetos diaros de trabajadores o transportes de mercancías, repartos... que no se observan en fin de semana, y por ello, estos picos de flujo de vehículos se pueden encontrar en esos días.
 
 Ahora, si observamos la proporción de outliers según el tipo de vía, podemos detectar que hay una cantidad superior de outliers en autovía y carretera desdoblada que en carretera convencional. Puede ser debido a que en carretera convencional hay menos carriles, el límite de velocidad máxima es inferior y, por tanto, tiene una menor capacidad de tráfico. Así que, este tipo de vía tiende a tener un flujo de vehículos más uniforme que en los otros tipos de vía, en general.
 
-```{r, echo=FALSE,fig.width = 4.5,fig.height = 2}
+```{r, include=FALSE}
 ggplot(as.data.frame(table((df$Tipo_Via))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
+ggsave("freq_vias.eps", plot= plot1, device="eps",width =12, height = 8, units="cm")
 ```
-
+![](freq_vias.eps)
 Por otro lado, tenemos la variable `Tipo_Vehiculo` que almacena si el vehículo es pesado o no. Haciendo uso de la misma junto con `Flujo_Vehiculos`, podemos representar la frecuencia relativa de outliers de vehículos pesados por día de la semana, al igual que del resto de vehículos. Veámoslo:
 
 
-```{r, echo=FALSE,fig.width = 6.65,fig.height = 2}
+```{r, include=FALSE}
 # Filtramos solo los vehículos pesados
 df_pesados <- vehiculos_tidy2 %>%
   filter(Tipo_Vehiculo == "Pesados") %>%
@@ -330,14 +328,16 @@ colnames(datos_pesados) <- c("Dia", "Frecuencia")
 datos_pesados$Dia <- factor(datos_pesados$Dia,
                             levels = c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"))
 
-library(ggplot2)
-
 ggplot(datos_pesados, aes(x = Dia, y = Frecuencia)) +
   geom_col(color = "blue", fill = "lavender") +
   labs(title = "Frecuencia relativa de outliers de vehículos pesados por día de la semana",
        x = "Día de la semana", y = "Frecuencia relativa") +
   theme_minimal()
+
+ggsave("freq_dias_pesados.eps", plot= plot1, device="eps",width =12, height = 8, units="cm")
+
 ```
+![](freq_dias_pesados.eps)
 
 Podemos ver que obtenemos un resultado parecido determinando la proporción de outliers según el día de la semana. Aunque podemos ver que en domingo la proporción es menor ya que en este día los vehículos pesados no suelen circular ya que no es día laboral.
 
@@ -346,9 +346,11 @@ Podemos ver que obtenemos un resultado parecido determinando la proporción de o
 De esta forma, podríamos mirar que ocurre con los resultados con respecto al tipo de vía, vemos que los outliers se concentran cuando la carretera es convencional. Aunque los vehículos pesados suelen circular más por autovía, podemos entender que los picos de flujo se encuentren en convencional por una concentración de vehículos puntual.
 
 
-```{r, echo=FALSE,fig.width = 4.5,fig.height = 2}
+```{r, include=FALSE}
 ggplot(as.data.frame(table((df$Tipo_Via))/3221), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
+ggsave("freq_vias_pesados.eps", plot= plot1, device="eps",width =12, height = 8, units="cm")
 ```
+![](freq_vias_pesados.eps)
 
 Por último, también podemos verificar si las coordendas (latitud y longitud) son correctas, es decir, si todos los puntos se encuentran dentro de la Comunidad Valenciana mediante un mapa. Observamos un único punto fuera del territorio a estudiar, que puede deberse a un error en la recopilación de datos.
 

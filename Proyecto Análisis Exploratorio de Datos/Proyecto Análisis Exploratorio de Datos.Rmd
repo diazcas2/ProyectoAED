@@ -286,22 +286,21 @@ df2 <- vehiculos2 %>% filter(reglahampel(Intensidad_Total))
 
 ```
 
-```{r, echo=FALSE}
-options(repr.plot.width = 0.5, repr.plot.height =0.27)
+```{r, echo=FALSE,fig.width = 4.5,fig.height = 2}
 
-ggplot(as.data.frame(table(sapply((df2$fecha),weekdays))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por día de la semana",  x = "Día de la semana", y = "Frecuencia") + theme_minimal()
+ggplot(as.data.frame(table(sapply((df2$fecha),weekdays))/2656), aes(x = Var1, y = Freq, fill = Var1),options(repr.plot.width = 9, repr.plot.height =4)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por día de la semana",  x = "Día de la semana", y = "Frecuencia") + theme_minimal()
 ```
 
 En este caso, vemos que en los días laborales (de lunes a viernes) hay una mayor proporción con respecto a los días correspondientes al fin de semana (sábado y domingo). Esto puede deberse a que, entre semana, hay desplazaminetos diaros de trabajadores o transportes de mercancías, repartos... que no se observan en fin de semana, y por ello, estos picos de flujo de vehículos se pueden encontrar en esos días.
 
 Ahora, si observamos la proporción de outliers según el tipo de vía, podemos detectar que hay una cantidad superior de outliers en autovía y carretera desdoblada que en carretera convencional. Puede ser debido a que en carretera convencional hay menos carriles, el límite de velocidad máxima es inferior y, por tanto, tiene una menor capacidad de tráfico. Así que, este tipo de vía tiende a tener un flujo de vehículos más uniforme que en los otros tipos de vía, en general.
-```{r, echo=FALSE}
+```{r, echo=FALSE,fig.width = 4.5,fig.height = 2}
 ggplot(as.data.frame(table((df2$Tipo_Via))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por tipo de vía",  x = "Tipo de vía", y = "Frecuencia") + theme_minimal()
 ```
 
 
 Por otro lado, tenemos la varibale Intensidad_Total_Pesados, donde detectamos un total de 3221 outliers. Realizando un procedimiento completamente análogo al de la variable anterior, obtenemos un resultado parecido determinando la proporción de outliers según el día de la semana. Aunque podemos ver que en domingo la proporción es menor ya que en este día los vehículos pesados no suelen circular ya que no es día laboral.
-```{r, echo=FALSE}
+```{r, echo=FALSE,fig.width = 4.5,fig.height = 2}
 df3 <- vehiculos2 %>% filter(reglahampel(Intensidad_Total_Pesados))
 ggplot(as.data.frame(table(sapply((df3$fecha),weekdays))/3221), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por día de la semana",  x = "Día de la semana", y = "Frecuencia") + theme_minimal()
 ```
@@ -309,7 +308,7 @@ ggplot(as.data.frame(table(sapply((df3$fecha),weekdays))/3221), aes(x = Var1, y 
 Observando los resultados con respecto al tipo de vía, vemos que los outliers se concentran cuando la carretera es convencional. Aunque los vehículos pesados suelen circular más por autovía, podemos entender que los picos de flujo se encuentren en convencional por una concentración de vehículos puntual.
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE,fig.width = 4.5,fig.height = 2}
 ggplot(as.data.frame(table((df3$Tipo_Via))/3221), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Número de registros por tipo de vía",  x = "Tipo de vía", y = "Frecuencia") + theme_minimal()
 ```
 

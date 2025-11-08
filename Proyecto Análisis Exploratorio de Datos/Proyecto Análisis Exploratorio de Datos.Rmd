@@ -406,11 +406,11 @@ CramerV(tabla2)
 Obtenemos un valor del coeficiente para los pares de variables `Tipo_Via`-`Tipo_Vehiculo` y  `Sentido`-`Tipo_Vehiculo` de 0; por tanto, ambos pares son independientes. Podríamos pensar que existe alguna dependencia entre el tipo de vehículo y el tipo de vía por la que se circula (autovía, convecional o desdoblada), pero observamos que no. En cambio, ya esperábamos que el sentido de circulación (ascendente o descendente) y el tipo de vehículo fueran completamente independientes ya que el tipo de vehículo no depende del sentido del trayecto (los vehículos pueden circular indistintamente en un sentido o en otro).
 
 # Outliers
-En este último apartado determinaremos los outliers (datos atípicos) de algunas variables numéricas. Comenzaremos con `Intensidad_Total` e `Intensidad_Total_Pesados` (flujo de vehículos total sumando ambos sentidos de circulación para todos los vehículos y para los vehículos pesados, respectivamente), que son "variables" del conjunto no tidy. Utilizaremos este conjunto para interpretar de una forma más sencilla los resultados.
+En este último apartado determinaremos los outliers (datos atípicos) de algunas variables numéricas. Haremos el análisis con la variable `Flujo_Vehiculos` y, también, estudiaremos los outliers de esta variable pero considerando solo los vehículos pesados. Así podremos interpretar de una forma más sencilla los resultados.
 
 Para detectar los outliers aplicaremos la regla de Hampel ya que utiliza estimadores robustos y, además, no presupone que los datos siguen una distribución gaussiana. Podremos observar los picos extremos de flujo de vehículos tanto en el flujo total de vehículos como en el de vehículos pesados.
 
-Respecto a la variable `Intensidad_Total` aparecen un total de 2656 outliers. Esta cantidad elevada (aunque representa el 17.4% del total de registros) puede deberse a que tenemos un conjunto de datos muy segado como podemos ver en las Figuras .... Para interpretar este resultado podemos ver si los outliers presentan alguna relación con alguna otra variable, como por ejemplo, el día de la semana (lunes, martes, etc.) o el tipo de vía.
+Respecto a la variable `Flujo_Vehiculos` aparecen un total de 2656 outliers. Esta cantidad elevada (aunque representa el 17.4% del total de registros) puede deberse a que tenemos un conjunto de datos muy segado como podemos ver en las Figuras .... Para interpretar este resultado podemos ver si los outliers presentan alguna relación con alguna otra variable, como por ejemplo, el día de la semana (lunes, martes, etc.) o el tipo de vía.
 
 Para ver si hay algún tipo de relación con el día de la semana podemos ver la proporción de outliers (frecuencia relativa) con respecto al total de outliers según el día:
 
@@ -447,7 +447,7 @@ Ahora, si observamos la proporción de outliers según el tipo de vía, podemos 
 ggplot(as.data.frame(table((df$Tipo_Via))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
 ```
 
-Por otro lado, tenemos la variable `Tipo_Vehiculo` que almacena si el vehículo es pesado o no. Haciendo uso de la misma junto con `Flujo_Vehículos`, podemos representar la frecuencia relativa de outliers de vehículos pesados por día de la semana, al igual que del resto de vehículos. Veámoslo:
+Por otro lado, tenemos la variable `Tipo_Vehiculo` que almacena si el vehículo es pesado o no. Haciendo uso de la misma junto con `Flujo_Vehiculos`, podemos representar la frecuencia relativa de outliers de vehículos pesados por día de la semana, al igual que del resto de vehículos. Veámoslo:
 
 
 ```{r, echo=FALSE,fig.width = 3.5,fig.height = 2}

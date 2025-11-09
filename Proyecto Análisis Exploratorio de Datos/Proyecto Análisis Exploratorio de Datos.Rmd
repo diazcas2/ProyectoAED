@@ -343,7 +343,7 @@ En la matriz de Pearson (izquierda) se observa una alta correlación positiva en
 
 La matriz de Spearman (derecha) mantiene un patrón de correlaciones similar al obtenido con Pearson, aunque con ligeras variaciones en la magnitud de los coeficientes. Esto sugiere que las relaciones entre las coordenadas mantienen su monotonía, aunque no de forma estrictamente ascendente. Cabe destacar la correlación negativa entre `Valor_Punto_Quilometrico` y las coordenadas se conserva, confirmando la tendencia inversa entre ambas variables. De igual forma, `Flujo_Vehiculos` sigue mostrando baja relación con las demás variables, confirmando su independencia respecto a la localización geográfica.
 
-Ahora estudiaremos la dependencia o independencia entre algunas variables categóricas: `Tipo_Via`-`Metodologia_Captacion`, `Tipo_Via`-`Tipo_Vehiculo` y `Sentido`-`Tipo_Vehiculo`. Para ello, calculamos el coeficiente V de Cramer (que está acotado entre 0 y 1). Obtenemos, respectivamente, 0.076, 0 y 0. 
+Ahora estudiaremos la dependencia o independencia entre algunas variables categóricas: `Tipo_Via`-`Metodologia_Captacion`, `Tipo_Via`-`Tipo_Vehiculo` y `Sentido`-`Tipo_Vehiculo`. Para ello, calculamos el coeficiente V de Cramer (que está acotado entre 0 y 1). Obteniendo, respectivamente, 0.076, 0 y 0. 
 ```{r,include=FALSE}
 tabla <- table(vehiculos_tidy2$Tipo_Via, vehiculos_tidy2$Metodologia_Captacion)
 CramerV(tabla)
@@ -357,7 +357,7 @@ CramerV(tabla2)
 Indicándonos que hay una mínima dependencia entre las variables `Tipo_Via`-`Metodologia_Captacion`. Sin embargo, obtenemos un valor del coeficiente para los pares de variables `Tipo_Via`-`Tipo_Vehiculo` y  `Sentido`-`Tipo_Vehiculo` de 0; por tanto, ambos son totalmente independientes. Podríamos pensar que existe alguna dependencia entre el tipo de vehículo y el tipo de vía por la cual se circula (autovía, convecional o desdoblada), pero observamos que no. En cambio, ya esperábamos que el sentido de circulación (ascendente o descendente) y el tipo de vehículo fueran completamente independientes ya que los vehículos pueden circular indistintamente en un sentido o en otro.
 
 # Outliers
-En este último apartado determinaremos los outliers (datos atípicos) de algunas variables numéricas. Haremos el análisis con la variable `Flujo_Vehiculos` y, también, estudiaremos los outliers de esta variable pero considerando solo los vehículos pesados. Así podremos interpretar de una forma más sencilla los resultados.
+En este último apartado determinaremos los outliers (datos atípicos) de algunas variables numéricas. Haremos el análisis con la variable `Flujo_Vehiculos` y, también, estudiaremos los outliers de esta variable pero considerando solo los vehículos pesados. Así podremos interpretar de una forma más completa los resultados.
 
 Para detectar los outliers aplicaremos la regla de Hampel ya que utiliza estimadores robustos y, además, no presupone que los datos siguen una distribución gaussiana. Podremos observar los picos extremos de flujo de vehículos tanto en el flujo total de vehículos como en el de vehículos pesados.
 
@@ -391,9 +391,9 @@ ggsave("freq_dias.eps", plot= plot1, device="eps",width =10, height = 6, units="
 ```
 ![](freq_dias.eps)
 
-En este caso, vemos que de lunes a sábado hay una mayor proporción con respecto a los domingos (aunque la distribución es prácticamente uniforme). Esto puede deberse a que, de lunes a sábado, hay desplazaminetos diaros de trabajadores o transportes de mercancías, repartos, etc., que no se observan en domingo, y por ello, estos picos más extremos de flujo de vehículos son más probables encontrarlos en estos días.
+En este caso, vemos que de lunes a sábado hay una mayor proporción con respecto a los domingos (aunque la distribución es prácticamente uniforme). Esto puede deberse a que, de lunes a sábado, hay desplazaminetos diaros de trabajadores o transportes de mercancías, repartos, etc., que no se observan en domingo, y por ello, estos picos más extremos de flujo de vehículos son más probables encontrarlos en esos días.
 
-Ahora, si observamos la proporción de outliers según el tipo de vía, podemos detectar que hay una cantidad superior de outliers en convencional que en autovía y desdoblada. Puede ser debido a que en carretera convencional hay menos carriles, el límite de velocidad máxima es inferior y, por tanto, tiene una menor capacidad de tráfico. Así que, aunque este tipo de vía tiende a tener un flujo de vehículos más uniforme que los otros tipos de vía (en general), cuando aparece algún pico de flujo de vehículos puede ser considerado como outlier.
+Ahora, si observamos la proporción de outliers según el tipo de vía, podemos detectar que hay una cantidad superior de outliers en convencional que en autovía y desdoblada. Puede ser debido a que en carretera convencional hay menos carriles, el límite de velocidad máxima es inferior y, por tanto, tiene una menor capacidad de tráfico. Por ello, cuando aparece algún pico de flujo de vehículos puede ser considerado como outlier.
 
 ```{r, include=FALSE}
 ggplot(as.data.frame(table((df$Tipo_Via))/118878), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
@@ -435,7 +435,7 @@ ggsave("freq_dias_pesados.pdf", device="pdf",width =10, height = 5, units="cm")
 
 Podemos ver que obtenemos un resultado parecido determinando la proporción de outliers según el día de la semana. Aunque observamos que en sábado y domingo la proporción es bastante menor con respecto al resto de días, ya que en estos días los vehículos pesados no suelen circular ya que no es día laboral.
 
-De esta forma, podríamos mirar que ocurre con los resultados con respecto al tipo de vía. Vemos que los outliers se concentran cuando la carretera es convencional. Aunque los vehículos pesados suelen circular más por autovía, podemos entender que los picos de flujo se encuentren en convencional por una concentración de vehículos puntual (como ocurría cuando considerábamos todos los vehículos).
+De esta forma, podríamos mirar que ocurre con los resultados con respecto al tipo de vía. Vemos que hay más outliers en carretera desdoblada (aunque no hay una gran diferencia con los otros tipos de vía). Como hemos visto antes, este tipo de vehículos transitan más por este tipo de carretera (y por convencional). Entonces podemos entender que los picos de flujo se encuentren en desdoblada (y convencional) por una concentración de vehículos puntual.
 
 
 ```{r, include=FALSE}

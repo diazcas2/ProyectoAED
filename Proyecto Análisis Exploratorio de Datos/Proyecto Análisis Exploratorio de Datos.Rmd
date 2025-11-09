@@ -18,7 +18,7 @@ output:
 ---
 
 # Introducción.
-El tráfico de vehículos va más allá de los números, muestra cómo Valencia se mueve, organiza y enfrenta cada día sus desafíos de desplazamiento. Este proyecto se centra en analizar la intensidad del tráfico en las carreteras de la Comunidad Valenciana durante el primer semestre de 2025, a partir de datos públicos proporcionados por la Generalidad Valenciana. A través de un análisis exploratorio de 15.235 observaciones, se busca detectar las posibles anomalías en el tráfico y explorar el comportamiento de la movilidad en Valencia.
+El tráfico de vehículos va más allá de los números, muestra cómo Valencia se mueve, organiza y enfrenta cada día sus desafíos de desplazamiento. Este proyecto se centra en analizar la intensidad del tráfico en las carreteras de la Comunidad Valenciana durante el primer semestre de 2025, a partir de datos públicos proporcionados por la Generalitat Valenciana. A través de un análisis exploratorio de 15.235 observaciones, se busca detectar las posibles anomalías en el tráfico y explorar el comportamiento de la movilidad en Valencia.
 
 # Importación de los datos.
 Para importar los datos, primero se descarga el fichero y se verifica que los datos estén en el directorio adecuado. Es importante especificar el encoding (en nuestro caso es UTF-8), ya que, de lo contrario, algunos caracteres pueden no reconocerse correctamente. De esta forma, haciendo uso de la función de importación en R con los parámetros adecuados, obtenemos el dataset.
@@ -61,7 +61,7 @@ Las variables de nuestro dataset son las siguientes:
 \item \textbf{PKFICOOR} (\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
 \end{enumerate}
 
-Si le echamos un vistazo a las variables, podemos ver que la variable $DIA$ es de tipo character, por lo que es necesario convertirla a formato de fecha. Para ello, usamos la función as.Date(). Por otro lado, es importante preguntarse con cuántos valores faltantes estamos trabajando, para ello usamos is.na() y sumamos los valores faltantes, obteniendo:
+Si le echamos un vistazo a las variables, podemos ver que la variable `DIA` es de tipo character, por lo que es necesario convertirla a formato de fecha. Para ello, usamos la función as.Date(). Por otro lado, es importante preguntarse con cuántos valores faltantes estamos trabajando, para ello usamos is.na() y sumamos los valores faltantes, obteniendo:
 
 ```{r,include=FALSE}
 vehiculos$DIA <- as.Date(vehiculos$DIA, format = '%d/%m/%Y')
@@ -238,7 +238,7 @@ ggsave("punto_quilometrico_hist.pdf", device="pdf",width =9, height = 5, units="
 ```
 ![](punto_quilometrico_hist.pdf)
 
-Se obserba que al igual que `Flujo_Vehiculos`, `Valor_Punto_Quilometrico` parece seguir una distribución exponencial, aunque no tan marcada. Lo que sugiere que los puntos críticos de tráfico están altamente localizados, ya que se repiten con frecuencia. Veamos si el `Tipo_Vía` está relacionado con esta idea:
+Se obserba que al igual que `Flujo_Vehiculos`, `Valor_Punto_Quilometrico` parece seguir una distribución exponencial, aunque no tan marcada. Lo que sugiere que los puntos críticos de tráfico están altamente localizados, ya que se repiten con frecuencia. Veamos si el `Tipo_Via` está relacionado con esta idea:
 
 ![](punto_quilometrico.pdf)
 
@@ -274,7 +274,7 @@ Por otro lado, en el gráfico `Tipo_Via` se observa claramente que hay más obse
 
 En cuanto al resto de variables cualitativas, `Codigo_CV, Num_Tramo, Sentido, Tipo_Vehiculo, Ubicacion, Tipo_Ubicacion y Tipo_Valor_Punto_Quilometrico`, se ha decidido no representarlas por diversos motivos. El principal es que, debido al alcance y los objetivos establecidos para este trabajo, no resulta viable realizar una exploración exhaustiva de todas ellas.
 
-Asimismo, existen razones vinculadas con la propia naturaleza de las variables. En primer lugar,`Codigo_CV y Num_Tramo` presentan un número excesivo de categorías, lo que dificulta su representación gráfica de forma clara y significativa. En segundo lugar, la representación de `Sentido`, `Tipo_Vehiculo, Tipo_Ubicacion` y T`ipo_Valor_Punto_Quilometrico` carecería de sentido, ya que estas variables fueron generadas mediante la función pivot_longer(). Por ello, las proporciones de sus valores son idénticas y, en consecuencia, de carácter sintético, es decir, no aportan información relevante para el análisis.
+Asimismo, existen razones vinculadas con la propia naturaleza de las variables. En primer lugar,`Codigo_CV` y `Num_Tramo` presentan un número excesivo de categorías, lo que dificulta su representación gráfica de forma clara y significativa. En segundo lugar, la representación de `Sentido`, `Tipo_Vehiculo, Tipo_Ubicacion` y `Tipo_Valor_Punto_Quilometrico` carecería de sentido, ya que estas variables fueron generadas mediante la función pivot_longer(). Por ello, las proporciones de sus valores son idénticas y, en consecuencia, de carácter sintético, es decir, no aportan información relevante para el análisis.
 
 
 Por último, reparemos en las variables numéricas que todavía no hemos explorado: las coordenadas geodésicas. Mediante el uso de las librerías `sf` y `mapSpain` (que contiene mapas políticos de España en particular) hemos representado los diferentes tipos de coordenadas en las que se han tomado las mediciones. Empecemos por las exactas:

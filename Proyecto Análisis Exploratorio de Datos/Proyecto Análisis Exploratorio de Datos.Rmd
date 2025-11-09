@@ -437,7 +437,7 @@ De esta forma, podríamos mirar que ocurre con los resultados con respecto al ti
 
 
 ```{r, include=FALSE}
-ggplot(as.data.frame(table((df$Tipo_Via))/10866), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
+ggplot(as.data.frame(table((df_pesados$Tipo_Via))/nrow(df_pesados)), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
 ggsave("freq_vias_pesados.pdf",  device="pdf",width =10, height = 5, units="cm")
 ```
 ![](freq_vias_pesados.pdf)

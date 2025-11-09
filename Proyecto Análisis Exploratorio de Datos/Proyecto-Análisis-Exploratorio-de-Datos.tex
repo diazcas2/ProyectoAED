@@ -215,7 +215,7 @@ Valencia se mueve, organiza y enfrenta cada día sus desafíos de
 desplazamiento. Este proyecto se centra en analizar la intensidad del
 tráfico en las carreteras de la Comunidad Valenciana durante el primer
 semestre de 2025, a partir de datos públicos proporcionados por la
-Generalidad Valenciana. A través de un análisis exploratorio de 15.235
+Generalitat Valenciana. A través de un análisis exploratorio de 15.235
 observaciones, se busca detectar las posibles anomalías en el tráfico y
 explorar el comportamiento de la movilidad en Valencia.
 
@@ -253,7 +253,7 @@ Las variables de nuestro dataset son las siguientes:
 \end{enumerate}
 
 Si le echamos un vistazo a las variables, podemos ver que la variable
-\(DIA\) es de tipo character, por lo que es necesario convertirla a
+\texttt{DIA} es de tipo character, por lo que es necesario convertirla a
 formato de fecha. Para ello, usamos la función as.Date(). Por otro lado,
 es importante preguntarse con cuántos valores faltantes estamos
 trabajando, para ello usamos is.na() y sumamos los valores faltantes,
@@ -285,32 +285,34 @@ Para convertir el conjunto de datos en tidy, optamos por transformar el
 formato ancho en uno largo, de modo que cada fila represente una
 combinación única de tramo, sentido y tipo de vehículo. Para ello
 aplicamos la función pivot\_longer(), que nos permite condensar varias
-columnas en dos nuevas variables: Sentido, que indica la dirección del
-tráfico, y Tipo\_Vehiculo, que diferencia entre vehículos pesados (P) y
-el total (T).
+columnas en dos nuevas variables: \texttt{Sentido}, que indica la
+dirección del tráfico, y \texttt{Tipo\_Vehiculo}, que diferencia entre
+vehículos pesados (P) y el total (T).
 
 De forma análoga, se aplicaron transformaciones similares a otras
 variables, como \texttt{TRAM}, las ubicaciones (\texttt{REFINI,\ REFFI})
-y los puntos kilométricos (\texttt{PKINI,\ PKFI,\ PKE}). En el caso de
-las variables de coordenadas (\texttt{PKECOOR,\ PKINICOOR,\ PKFICOOR}),
-que distinguen entre la posición inicial, final y exacta, como cada
-coordenada incluye la latitud y la longitud separadas por un punto y
-coma, usamos la función \texttt{separate()} para dividir cada columna en
-longitud y latitud. El separador decimal del conjunto eran las comas,
-por lo que R detectaba las columnas como tipo carácter. Lo solucionamos
-usando la función \texttt{sub()} para reemplazar las comas por puntos,
-lo que nos permite convertir correctamente los valores a tipo numérico.
-Después de convertirlas a tipo numérico, acabamos con las variables
-\texttt{Latitud\_Inicio}, \texttt{Longitud\_Inicio},
-\texttt{Latitud\_Final}, \texttt{Longitud\_Final},
-\texttt{Latitud\_Exacta} y \texttt{Longitud\_Exacta}.
+y los puntos kilométricos (\texttt{PKINI,\ PKFI,\ PKE}).
+
+En el caso de las variables de coordenadas
+(\texttt{PKECOOR,\ PKINICOOR,\ PKFICOOR}), que distinguen entre la
+posición inicial, final y exacta, como cada coordenada incluye la
+latitud y la longitud separadas por un punto y coma, usamos la función
+separate() para dividir cada columna en longitud y latitud. El separador
+decimal del conjunto eran las comas, por lo que R detectaba las columnas
+como tipo carácter. Lo solucionamos usando la función sub() para
+reemplazar las comas por puntos, lo que nos permite convertir
+correctamente los valores a tipo numérico. Después de convertirlas a
+tipo numérico, acabamos con las variables \texttt{Latitud\_Inicio},
+\texttt{Longitud\_Inicio}, \texttt{Latitud\_Final},
+\texttt{Longitud\_Final}, \texttt{Latitud\_Exacta} y
+\texttt{Longitud\_Exacta}.
 
 Solo falta asegurarnos de que los nombres de las columnas sean
-representativos; para ello, utilizamos la función \texttt{rename()} y
+representativos; para ello, utilizamos la función rename() y
 reemplazamos algunos valores abreviados por descripciones completas
-mediante la función \texttt{ifelse()}. Por ejemplo, en las variables
-relacionadas con ubicación, los códigos \emph{INI}, \emph{E} y \emph{FI}
-se sustituyeron por \emph{Inicial}, \emph{Exacta} y \emph{Final}; en
+mediante la función ifelse(). Por ejemplo, en las variables relacionadas
+con ubicación, los códigos \emph{INI}, \emph{E} y \emph{FI} se
+sustituyeron por \emph{Inicial}, \emph{Exacta} y \emph{Final}; en
 \texttt{Sentido}, los valores \emph{A} y \emph{D} pasaron a
 \emph{Ascendente} y \emph{Descendente}; y en \texttt{Tipo\_Vehiculo},
 \emph{T} y \emph{P} se cambiaron por \emph{Todos} y \emph{Pesados.}
@@ -411,7 +413,7 @@ Se obserba que al igual que \texttt{Flujo\_Vehiculos},
 \texttt{Valor\_Punto\_Quilometrico} parece seguir una distribución
 exponencial, aunque no tan marcada. Lo que sugiere que los puntos
 críticos de tráfico están altamente localizados, ya que se repiten con
-frecuencia. Veamos si el \texttt{Tipo\_Vía} está relacionado con esta
+frecuencia. Veamos si el \texttt{Tipo\_Via} está relacionado con esta
 idea:
 
 \pandocbounded{\includegraphics[keepaspectratio]{punto_quilometrico.pdf}}
@@ -448,12 +450,12 @@ que, debido al alcance y los objetivos establecidos para este trabajo,
 no resulta viable realizar una exploración exhaustiva de todas ellas.
 
 Asimismo, existen razones vinculadas con la propia naturaleza de las
-variables. En primer lugar,\texttt{Codigo\_CV\ y\ Num\_Tramo} presentan
-un número excesivo de categorías, lo que dificulta su representación
-gráfica de forma clara y significativa. En segundo lugar, la
-representación de \texttt{Sentido},
+variables. En primer lugar,\texttt{Codigo\_CV} y \texttt{Num\_Tramo}
+presentan un número excesivo de categorías, lo que dificulta su
+representación gráfica de forma clara y significativa. En segundo lugar,
+la representación de \texttt{Sentido},
 \texttt{Tipo\_Vehiculo,\ Tipo\_Ubicacion} y
-T\texttt{ipo\_Valor\_Punto\_Quilometrico} carecería de sentido, ya que
+\texttt{Tipo\_Valor\_Punto\_Quilometrico} carecería de sentido, ya que
 estas variables fueron generadas mediante la función pivot\_longer().
 Por ello, las proporciones de sus valores son idénticas y, en
 consecuencia, de carácter sintético, es decir, no aportan información
@@ -615,9 +617,9 @@ El análisis del tráfico en la Comunidad Valenciana durante el primer
 semestre de 2025 revela una alta concentración del flujo en determinados
 tramos, especialmente en carreteras convencionales, que registran el
 mayor número de observaciones y de valores atípicos. Se aprecia un
-aumento del tráfico en abril, coincidiendo con las fallas y Semana
-Santa, y una menor intensidad en enero y junio, coincidiendo con las
-vacaciones donde la población suele viajar más a otros destinos.
+aumento del tráfico en abril, coincidiendo con Fallas y Semana Santa, y
+una menor intensidad en enero y junio, coincidiendo con las vacaciones
+donde la población suele viajar más a otros destinos.
 
 Por otro lado, las coordenadas geográficas se ajustan correctamente al
 trazado de las vías, lo que confirma la calidad de los datos. Además, se

@@ -185,9 +185,7 @@ Pasemos ahora a representar gráficamente aquellas variables en cuyo caso sea po
   theme_minimal()
 ggsave("flujo.pdf",plot= myplot1, device="pdf",width =12, height = 8, units="cm")
 ```
-
 ![](flujo.pdf)
-
 
 En la gráfica podemos observar que lo más común es que el flujo, oscile entre 0 y 250, aunque también hay registros de observaciones en los que el valor del flujo está cerca de 1000. 
 
@@ -213,6 +211,8 @@ ggsave("flujo_sentido.pdf", device="pdf",width =12, height = 8, units="cm")
 ```
 ![](flujo_sentido.pdf)
 
+Por último, en la gráfica anterior puede apreciarse claramente que el sentido de la circulación no influye en manera alguna al valor del flujo del tráfico.
+
 ```{r, include=FALSE}
 myplot3 <- ggplot(vehiculos_tidy2, aes(x=Tipo_Via,y=Valor_Punto_Quilometrico)) +
   geom_boxplot(fill = "lavender",color="blue") +
@@ -224,21 +224,22 @@ ggsave("punto_quilometrico.pdf", plot= myplot3, device="pdf",width =12, height =
 
 Pasemos ahora a las variables cualitativas. Representaremos primero `Tipo_Via` y `Metodo_Captacion`.
 ```{r,include=FALSE} 
+par(mfrow = c(1, 2))
   ggplot(vehiculos_tidy2,aes(Metodologia_Captacion)) + 
   geom_bar(color = "blue", fill = "lavender") +
   labs(x = "Método de captación", y = "Recuento") +
-  facet_wrap(~Tipo_Via) +
+  facet_grid(Tipo_Via~.) +
+  coord_flip()+
   theme_minimal()
-ggsave("metodo.pdf", device="pdf",width =9, height = 5, units="cm")
+ggsave("metodo.pdf", device="pdf",width =9, height = 6, units="cm")
   ggplot(vehiculos_tidy2,aes(Tipo_Via)) + 
   geom_bar(color = "blue", fill = "lavender") +
   labs(x = "Tipo de vía", y = "Recuento") +
   theme_minimal()
-ggsave("via.pdf", device="pdf",width =9, height = 5, units="cm")
+ggsave("via.pdf", device="pdf",width =9, height = 6, units="cm")
 ```
 ![](metodo.pdf) 
-
-![](via.pdf) 
+![](via.pdf)
 
 Fijémonos en que, si representamos el método de captación desglosándolo según el tipo de carretera podemos sacar dos conclusiones: el método dominante es espiras y las gomas solo se usan en carreteras convencionales. Por otro lado, en el gráfico de barras se observa claramente que hay más observaciones en las carreteras convencionales que en las autovías o en las carreteras desdobladas.
 
@@ -267,18 +268,46 @@ ggsave("mapa_por_via.pdf", device="pdf",width =14, height = 10, units="cm")
 
 En este mapa se puede comprobar a simple vista que las coordenadas están bien, ya que coinciden con el trazado de las carreteras de la Comunidad Valenciana, y que, como habíamos visto antes con el gráfico de barras, la cantidad de observaciones en carreteras convencionales es considerablemente mayor a la de los otros tipos de vía.
 
+```{r, include=FALSE}
+coord_iniciales <- vehiculos_tidy2 %>% 
+  select(Tipo_Via, Latitud_Inicio, Longitud_Inicio, Metodologia_Captacion) %>% 
+  distinct
+
+coord_finales <- vehiculos_tidy2 %>% 
+  select(Tipo_Via, Latitud_Final, Longitud_Final, Metodologia_Captacion) %>% 
+  distinct
+
+coord_iniciales_sf <- st_as_sf(coord_iniciales, coords = c("Longitud_Inicio", "Latitud_Inicio"), crs = 4326)
+coord_finales_sf <- st_as_sf(coord_finales, coords = c("Longitud_Final", "Latitud_Final"), crs = 4326)
+ggplot() +
+  geom_sf(data = valencia, fill = "beige") +
+  geom_sf(data = coord_iniciales_sf,aes(col = Tipo_Via), size = 1) +
+  scale_color_manual(guide="none",values=c("#d87373","#63b0b8","blue")) +
+  facet_wrap(~ Tipo_Via, ncol = 3) +
+  theme_minimal()
+ggsave("mapa_incial.pdf", device="pdf",width =14, height = 7, units="cm")
+
+
+ggplot() +
+  geom_sf(data = valencia, fill = "beige") +
+  geom_sf(data = coord_finales_sf,aes(col = Tipo_Via), size = 1) +
+  scale_color_manual(guide="none",values=c("#d87373","#63b0b8","blue")) +
+  facet_wrap(~ Tipo_Via, ncol = 3) +
+  theme_minimal()
+ggsave("mapa_final.pdf", device="pdf",width =14, height = 8, units="cm")
+```
+![](mapa_incial.pdf)
+
+![](mapa_final.pdf)
+
 # Relación entre las variables
 En este apartado estudiaremos si existe una relación lineal entre las variables  de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman con la función cor() para determinar si existe o no una relación entre estas variables y las representaremos. Veámoslo:
 ```{r,include=FALSE}
 vehiculos_num <- vehiculos_tidy2[sapply(vehiculos_tidy2, is.numeric)]
-```
 
-```{r,echo=FALSE}
 matrizcorr1 <-cor(vehiculos_num,use='complete.obs',method='pearson')
 matrizcorr2 <-cor(vehiculos_num,use='complete.obs',method='spearman')
-```
 
-```{r, include=FALSE}
 png("cor.png",width = 3, height = 1.5, units = "cm",res=300)
 par(mfrow = c(1, 2))
 corrplot(
@@ -295,11 +324,9 @@ corrplot(
 )
 dev.off()
 ```
-
 ```{r, echo = FALSE, fig.width=6,fig.height=3}
 knitr::include_graphics("cor.png")
 ```
-
 
 En la matriz de Pearson (izquierda) se observa una alta correlación positiva entre las variables de latitud y longitud en sus diferentes versiones. Lo que indica que dichas variables están estrechamente relacionadas linealmente, lo cual tiene sentido por su naturaleza geográfica. Por otro lado, la variable `Valor_Punto_Quilométrico` presenta una correlación negativa moderada a alta con las coordenadas geográficas. Esto puede deberse a que a medida que varía el punto kilométrico, también se produce una variación inversa en la posición (latitud o longitud), lo que indica que los puntos de medición están ordenados espacialmente a lo largo del trazado de la vía. Sin embargo, la variable `Flujo_Vehículos` no muestra una correlación lineal significativa con el resto de las variables, lo que indica que el flujo de vehículos no depende directamente de la posición geográfica de los puntos de medición.
 
@@ -349,7 +376,7 @@ datos$Var1 <- factor(datos$Var1, levels = c("lunes", "martes", "miércoles", "ju
 
 plot1 <-ggplot(datos, aes(x = Var1, y = Freq, fill = Var1),options(repr.plot.width = 9, repr.plot.height =4)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por día de la semana",  x = "Día de la semana", y = "Frecuencia relativa") + theme_minimal()
 
-ggsave("freq_dias.eps", plot= plot1, device="eps",width =12, height = 8, units="cm")
+ggsave("freq_dias.eps", plot= plot1, device="eps",width =9, height = 6, units="cm")
 
 ```
 ![](freq_dias.eps)
@@ -360,7 +387,7 @@ Ahora, si observamos la proporción de outliers según el tipo de vía, podemos 
 
 ```{r, include=FALSE}
 ggplot(as.data.frame(table((df$Tipo_Via))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
-ggsave("freq_vias.eps", device="eps",width =12, height = 8, units="cm")
+ggsave("freq_vias.eps", device="eps",width =9, height = 6, units="cm")
 ```
 ![](freq_vias.eps)
 Por otro lado, tenemos la variable `Tipo_Vehiculo` que almacena si el vehículo es pesado o no. Haciendo uso de la misma junto con `Flujo_Vehiculos`, podemos representar la frecuencia relativa de outliers de vehículos pesados por día de la semana, al igual que del resto de vehículos. Veámoslo:
@@ -390,7 +417,7 @@ ggplot(datos_pesados, aes(x = Dia, y = Frecuencia)) +
        x = "Día de la semana", y = "Frecuencia relativa") +
   theme_minimal()
 
-ggsave("freq_dias_pesados.eps", device="eps",width =12, height = 8, units="cm")
+ggsave("freq_dias_pesados.eps", device="eps",width =9, height = 6, units="cm")
 
 ```
 ![](freq_dias_pesados.eps)
@@ -404,7 +431,7 @@ De esta forma, podríamos mirar que ocurre con los resultados con respecto al ti
 
 ```{r, include=FALSE}
 ggplot(as.data.frame(table((df$Tipo_Via))/3221), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Frecuencia relativa de outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
-ggsave("freq_vias_pesados.eps",  device="eps",width =12, height = 8, units="cm")
+ggsave("freq_vias_pesados.eps",  device="eps",width =9, height = 6, units="cm")
 ```
 ![](freq_vias_pesados.eps)
 

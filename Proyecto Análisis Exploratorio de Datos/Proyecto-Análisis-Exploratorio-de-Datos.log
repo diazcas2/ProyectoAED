@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.6)  9 NOV 2025 12:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.6)  9 NOV 2025 18:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1139,10 +1139,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 205--205
 
 Package marginnote Info: xpos seems to be 167.01753pt on input line 205.
 Package epstopdf Info: Source file: <Definitions/logo-mdpi.eps>
-(epstopdf)                    date: 2025-11-09 12:03:33
+(epstopdf)                    date: 2025-11-09 17:20:19
 (epstopdf)                    size: 563678 bytes
 (epstopdf)             Output file: <Definitions/logo-mdpi-eps-converted-to.pdf>
-(epstopdf)                    date: 2025-11-09 12:03:33
+(epstopdf)                    date: 2025-11-09 17:20:19
 (epstopdf)                    size: 13060 bytes
 (epstopdf)             Command: <repstopdf --outfile=Definitions/logo-mdpi-eps-converted-to.pdf Definitions/logo-mdpi.eps>
 (epstopdf)             \includegraphics on input line 205.
@@ -1230,16 +1230,11 @@ Overfull \hbox (15.0448pt too wide) in paragraph at lines 348--348
 []\T1/cmtt/m/n/10 ## Valor_Punto_Quilometrico   0.00 95090.00 95090.00 22910.00 3500.00 10200.00[] 
  []
 
-<flujo.pdf, id=75, 341.275pt x 226.8475pt>
-File: flujo.pdf Graphic file (type pdf)
-<use flujo.pdf>
-Package pdftex.def Info: flujo.pdf  used on input line 365.
-(pdftex.def)             Requested size: 341.27415pt x 226.84694pt.
-
-Overfull \hbox (9.22461pt too wide) in paragraph at lines 365--369
-[][] \T1/ppl/m/n/10 (-20) En la grá-
- []
-
+<flujo_via.pdf, id=75, 255.95625pt x 170.6375pt>
+File: flujo_via.pdf Graphic file (type pdf)
+<use flujo_via.pdf>
+Package pdftex.def Info: flujo_via.pdf  used on input line 368.
+(pdftex.def)             Requested size: 255.95561pt x 170.63707pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1248,16 +1243,16 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
 [3]
-<flujo_via_vehiculo.pdf, id=80, 341.275pt x 226.8475pt>
-File: flujo_via_vehiculo.pdf Graphic file (type pdf)
-<use flujo_via_vehiculo.pdf>
-Package pdftex.def Info: flujo_via_vehiculo.pdf  used on input line 370.
-(pdftex.def)             Requested size: 341.27415pt x 226.84694pt.
-<flujo_sentido.pdf, id=81, 341.275pt x 226.8475pt>
+<flujo_sentido.pdf, id=80, 255.95625pt x 170.6375pt>
 File: flujo_sentido.pdf Graphic file (type pdf)
 <use flujo_sentido.pdf>
-Package pdftex.def Info: flujo_sentido.pdf  used on input line 377.
-(pdftex.def)             Requested size: 341.27415pt x 226.84694pt.
+Package pdftex.def Info: flujo_sentido.pdf  used on input line 385.
+(pdftex.def)             Requested size: 255.95561pt x 170.63707pt.
+<flujo_tiempo.pdf, id=81, 284.06125pt x 170.6375pt>
+File: flujo_tiempo.pdf Graphic file (type pdf)
+<use flujo_tiempo.pdf>
+Package pdftex.def Info: flujo_tiempo.pdf  used on input line 395.
+(pdftex.def)             Requested size: 284.06053pt x 170.63707pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1265,21 +1260,16 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[4 <./flujo.pdf> <./flujo_via_vehiculo.pdf>]
-<punto_quilometrico.pdf, id=96, 341.275pt x 226.8475pt>
+[4 <./flujo_via.pdf> <./flujo_sentido.pdf>]
+<punto_quilometrico_hist.pdf, id=96, 255.95625pt x 141.52875pt>
+File: punto_quilometrico_hist.pdf Graphic file (type pdf)
+<use punto_quilometrico_hist.pdf>
+Package pdftex.def Info: punto_quilometrico_hist.pdf  used on input line 408.
+(pdftex.def)             Requested size: 255.95561pt x 141.5284pt.
+<punto_quilometrico.pdf, id=97, 255.95625pt x 141.52875pt>
 File: punto_quilometrico.pdf Graphic file (type pdf)
 <use punto_quilometrico.pdf>
-Package pdftex.def Info: punto_quilometrico.pdf  used on input line 379.
-(pdftex.def)             Requested size: 341.27415pt x 226.84694pt.
-<metodo.pdf, id=97, 255.95625pt x 141.52875pt>
-File: metodo.pdf Graphic file (type pdf)
-<use metodo.pdf>
-Package pdftex.def Info: metodo.pdf  used on input line 384.
-(pdftex.def)             Requested size: 255.95561pt x 141.5284pt.
-<via.pdf, id=98, 255.95625pt x 141.52875pt>
-File: via.pdf Graphic file (type pdf)
-<use via.pdf>
-Package pdftex.def Info: via.pdf  used on input line 386.
+Package pdftex.def Info: punto_quilometrico.pdf  used on input line 417.
 (pdftex.def)             Requested size: 255.95561pt x 141.5284pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1288,22 +1278,47 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[5 <./flujo_sentido.pdf> <./punto_quilometrico.pdf> <./metodo.pdf>]
-<mapa_por_via.pdf, id=118, 397.485pt x 284.06125pt>
+[5 <./flujo_tiempo.pdf> <./punto_quilometrico_hist.pdf> <./punto_quilometrico.pdf>]
+<metodo.pdf, id=117, 255.95625pt x 212.795pt>
+File: metodo.pdf Graphic file (type pdf)
+<use metodo.pdf>
+Package pdftex.def Info: metodo.pdf  used on input line 431.
+(pdftex.def)             Requested size: 255.95561pt x 212.79446pt.
+<via.pdf, id=118, 226.8475pt x 113.42375pt>
+File: via.pdf Graphic file (type pdf)
+<use via.pdf>
+Package pdftex.def Info: via.pdf  used on input line 438.
+(pdftex.def)             Requested size: 226.84694pt x 113.42346pt.
+
+Overfull \hbox (45.81938pt too wide) in paragraph at lines 444--449
+[]\T1/ppl/m/n/10 (-20) En cuanto al resto de vari-ables cual-i-ta-ti-vas, \T1/cmtt/m/n/10 Codigo_CV, Num_Tramo, Sentido, Tipo_Vehiculo,
+ []
+
+
+Overfull \hbox (1.33995pt too wide) in paragraph at lines 444--449
+\T1/cmtt/m/n/10 Ubicacion, Tipo_Ubicacion y Tipo_Valor_Punto_Quilometrico\T1/ppl/m/n/10 (-20) , se ha de-ci-dido no rep-
+ []
+
+
+Overfull \hbox (16.67546pt too wide) in paragraph at lines 450--461
+\T1/ppl/m/n/10 (-20) sentación de \T1/cmtt/m/n/10 Sentido\T1/ppl/m/n/10 (-20) , \T1/cmtt/m/n/10 Tipo_Vehiculo, Tipo_Ubicacion \T1/ppl/m/n/10 (-20) y T\T1/cmtt/m/n/10 ipo_Valor_Punto_Quilometrico
+ []
+
+
+Overfull \hbox (16.02003pt too wide) in paragraph at lines 450--461
+\T1/ppl/m/n/10 (-20) care-cería de sen-tido, ya que es-tas vari-ables fueron gen-er-adas me-di-ante la fun-ción pivot_longer().
+ []
+
+<mapa_por_via.pdf, id=119, 397.485pt x 198.7425pt>
 File: mapa_por_via.pdf Graphic file (type pdf)
 <use mapa_por_via.pdf>
-Package pdftex.def Info: mapa_por_via.pdf  used on input line 401.
-(pdftex.def)             Requested size: 397.48402pt x 284.06053pt.
+Package pdftex.def Info: mapa_por_via.pdf  used on input line 468.
+(pdftex.def)             Requested size: 397.48402pt x 198.742pt.
 
-Overfull \hbox (21.35088pt too wide) in paragraph at lines 401--402
+Overfull \hbox (21.35088pt too wide) in paragraph at lines 468--469
 [][] 
  []
 
-<cor.png, id=119, 85.2786pt x 42.6393pt>
-File: cor.png Graphic file (type png)
-<use cor.png>
-Package pdftex.def Info: cor.png  used on input line 418.
-(pdftex.def)             Requested size: 355.56825pt x 177.84302pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1311,14 +1326,25 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[6 <./via.pdf> <./mapa_por_via.pdf>]
-Overfull \hbox (11.14143pt too wide) in paragraph at lines 446--453
-\T1/ppl/m/n/10 (-20) cas: \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Metodologia_Captacion\T1/ppl/m/n/10 (-20) , \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo\T1/ppl/m/n/10 (-20) , \T1/cmtt/m/n/10 Sentido\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo\T1/ppl/m/n/10 (-20) .
- []
+[6 <./metodo.pdf> <./via.pdf>]
+<mapa_incial.pdf, id=134, 141.52875pt x 226.8475pt>
+File: mapa_incial.pdf Graphic file (type pdf)
+<use mapa_incial.pdf>
+Package pdftex.def Info: mapa_incial.pdf  used on input line 482.
+(pdftex.def)             Requested size: 141.5284pt x 226.84694pt.
+<mapa_final.pdf, id=135, 141.52875pt x 216.81pt>
+File: mapa_final.pdf Graphic file (type pdf)
+<use mapa_final.pdf>
+Package pdftex.def Info: mapa_final.pdf  used on input line 483.
+(pdftex.def)             Requested size: 141.5284pt x 216.80946pt.
+<cor.pdf, id=136, 375.4025pt x 216.81pt>
+File: cor.pdf Graphic file (type pdf)
+<use cor.pdf>
+Package pdftex.def Info: cor.pdf  used on input line 495.
+(pdftex.def)             Requested size: 375.40158pt x 216.80946pt.
 
-
-Overfull \hbox (7.61987pt too wide) in paragraph at lines 469--479
-[]\T1/ppl/m/n/10 (-20) Obtenemos un valor del co-e-fi-ciente para los pares de vari-ables \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo
+Overfull \hbox (2.38591pt too wide) in paragraph at lines 495--496
+[][] 
  []
 
 
@@ -1328,76 +1354,70 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[7 <./cor.png (PNG copy)>]
+[7 <./mapa_por_via.pdf> <./mapa_incial.pdf> <./mapa_final.pdf>]
+Overfull \hbox (69.95616pt too wide) in paragraph at lines 510--520
+\T1/ppl/m/n/10 (-20) de forma es-tric-ta-mente as-cen-dente. Cabe destacar la cor-relación neg-a-tiva en-tre \T1/cmtt/m/n/10 Valor_Punto_Quilometrico
+ []
+
+
+Overfull \hbox (15.9202pt too wide) in paragraph at lines 521--528
+\T1/ppl/m/n/10 (-20) cas: \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Metodologia_Captacion\T1/ppl/m/n/10 (-20) , \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo \T1/ppl/m/n/10 (-20) y \T1/cmtt/m/n/10 Sentido\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Tipo_Vehiculo\T1/ppl/m/n/10 (-20) .
+ []
+
+
+Overfull \hbox (70.36192pt too wide) in paragraph at lines 529--541
+[]\T1/ppl/m/n/10 (-20) Indicándonos que hay una mín-ima de-pen-den-cia en-tre las vari-ables \T1/cmtt/m/n/10 Tipo_Via\T1/ppl/m/n/10 (-20) -\T1/cmtt/m/n/10 Metodologia_Captacion\T1/ppl/m/n/10 (-20) .
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[8 <./cor.pdf>]
 Package epstopdf Info: Source file: <freq_dias.eps>
-(epstopdf)                    date: 2025-11-09 12:12:02
-(epstopdf)                    size: 8948 bytes
+(epstopdf)                    date: 2025-11-09 18:38:29
+(epstopdf)                    size: 8882 bytes
 (epstopdf)             Output file: <freq_dias-eps-converted-to.pdf>
-(epstopdf)                    date: 2025-11-09 12:12:10
-(epstopdf)                    size: 11258 bytes
+(epstopdf)                    date: 2025-11-09 17:22:01
+(epstopdf)                    size: 11233 bytes
 (epstopdf)             Command: <repstopdf --outfile=freq_dias-eps-converted-to.pdf freq_dias.eps>
-(epstopdf)             \includegraphics on input line 506.
-Package epstopdf Info: Output file is already uptodate.
-<freq_dias-eps-converted-to.pdf, id=140, 341.275pt x 227.85126pt>
+(epstopdf)             \includegraphics on input line 568.
+runsystem(repstopdf --outfile=freq_dias-eps-converted-to.pdf freq_dias.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <freq_dias-eps-converted-to.pdf>
+(epstopdf)                    date: 2025-11-09 17:22:01
+(epstopdf)                    size: 11233 bytes.
+<freq_dias-eps-converted-to.pdf, id=170, 284.06125pt x 170.6375pt>
 File: freq_dias-eps-converted-to.pdf Graphic file (type pdf)
 <use freq_dias-eps-converted-to.pdf>
-Package pdftex.def Info: freq_dias-eps-converted-to.pdf  used on input line 506.
-(pdftex.def)             Requested size: 341.27415pt x 227.8507pt.
+Package pdftex.def Info: freq_dias-eps-converted-to.pdf  used on input line 568.
+(pdftex.def)             Requested size: 284.06053pt x 170.63707pt.
 Package epstopdf Info: Source file: <freq_vias.eps>
-(epstopdf)                    date: 2025-11-09 12:12:02
-(epstopdf)                    size: 8670 bytes
+(epstopdf)                    date: 2025-11-09 18:38:29
+(epstopdf)                    size: 8687 bytes
 (epstopdf)             Output file: <freq_vias-eps-converted-to.pdf>
-(epstopdf)                    date: 2025-11-09 12:12:11
-(epstopdf)                    size: 10995 bytes
+(epstopdf)                    date: 2025-11-09 17:22:03
+(epstopdf)                    size: 11303 bytes
 (epstopdf)             Command: <repstopdf --outfile=freq_vias-eps-converted-to.pdf freq_vias.eps>
-(epstopdf)             \includegraphics on input line 523.
-Package epstopdf Info: Output file is already uptodate.
-<freq_vias-eps-converted-to.pdf, id=141, 341.275pt x 227.85126pt>
+(epstopdf)             \includegraphics on input line 586.
+runsystem(repstopdf --outfile=freq_vias-eps-converted-to.pdf freq_vias.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <freq_vias-eps-converted-to.pdf>
+(epstopdf)                    date: 2025-11-09 17:22:03
+(epstopdf)                    size: 11303 bytes.
+<freq_vias-eps-converted-to.pdf, id=171, 284.06125pt x 142.5325pt>
 File: freq_vias-eps-converted-to.pdf Graphic file (type pdf)
 <use freq_vias-eps-converted-to.pdf>
-Package pdftex.def Info: freq_vias-eps-converted-to.pdf  used on input line 523.
-(pdftex.def)             Requested size: 341.27415pt x 227.8507pt.
-
-Overfull \hbox (4.78654pt too wide) in paragraph at lines 523--529
-[][] \T1/ppl/m/n/10 (-20) Por otro
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 16.18796pt, for example:
-(fancyhdr)                \setlength{\headheight}{16.18796pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
-
-[8 <./freq_dias-eps-converted-to.pdf>]
-Package epstopdf Info: Source file: <freq_dias_pesados.eps>
-(epstopdf)                    date: 2025-11-09 12:12:03
-(epstopdf)                    size: 8993 bytes
-(epstopdf)             Output file: <freq_dias_pesados-eps-converted-to.pdf>
-(epstopdf)                    date: 2025-11-09 12:12:13
-(epstopdf)                    size: 11240 bytes
-(epstopdf)             Command: <repstopdf --outfile=freq_dias_pesados-eps-converted-to.pdf freq_dias_pesados.eps>
-(epstopdf)             \includegraphics on input line 530.
-Package epstopdf Info: Output file is already uptodate.
-<freq_dias_pesados-eps-converted-to.pdf, id=155, 341.275pt x 227.85126pt>
-File: freq_dias_pesados-eps-converted-to.pdf Graphic file (type pdf)
-<use freq_dias_pesados-eps-converted-to.pdf>
-Package pdftex.def Info: freq_dias_pesados-eps-converted-to.pdf  used on input line 530.
-(pdftex.def)             Requested size: 341.27415pt x 227.8507pt.
-Package epstopdf Info: Source file: <freq_vias_pesados.eps>
-(epstopdf)                    date: 2025-11-09 12:12:04
-(epstopdf)                    size: 8576 bytes
-(epstopdf)             Output file: <freq_vias_pesados-eps-converted-to.pdf>
-(epstopdf)                    date: 2025-11-09 12:12:14
-(epstopdf)                    size: 10861 bytes
-(epstopdf)             Command: <repstopdf --outfile=freq_vias_pesados-eps-converted-to.pdf freq_vias_pesados.eps>
-(epstopdf)             \includegraphics on input line 543.
-Package epstopdf Info: Output file is already uptodate.
-<freq_vias_pesados-eps-converted-to.pdf, id=156, 341.275pt x 227.85126pt>
-File: freq_vias_pesados-eps-converted-to.pdf Graphic file (type pdf)
-<use freq_vias_pesados-eps-converted-to.pdf>
-Package pdftex.def Info: freq_vias_pesados-eps-converted-to.pdf  used on input line 543.
-(pdftex.def)             Requested size: 341.27415pt x 227.8507pt.
+Package pdftex.def Info: freq_vias-eps-converted-to.pdf  used on input line 586.
+(pdftex.def)             Requested size: 284.06053pt x 142.53214pt.
+<freq_dias_pesados.pdf, id=172, 284.06125pt x 141.52875pt>
+File: freq_dias_pesados.pdf Graphic file (type pdf)
+<use freq_dias_pesados.pdf>
+Package pdftex.def Info: freq_dias_pesados.pdf  used on input line 594.
+(pdftex.def)             Requested size: 284.06053pt x 141.5284pt.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1405,15 +1425,20 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[9 <./freq_vias-eps-converted-to.pdf> <./freq_dias_pesados-eps-converted-to.pdf>]
+[9 <./freq_dias-eps-converted-to.pdf> <./freq_vias-eps-converted-to.pdf>]
+<freq_vias_pesados.pdf, id=193, 284.06125pt x 141.52875pt>
+File: freq_vias_pesados.pdf Graphic file (type pdf)
+<use freq_vias_pesados.pdf>
+Package pdftex.def Info: freq_vias_pesados.pdf  used on input line 610.
+(pdftex.def)             Requested size: 284.06053pt x 141.5284pt.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 585.
+(Font)              scaled to size 9.37807pt on input line 646.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 585.
+(Font)              scaled to size 7.29405pt on input line 646.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 585.
+(Font)              scaled to size 9.37807pt on input line 646.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 585.
+(Font)              scaled to size 7.29405pt on input line 646.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1421,7 +1446,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[10 <./freq_vias_pesados-eps-converted-to.pdf>] 
+[10 <./freq_dias_pesados.pdf> <./freq_vias_pesados.pdf>] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./Proyecto-AnÃ¡lisis-Exploratorio-de-Datos.aux)
  ***********
@@ -1429,21 +1454,38 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-10-24>
  ***********
 Package rerunfilecheck Info: File `Proyecto-AnÃ¡lisis-Exploratorio-de-Datos.out' has not changed.
-(rerunfilecheck)             Checksum: 054E81D139E709705F599456B11FBEF4;1123.
+(rerunfilecheck)             Checksum: 5A1DB2610022305FD94E93976038DE18;1072.
  ) 
 Here is how much of TeX's memory you used:
- 33515 strings out of 469519
- 632480 string characters out of 5468256
+ 33531 strings out of 469519
+ 632885 string characters out of 5468256
  1129606 words of memory out of 5000000
- 61227 multiletter control sequences out of 15000+600000
+ 61243 multiletter control sequences out of 15000+600000
  687649 words of font info for 337 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  123i,12n,121p,4660b,865s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> <c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.375pk><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/esdia/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on Proyecto-AnÃ¡lisis-Exploratorio-de-Datos.pdf (10 pages, 374558 bytes).
+Output written on Proyecto-AnÃ¡lisis-Exploratorio-de-Datos.pdf (10 pages, 509094 bytes).
 PDF statistics:
- 294 PDF objects out of 1000 (max. 8388607)
- 167 compressed objects within 2 object streams
+ 314 PDF objects out of 1000 (max. 8388607)
+ 183 compressed objects within 2 object streams
  35 named destinations out of 1000 (max. 500000)
- 85630 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 85645 words of extra memory for PDF output out of 89155 (max. 10000000)
 
+
+! GPL Ghostscript 10.06.0: **** Could not open the file freq_dias-eps-converted-to.pdf .
+! **** Unable to open the initial device, quitting.
+! epstopdf ($Id: epstopdf.pl 71777 2024-07-11 21:24:57Z karl $) 2.36
+! !!! Error: Writing to gswin64c failed, error code 1
+
+! ...\esdia\AppData\Roaming\TinyTeX\bin\windows\runscript.tlu:933: command failed with exit code 1:
+! perl.exe c:\Users\esdia\AppData\Roaming\TinyTeX\texmf-dist\scripts\epstopdf\epstopdf.pl --restricted "--outfile=freq_dias-eps-converted-to.pdf" "freq_dias.eps"
+! GPL Ghostscript 10.06.0: **** Could not open the file freq_vias-eps-converted-to.pdf .
+! **** Unable to open the initial device, quitting.
+! epstopdf ($Id: epstopdf.pl 71777 2024-07-11 21:24:57Z karl $) 2.36
+! !!! Error: Writing to gswin64c failed, error code 1
+
+! ...\esdia\AppData\Roaming\TinyTeX\bin\windows\runscript.tlu:933: command failed with exit code 1:
+! perl.exe c:\Users\esdia\AppData\Roaming\TinyTeX\texmf-dist\scripts\epstopdf\epstopdf.pl --restricted "--outfile=freq_vias-eps-converted-to.pdf" "freq_vias.eps"
+! system returned with code 1
+! system returned with code 1

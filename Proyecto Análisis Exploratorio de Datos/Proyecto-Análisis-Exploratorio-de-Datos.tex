@@ -324,7 +324,7 @@ de las que disponemos son \texttt{Flujo\_Vehiculos},
 \texttt{Valor\_Punto\_Quilometrico}, y las coordenadas geográficas de
 los puntos en los que se mide el flujo, así como las de los puntos que
 se han designado como inicio y fin del tramo en el que se asume que el
-tráfico es invariante.
+tráfico es invariante. Estudiemos los diferentes estadísticos:
 
 \begin{verbatim}
 ##                          Mínimo   Máximo    Rango      IQR   Q0.25  Mediana
@@ -348,134 +348,196 @@ tráfico es invariante.
 \end{verbatim}
 
 Como era de esperar, las variables \texttt{Flujo\_Vehiculos} y
-\texttt{Valor\_Punto\_Quilometrico} no toman valores negativos. Las
-variables que miden longitud y latitud obtienen estadísticos casi
-idénticos, aunque, si nos fijamos en el rango, vemos que tanto en la
-longitud como en la latitud (y sobre todo en esta última) de las
-coordenadas que marcan el final del tramo se observa una mayor
-variación. Esto nos indica que es probable que haya algún problema con
-los datos de las coordenadas del tramo final, que veremos más adelante.
-Por último, cabe recalcar que la media y la mediana de
-\texttt{Flujo\_Vehiculos} distan mucho.
+\texttt{Valor\_Punto\_Quilometrico} únicamente toman valores positivos,
+lo cual es coherente con su naturaleza. Por otro lado, en las variables
+que representan coordenadas geográficas (latitud y longitud, tanto
+exactas como de inicio y fin del tramo), podemos ver que los
+estadísticos muestran valores muy similares entre sí. No obstante, el
+rango y el IQR de las coordenadas finales son mayores, especialmente en
+la latitud, lo que nos indica que es probable que haya algún problema
+con los datos de las coordenadas del tramo final, que veremos más
+adelante.
 
-Pasemos ahora a representar gráficamente aquellas variables en cuyo caso
-sea posible. Empezando con las numéricas, nos fijaremos primeramente en
-\texttt{Flujo\_Vehiculos}:
+Sin embargo, en la variable \texttt{Flujo\_Vehiculos} podemos ver que la
+media (142.7) es mucho mayor que la mediana (16.6)(valor central), lo
+que nos indica que la mayoría de los tramos registran flujos bajos, pero
+que existen algunos tramos con valores muy altos (outliers) que quizás
+dependen del tipo de vía que hacen que se eleve la media. Veamos si
+estamos en lo cierto:
 
-\pandocbounded{\includegraphics[keepaspectratio]{flujo.pdf}} En la
-gráfica podemos observar que lo más común es que el flujo, oscile entre
-0 y 250, aunque también hay registros de observaciones en los que el
-valor del flujo está cerca de 1000.
+\pandocbounded{\includegraphics[keepaspectratio]{flujo_via.pdf}}
 
-\pandocbounded{\includegraphics[keepaspectratio]{flujo_via_vehiculo.pdf}}
+En los tres casos la distribución es claramente asimétrica hacia la
+derecha, con la mayoría de los tramos registrando flujos bajos y unos
+pocos con valores muy altos. Las vías convencionales concentran la mayor
+cantidad de observaciones y presentan un pico en los flujos bajos,
+mientras que las autovías y desdobladas muestran patrones similares,
+aunque con algunos tramos de tráfico más intenso. Estos resultados
+confirman la presencia de valores extremos que elevan la media de
+\texttt{Flujo\_Vehiculos}. Por otro lado, cabe destacar que esta
+variable no presenta una distribución gaussiana como podría haberse
+esperado, sino una exponencial.
 
-Si además tenemos en cuenta el tipo de vía y el tipo de vehículo,
-observamos que el flujo de vehículos pesados suele ser mayor en
-carreteras convencionales, mientras que los vehículos no pesados
-transitan más las autovías y carreteras desdobladas.
+También podríamos preguntarnos si las variaciones del flujo se ven
+afectadas por el \texttt{Sentido}, ya que los patrones de tráfico suelen
+presentar asimetrías en los viajes de ida y vuelta. Veámoslo:
 
 \pandocbounded{\includegraphics[keepaspectratio]{flujo_sentido.pdf}}
 
+Se puede observar la gran similutd entre los histogramas del flujo en
+sentido ascendente y descendente, lo que indica la ausencia de una
+asimetría direccional en el tráfico de Valencia. Sin embargo, esta
+homogeneidad en el sentido no implica estabilidad temporal, por lo que
+resulta necesario analizar cómo varía el flujo a lo largo del tiempo
+para identificar patrones mensuales que sí podrían revelar dinámicas
+críticas para la gestión de la movilidad.
+
+\pandocbounded{\includegraphics[keepaspectratio]{flujo_tiempo.pdf}}
+
+Podemos ver que\texttt{Flujo\_Vehiculos} varía según el mes en el que
+nos encontremos. Cabe destacar que se observa un máximo en abril, que
+probablemente coincida con las fallas o Semana Santa que coincide con la
+llegada de turistas a la ciudad. Por otro lado, en enero y junio
+disminuye el tráfico, esto se puede deber a las vacaciones de navidad y
+verano que la población suele viajar a nuevos destinos.
+
+Una vez estudiado el flujo de vehículos, estudiemos que ocurre con la
+variable numérica \texttt{Valor\_Punto\_Quilometrico}. Para ello
+representemosla:
+
+\pandocbounded{\includegraphics[keepaspectratio]{punto_quilometrico_hist.pdf}}
+
+Se obserba que al igual que \texttt{Flujo\_Vehiculos},
+\texttt{Valor\_Punto\_Quilometrico} parece seguir una distribución
+exponencial, aunque no tan marcada. Lo que sugiere que los puntos
+críticos de tráfico están altamente localizados, ya que se repiten con
+frecuencia. Veamos si el \texttt{Tipo\_Vía} está relacionado con esta
+idea:
+
 \pandocbounded{\includegraphics[keepaspectratio]{punto_quilometrico.pdf}}
 
-Pasemos ahora a las variables cualitativas. Representaremos primero
-\texttt{Tipo\_Via} y \texttt{Metodo\_Captacion}.
+Cabe destacar que las autovías presentan los valores de punto
+kilométrico más elevados y dispersos, indicando mayor frecuencia de
+tráfico. Sin embargo, las vías desdobladas muestran una distribución más
+concentrada con valores intermedios, mientras que las vías
+convencionales registran los valores más bajos y compactos. También se
+aprecia claramente como la gran cantidad de outliers presentes en
+carreteras desdobladas y convencionales influyen en la discrepancia
+entre la media y la mediana.
+
+A continuación vamos a representar algunas variables categóricas, como
+es el caso de \texttt{Tipo\_Via} y \texttt{Metodo\_Captacion}.
 
 \pandocbounded{\includegraphics[keepaspectratio]{metodo.pdf}}
-
-\pandocbounded{\includegraphics[keepaspectratio]{via.pdf}}
 
 Fijémonos en que, si representamos el método de captación desglosándolo
 según el tipo de carretera podemos sacar dos conclusiones: el método
 dominante es espiras y las gomas solo se usan en carreteras
-convencionales. Por otro lado, en el gráfico de barras se observa
-claramente que hay más observaciones en las carreteras convencionales
-que en las autovías o en las carreteras desdobladas.
+convencionales.
+
+\pandocbounded{\includegraphics[keepaspectratio]{via.pdf}}
+
+Por otro lado, en el gráfico \texttt{Tipo\_Via} se observa claramente
+que hay más observaciones en las carreteras convencionales que en las
+autovías o en las carreteras desdobladas.
+
+En cuanto al resto de variables cualitativas,
+\texttt{Codigo\_CV,\ Num\_Tramo,\ Sentido,\ Tipo\_Vehiculo,\ Ubicacion,\ Tipo\_Ubicacion\ y\ Tipo\_Valor\_Punto\_Quilometrico},
+se ha decidido no representarlas por diversos motivos. El principal es
+que, debido al alcance y los objetivos establecidos para este trabajo,
+no resulta viable realizar una exploración exhaustiva de todas ellas.
+
+Asimismo, existen razones vinculadas con la propia naturaleza de las
+variables. En primer lugar,\texttt{Codigo\_CV\ y\ Num\_Tramo} presentan
+un número excesivo de categorías, lo que dificulta su representación
+gráfica de forma clara y significativa. En segundo lugar, la
+representación de \texttt{Sentido},
+\texttt{Tipo\_Vehiculo,\ Tipo\_Ubicacion} y
+T\texttt{ipo\_Valor\_Punto\_Quilometrico} carecería de sentido, ya que
+estas variables fueron generadas mediante la función pivot\_longer().
+Por ello, las proporciones de sus valores son idénticas y, en
+consecuencia, de carácter sintético, es decir, no aportan información
+relevante para el análisis.
 
 Por último, reparemos en las variables numéricas que todavía no hemos
 explorado: las coordenadas geodésicas. Mediante el uso de las librerías
 \texttt{sf} y \texttt{mapSpain} (que contiene mapas políticos de España
-en particular) hemos representado las coordenadas exactas en las que se
-han tomado las mediciones.
+en particular) hemos representado los diferentes tipos de coordenadas en
+las que se han tomado las mediciones. Empecemos por las exactas:
 
 \pandocbounded{\includegraphics[keepaspectratio]{mapa_por_via.pdf}}
 
-En este mapa se puede comprobar a simple vista que las coordenadas están
-bien, ya que coinciden con el trazado de las carreteras de la Comunidad
-Valenciana, y que, como habíamos visto antes con el gráfico de barras,
-la cantidad de observaciones en carreteras convencionales es
-considerablemente mayor a la de los otros tipos de vía.
+En este mapa puede comprobarse visualmente que las coordenadas son
+correctas, ya que coinciden con el trazado de las carreteras de la
+Comunidad Valenciana. Además, se observa, al igual que en el gráfico de
+barras anterior, que el número de observaciones en carreteras
+convencionales es considerablemente superior al de los demás tipos de
+vía.
 
-\section{Relación entre las
-variables}\label{relaciuxf3n-entre-las-variables}
+A continuación, representamos las coordenadas de los puntos iniciales y
+finales de los tramos. Observando un único punto fuera del territorio a
+estudiar, que probablemente se deba a un error en la recopilación de
+datos.
 
-En este apartado estudiaremos si existe una relación lineal entre las
-variables de nuestro conjunto de datos. En primer lugar, comenzaremos
-con las variables numéricas, calculando las matrices de correlación de
-Pearson y Spearman con la función cor() para determinar si existe o no
-una relación entre estas variables y las representaremos. Veámoslo:
+\pandocbounded{\includegraphics[keepaspectratio]{mapa_incial.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{mapa_final.pdf}}
 
-\includegraphics[width=4.92in]{cor}
+\section{Análisis bivariante}\label{anuxe1lisis-bivariante}
+
+En este apartado, estudiaremos la linealidad, monotonía y dependencia de
+las variables de nuestro conjunto de datos. En primer lugar,
+comenzaremos con las variables numéricas, calculando las matrices de
+correlación de Pearson y Spearman para determinar si existe una relación
+lineal y una monotonía entre estas variables. Para ello, representamos
+los coeficientes de Pearson y Spearman para cada par de variables.
+Veámoslo:
+
+\pandocbounded{\includegraphics[keepaspectratio]{cor.pdf}}
 
 En la matriz de Pearson (izquierda) se observa una alta correlación
 positiva entre las variables de latitud y longitud en sus diferentes
 versiones. Lo que indica que dichas variables están estrechamente
 relacionadas linealmente, lo cual tiene sentido por su naturaleza
 geográfica. Por otro lado, la variable
-\texttt{Valor\_Punto\_Quilométrico} presenta una correlación negativa
-moderada a alta con las coordenadas geográficas. Esto puede deberse a
-que a medida que varía el punto kilométrico, también se produce una
-variación inversa en la posición (latitud o longitud), lo que indica que
-los puntos de medición están ordenados espacialmente a lo largo del
-trazado de la vía. Sin embargo, la variable \texttt{Flujo\_Vehículos} no
-muestra una correlación lineal significativa con el resto de las
-variables, lo que indica que el flujo de vehículos no depende
-directamente de la posición geográfica de los puntos de medición.
+\texttt{Valor\_Punto\_Quilometrico} presenta correlaciones positivas y
+negativas (bajas) con las coordenadas geográficas. Esto es debido a que
+esta variable es relativa a cada carretera o tramo. Sin embargo, la
+variable \texttt{Flujo\_Vehiculos} no muestra una correlación lineal
+significativa con el resto de las variables, lo que indica que el flujo
+de vehículos no depende directamente de forma lineal con la posición
+geográfica de los puntos de medición.
 
-No obstante, la matriz de Spearman (derecha) mantiene un patrón de
-correlaciones similar al obtenido con Pearson, aunque con ligeras
-variaciones en la magnitud de los coeficientes. Esto sugiere que las
-relaciones entre las coordenadas mantienen su monotonía, aunque no de
-forma estrictamente lineal. Cabe destacar la correlación negativa entre
-\texttt{Valor\_Punto\_Quilométrico} y las coordenadas se conserva,
+La matriz de Spearman (derecha) mantiene un patrón de correlaciones
+similar al obtenido con Pearson, aunque con ligeras variaciones en la
+magnitud de los coeficientes. Esto sugiere que las relaciones entre las
+coordenadas mantienen su monotonía, aunque no de forma estrictamente
+ascendente. Cabe destacar la correlación negativa entre
+\texttt{Valor\_Punto\_Quilometrico} y las coordenadas se conserva,
 confirmando la tendencia inversa entre ambas variables. De igual forma,
-\texttt{Flujo\_Vehículos} sigue mostrando baja relación con las demás
+\texttt{Flujo\_Vehiculos} sigue mostrando baja relación con las demás
 variables, confirmando su independencia respecto a la localización
 geográfica.
 
 Ahora estudiaremos la dependencia o independencia entre algunas
 variables categóricas:
 \texttt{Tipo\_Via}-\texttt{Metodologia\_Captacion},
-\texttt{Tipo\_Via}-\texttt{Tipo\_Vehiculo},
-\texttt{Sentido}-\texttt{Tipo\_Vehiculo}. Comenzando con las dos
-primeras variables, calculamos el coeficiente V de Cramer (que está
-acotado entre 0 y 1):
-
-\begin{verbatim}
-## [1] 0.07673791
-\end{verbatim}
-
-Lo que nos indica que hay dependencia pero las variables prácticamente
-no se influyen entre sí.Veamos que ocurre con las otras variables:
-
-\begin{verbatim}
-## [1] 0
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 0
-\end{verbatim}
-
-Obtenemos un valor del coeficiente para los pares de variables
 \texttt{Tipo\_Via}-\texttt{Tipo\_Vehiculo} y
-\texttt{Sentido}-\texttt{Tipo\_Vehiculo} de 0; por tanto, ambos pares
-son independientes. Podríamos pensar que existe alguna dependencia entre
-el tipo de vehículo y el tipo de vía por la que se circula (autovía,
-convecional o desdoblada), pero observamos que no. En cambio, ya
-esperábamos que el sentido de circulación (ascendente o descendente) y
-el tipo de vehículo fueran completamente independientes ya que el tipo
-de vehículo no depende del sentido del trayecto (los vehículos pueden
-circular indistintamente en un sentido o en otro).
+\texttt{Sentido}-\texttt{Tipo\_Vehiculo}. Para ello, calculamos el
+coeficiente V de Cramer (que está acotado entre 0 y 1). Obteniendo,
+respectivamente, 0.076, 0 y 0.
+
+Indicándonos que hay una mínima dependencia entre las variables
+\texttt{Tipo\_Via}-\texttt{Metodologia\_Captacion}. Sin embargo,
+obtenemos un valor del coeficiente para los pares de variables
+\texttt{Tipo\_Via}-\texttt{Tipo\_Vehiculo} y
+\texttt{Sentido}-\texttt{Tipo\_Vehiculo} de 0; por tanto, ambos son
+totalmente independientes. Podríamos pensar que existe alguna
+dependencia entre el tipo de vehículo y el tipo de vía por la cual se
+circula (autovía, convecional o desdoblada), pero observamos que no. En
+cambio, ya esperábamos que el sentido de circulación (ascendente o
+descendente) y el tipo de vehículo fueran completamente independientes
+ya que los vehículos pueden circular indistintamente en un sentido o en
+otro.
 
 \section{Outliers}\label{outliers}
 
@@ -483,7 +545,7 @@ En este último apartado determinaremos los outliers (datos atípicos) de
 algunas variables numéricas. Haremos el análisis con la variable
 \texttt{Flujo\_Vehiculos} y, también, estudiaremos los outliers de esta
 variable pero considerando solo los vehículos pesados. Así podremos
-interpretar de una forma más sencilla los resultados.
+interpretar de una forma más completa los resultados.
 
 Para detectar los outliers aplicaremos la regla de Hampel ya que utiliza
 estimadores robustos y, además, no presupone que los datos siguen una
@@ -491,62 +553,61 @@ distribución gaussiana. Podremos observar los picos extremos de flujo de
 vehículos tanto en el flujo total de vehículos como en el de vehículos
 pesados.
 
-Respecto a la variable \texttt{Flujo\_Vehiculos} aparecen un total de
-2656 outliers. Esta cantidad elevada (aunque representa el 17.4\% del
-total de registros) puede deberse a que tenemos un conjunto de datos muy
-segado como podemos ver en las Figuras \ldots. Para interpretar este
-resultado podemos ver si los outliers presentan alguna relación con
-alguna otra variable, como por ejemplo, el día de la semana (lunes,
-martes, etc.) o el tipo de vía.
+Respecto a \texttt{Flujo\_Vehiculos} aparecen un total de 118878
+outliers. Esta cantidad elevada (representa el 32.5\% del total de
+registros) puede deberse a que tenemos un conjunto de datos muy segado
+como podemos ver en las gráficas mostradas en la sección 4. Para
+interpretar este resultado podemos ver si los outliers presentan alguna
+relación con alguna otra variable, como por ejemplo, el día de la semana
+(lunes, martes, etc.) o el tipo de vía.
 
-Para ver si hay algún tipo de relación con el día de la semana podemos
-ver la proporción de outliers (frecuencia relativa) con respecto al
-total de outliers según el día:
+Para ver si hay relación con el día de la semana podemos ver la
+proporción de outliers (frecuencia relativa) con respecto al total de
+outliers según el día:
 
 \pandocbounded{\includegraphics[keepaspectratio]{freq_dias.eps}}
 
-En este caso, vemos que en los días laborales (de lunes a viernes) hay
-una mayor proporción con respecto a los días correspondientes al fin de
-semana (sábado y domingo). Esto puede deberse a que, entre semana, hay
+En este caso, vemos que de lunes a sábado hay una mayor proporción con
+respecto a los domingos (aunque la distribución es prácticamente
+uniforme). Esto puede deberse a que, de lunes a sábado, hay
 desplazaminetos diaros de trabajadores o transportes de mercancías,
-repartos\ldots{} que no se observan en fin de semana, y por ello, estos
-picos de flujo de vehículos se pueden encontrar en esos días.
+repartos, etc., que no se observan en domingo, y por ello, estos picos
+más extremos de flujo de vehículos son más probables encontrarlos en
+esos días.
 
 Ahora, si observamos la proporción de outliers según el tipo de vía,
-podemos detectar que hay una cantidad superior de outliers en autovía y
-carretera desdoblada que en carretera convencional. Puede ser debido a
-que en carretera convencional hay menos carriles, el límite de velocidad
-máxima es inferior y, por tanto, tiene una menor capacidad de tráfico.
-Así que, este tipo de vía tiende a tener un flujo de vehículos más
-uniforme que en los otros tipos de vía, en general.
+podemos detectar que hay una cantidad superior de outliers en
+convencional que en autovía y desdoblada. Puede ser debido a que en
+carretera convencional hay menos carriles, el límite de velocidad máxima
+es inferior y, por tanto, tiene una menor capacidad de tráfico. Por
+ello, cuando aparece algún pico de flujo de vehículos puede ser
+considerado como outlier.
 
-\pandocbounded{\includegraphics[keepaspectratio]{freq_vias.eps}} Por
-otro lado, tenemos la variable \texttt{Tipo\_Vehiculo} que almacena si
-el vehículo es pesado o no. Haciendo uso de la misma junto con
+\pandocbounded{\includegraphics[keepaspectratio]{freq_vias.eps}}
+
+Por otro lado, tenemos la variable \texttt{Tipo\_Vehiculo} que almacena
+si el vehículo es pesado o no. Haciendo uso de la misma junto con
 \texttt{Flujo\_Vehiculos}, podemos representar la frecuencia relativa de
-outliers de vehículos pesados por día de la semana, al igual que del
-resto de vehículos. Veámoslo:
+outliers de vehículos pesados por día de la semana, al igual que hemos
+hecho antes. Veámoslo:
 
-\pandocbounded{\includegraphics[keepaspectratio]{freq_dias_pesados.eps}}
+\pandocbounded{\includegraphics[keepaspectratio]{freq_dias_pesados.pdf}}
 
 Podemos ver que obtenemos un resultado parecido determinando la
-proporción de outliers según el día de la semana. Aunque podemos ver que
-en domingo la proporción es menor ya que en este día los vehículos
-pesados no suelen circular ya que no es día laboral.
+proporción de outliers según el día de la semana. Aunque observamos que
+en sábado y domingo la proporción es bastante menor con respecto al
+resto de días, ya que en estos días los vehículos pesados no suelen
+circular ya que no es día laboral.
 
 De esta forma, podríamos mirar que ocurre con los resultados con
-respecto al tipo de vía, vemos que los outliers se concentran cuando la
-carretera es convencional. Aunque los vehículos pesados suelen circular
-más por autovía, podemos entender que los picos de flujo se encuentren
-en convencional por una concentración de vehículos puntual.
+respecto al tipo de vía. Vemos que hay más outliers en carretera
+desdoblada (aunque no hay una gran diferencia con los otros tipos de
+vía). Como hemos visto antes, este tipo de vehículos transitan más por
+este tipo de carretera (y por convencional). Entonces podemos entender
+que los picos de flujo se encuentren en desdoblada (y convencional) por
+una concentración de vehículos puntual.
 
-\pandocbounded{\includegraphics[keepaspectratio]{freq_vias_pesados.eps}}
-
-Por último, también podemos verificar si las coordendas (latitud y
-longitud) son correctas, es decir, si todos los puntos se encuentran
-dentro de la Comunidad Valenciana mediante un mapa. Observamos un único
-punto fuera del territorio a estudiar, que puede deberse a un error en
-la recopilación de datos.
+\pandocbounded{\includegraphics[keepaspectratio]{freq_vias_pesados.pdf}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

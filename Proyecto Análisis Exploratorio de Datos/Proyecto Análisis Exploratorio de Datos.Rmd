@@ -162,7 +162,7 @@ vehiculos_tidy2$Tipo_Posicion_Punto_Quilometrico <-
 
 # Análisis univariante y gráficos exploratorios
 
-En esta sección exploraremos los datos mediante un análisis univariante de las variables númericas y el uso de gráficos. Las variables numéricas de las que disponemos son `Flujo_Vehiculos`, `Valor_Punto_Quilometrico`, y las coordenadas geográficas de los puntos en los que se mide el flujo, así como las de los puntos que se han designado como inicio y fin del tramo en el que se asume que el tráfico es invariante.
+En esta sección exploraremos los datos mediante un análisis univariante de las variables númericas y el uso de gráficos. Las variables numéricas de las que disponemos son `Flujo_Vehiculos`, `Valor_Punto_Quilometrico`, y las coordenadas geográficas de los puntos en los que se mide el flujo, así como las de los puntos que se han designado como inicio y fin del tramo en el que se asume que el tráfico es invariante. Estudiemos los diferentes estadísticos:
 
 ```{r, echo=FALSE,fig.width=10, fig.height=4}
 description<- vehiculos_tidy2 %>% 
@@ -174,20 +174,9 @@ description %>%
   rename(Media=mean,Mínimo=min,Máximo=max,Mediana=median,Rango = range,Desviación_típica=sd)
 ```
 
-Como era de esperar, las variables `Flujo_Vehiculos` y `Valor_Punto_Quilometrico` no toman valores negativos. Las variables que miden longitud y latitud obtienen estadísticos casi idénticos, aunque, si nos fijamos en el rango, vemos que tanto en la longitud como en la latitud (y sobre todo en esta última) de las coordenadas que marcan el final del tramo se observa una mayor variación. Esto nos indica que es probable que haya algún problema con los datos de las coordenadas del tramo final, que veremos más adelante. Por último, cabe recalcar que la media y la mediana de `Flujo_Vehiculos` distan mucho.
+Como era de esperar, las variables `Flujo_Vehiculos` y `Valor_Punto_Quilometrico` únicamente toman valores positivos, lo cual es coherente con su naturaleza. Por otro lado, en las variables que representan coordenadas geográficas (latitud y longitud, tanto exactas como de inicio y fin del tramo), podemos ver que los estadísticos muestran valores muy similares entre sí. No obstante, el rango y el IQR de las coordenadas finales son mayores, especialmente en la latitud, lo que nos indica que es probable que haya algún problema con los datos de las coordenadas del tramo final, que veremos más adelante.
 
-Pasemos ahora a representar gráficamente aquellas variables en cuyo caso sea posible. Empezando con las numéricas, nos fijaremos primeramente en `Flujo_Vehiculos`:
-
-```{r,include=FALSE}
-  myplot1 <- ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
-  geom_histogram(fill = "lavender",color="blue",binwidth=30) +
-  labs(y="Recuento", x="Flujo total de vehículos") +
-  theme_minimal()
-ggsave("flujo.pdf",plot= myplot1, device="pdf",width =9, height = 6, units="cm")
-```
-![](flujo.pdf)
-
-En la gráfica podemos observar que lo más común es que el flujo, oscile entre 0 y 250, aunque también hay registros de observaciones en los que el valor del flujo está cerca de 1000. Claramente esta variable no presenta una distribución gaussiana como podría haberse esperado, sino un exponencial.
+Sin embargo, en la variable `Flujo_Vehiculos` podemos ver que la media (142.7) es mucho mayor que la mediana (16.6)(valor central), lo que nos indica que la mayoría de los tramos registran flujos bajos, pero que existen algunos tramos con valores muy altos (outliers) que quizás dependen del tipo de vía que hacen que se eleve la media. Veamos si estamos en lo cierto: 
 
 ```{r,include=FALSE}
   myplot2 <- ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
@@ -199,7 +188,9 @@ ggsave("flujo_via.pdf", plot= myplot2, device="pdf",width =9, height = 6, units=
 ```
 ![](flujo_via.pdf)
 
-Si además tenemos en cuenta el tipo de vía, observamos que el flujo de vehículos pesados alcanza mayor número de veces valores más altos en carreteras convencionales y desdobladas. Esto significa que el tránsito de vehículos es mayor en estos tipos de vías.
+En los tres casos la distribución es claramente asimétrica hacia la derecha, con la mayoría de los tramos registrando flujos bajos y unos pocos con valores muy altos. Las vías convencionales concentran la mayor cantidad de observaciones y presentan un pico en los flujos bajos, mientras que las autovías y desdobladas muestran patrones similares, aunque con algunos tramos de tráfico más intenso. Estos resultados confirman la presencia de valores extremos que elevan la media de `Flujo_Vehiculos`. Por otro lado, cabe destacar que esta variable no presenta una distribución gaussiana como podría haberse esperado, sino una exponencial.
+
+También podríamos preguntarnos si las variaciones del flujo se ven afectadas por el `Sentido`, ya que los patrones de tráfico suelen presentar asimetrías en los viajes de ida y vuelta. Veámoslo:
 
 ```{r,include=FALSE}
 ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
@@ -211,7 +202,25 @@ ggsave("flujo_sentido.pdf", device="pdf",width =9, height = 6, units="cm")
 ```
 ![](flujo_sentido.pdf)
 
-Por último, podríamos preguntarnos si por alguna peculiar razón el flujo sea diferente dependiendo del sentido circulación. Sin embargo, los datos parecen desmentir esta teoría dada la gran similutd presente entre los histogramas del flujo en sentido ascendente y descendente.
+Se puede observar la gran similutd entre los histogramas del flujo en sentido ascendente y descendente, lo que indica la ausencia de una asimetría direccional en el tráfico de Valencia. Sin embargo, esta homogeneidad en el sentido no implica estabilidad temporal, por lo que resulta necesario analizar cómo varía el flujo a lo largo del tiempo para identificar patrones mensuales que sí podrían revelar dinámicas críticas para la gestión de la movilidad.
+
+```{r,include=FALSE}
+vehiculos_tidy2 %>%
+  group_by(Fecha) %>%
+  summarise(Flujo_medio = mean(Flujo_Vehiculos, na.rm = TRUE)) %>%
+  ggplot(aes(x = Fecha, y = Flujo_medio)) +
+  geom_line(color = "steelblue") +
+  labs(title = "Evolución temporal del Flujo medio")
+ggsave("flujo_tiempo.pdf", device="pdf",width =10, height = 6, units="cm")
+
+```
+![](flujo_tiempo.pdf)
+
+
+
+Podemos ver que `Flujo_Vehiculos` varía según el mes en el que nos encontremos. Cabe destacar que se observa un máximo en abril, que probablemente coincida con las fallas o Semana Santa que coincide con la llegada de turistas a la ciudad. Por otro lado, en enero y junio disminuye el tráfico, esto se puede deber a las vacaciones de navidad y verano que la población suele viajar a nuevos destinos.
+
+Una vez estudiado el flujo de vehículos, estudiemos que ocurre con la variable numérica `Valor_Punto_Quilometrico`. Para ello representemosla: 
 
 ```{r, include=FALSE}
 myplot3 <- ggplot(vehiculos_tidy2, aes(x=Tipo_Via,y=Valor_Punto_Quilometrico)) +
@@ -227,12 +236,15 @@ ggsave("punto_quilometrico_hist.pdf", device="pdf",width =9, height = 5, units="
 ```
 ![](punto_quilometrico_hist.pdf)
 
+Se obserba que al igual que `Flujo_Vehiculos`, `Valor_Punto_Quilometrico` parece seguir una distribución exponencial, aunque no tan marcada. Lo que sugiere que los puntos críticos de tráfico están altamente localizados, ya que se repiten con frecuencia. Veamos si el `Tipo_Vía` está relacionado con esta idea:
 
 ![](punto_quilometrico.pdf)
 
-Al igual que `Flujo_Vehiculos`, `Valor_Punto_Quilometrico` parece seguir una distribución exponencial, aunque no tan marcada. En el gráfico de caja del punto quilométrico respecto al tipo de vía, podemos apreciar una mayor dispersión en las carreteras convencionales. También se aprecia claramente como la gran cantidad de outliers presentes en carreteras desdobladas y convencionales influyen en la discrepancia entre media y mediana.
+Cabe destacar que las autovías presentan los valores de punto kilométrico más elevados y dispersos, indicando mayor frecuencia de tráfico. Sin embargo, las vías desdobladas muestran una distribución más concentrada con valores intermedios, mientras que las vías convencionales registran los valores más bajos y compactos. También se aprecia claramente como la gran cantidad de outliers presentes en carreteras desdobladas y convencionales influyen en la discrepancia entre la media y la mediana.
 
-Pasemos ahora a las variables cualitativas. Representaremos primero `Tipo_Via` y `Metodo_Captacion`.
+
+A continuación vamos a representar algunas variables categóricas, como es el caso de `Tipo_Via` y `Metodo_Captacion`.
+
 ```{r,include=FALSE} 
 par(mfrow = c(1, 2))
   ggplot(vehiculos_tidy2,aes(Metodologia_Captacion)) + 
@@ -254,10 +266,16 @@ Fijémonos en que, si representamos el método de captación desglosándolo seg�
 
 ![](via.pdf)
 
-Por otro lado, en el gráfico de barras se observa claramente que hay más observaciones en las carreteras convencionales que en las autovías o en las carreteras desdobladas.
-Respecto al resto de variables cualitativas, `Codigo_CV`, `Num_Tramo`, `Sentido`, `Tipo_Vehiculo`, `Ubicacion`, `Tipo_Ubicacion` y `Tipo_Valor_Punto_Quilometrico`, no las representaremos por diversos motivos. El primero y más importante es que, debido a la envergadura y cualidades que debe tener este trabajo no podemos pretender hacer una exploración exhaustiva de todas ellas. Luego también hay motivos fundados en la naturaleza de las variables: `Codigo_CV` y `Num_Tramo` toman demasiados valores distintos, por lo que nos es imposible poder representarlos en una gráfica, y no tendría sentido representar `Sentido`, `Tipo_Vehiculo`, `Tipo_Ubicacion` y `Tipo_Valor_Punto_Quilometrico`. Esto último se debe a que son variables obtenidas al implementar `pivot_longer()`, por lo que las proporciones de sus valores son iguales y, por así decirlo, sintéticas (es decir, no aportan información).
+Por otro lado, en el gráfico `Tipo_Via` se observa claramente que hay más observaciones en las carreteras convencionales que en las autovías o en las carreteras desdobladas.
 
-Por último, reparemos en las variables numéricas que todavía no hemos explorado: las coordenadas geodésicas. Mediante el uso de las librerías `sf` y `mapSpain` (que contiene mapas políticos de España en particular) hemos representado las coordenadas exactas en las que se han tomado las mediciones.
+
+
+En cuanto al resto de variables cualitativas, `Codigo_CV, Num_Tramo, Sentido, Tipo_Vehiculo, Ubicacion, Tipo_Ubicacion y Tipo_Valor_Punto_Quilometrico`, se ha decidido no representarlas por diversos motivos. El principal es que, debido al alcance y los objetivos establecidos para este trabajo, no resulta viable realizar una exploración exhaustiva de todas ellas.
+
+Asimismo, existen razones vinculadas con la propia naturaleza de las variables. En primer lugar,`Codigo_CV y Num_Tramo` presentan un número excesivo de categorías, lo que dificulta su representación gráfica de forma clara y significativa. En segundo lugar, la representación de `Sentido`, `Tipo_Vehiculo, Tipo_Ubicacion` y T`ipo_Valor_Punto_Quilometrico` carecería de sentido, ya que estas variables fueron generadas mediante la función pivot_longer(). Por ello, las proporciones de sus valores son idénticas y, en consecuencia, de carácter sintético, es decir, no aportan información relevante para el análisis.
+
+
+Por último, reparemos en las variables numéricas que todavía no hemos explorado: las coordenadas geodésicas. Mediante el uso de las librerías `sf` y `mapSpain` (que contiene mapas políticos de España en particular) hemos representado los diferentes tipos de coordenadas en las que se han tomado las mediciones. Empecemos por las exactas:
 
 ```{r, include=FALSE}
 coord_exactas <- vehiculos_tidy2 %>% 
@@ -280,9 +298,9 @@ ggsave("mapa_por_via.pdf", device="pdf",width =14, height = 7, units="cm")
 ```
 ![](mapa_por_via.pdf)
 
-En este mapa se puede comprobar a simple vista que las coordenadas están bien, ya que coinciden con el trazado de las carreteras de la Comunidad Valenciana, y que, como habíamos visto antes con el gráfico de barras, la cantidad de observaciones en carreteras convencionales es considerablemente mayor a la de los otros tipos de vía.
+En este mapa puede comprobarse visualmente que las coordenadas son correctas, ya que coinciden con el trazado de las carreteras de la Comunidad Valenciana. Además, se observa, al igual que en el gráfico de barras anterior, que el número de observaciones en carreteras convencionales es considerablemente superior al de los demás tipos de vía.
 
-Representamos igualmente las coordenadas de los puntos iniciales y finales de los tramos. Observamos un único punto fuera del territorio a estudiar, en las coordenadas de los puntos finales, que se debe a un error en la recopilación de datos.
+A continuación, representamos las coordenadas de los puntos iniciales y finales de los tramos. Observando un único punto fuera del territorio a estudiar en las coordenadas finales, que probablemente se deba a un error en la recopilación de datos.
 
 ```{r, include=FALSE}
 coord_iniciales <- vehiculos_tidy2 %>% 
@@ -340,6 +358,7 @@ En este apartado, estudiaremos la linealidad, monotonía y dependencia de las va
 ![](cor.pdf)
 
 En la matriz de Pearson (izquierda) se observa una alta correlación positiva entre las variables de latitud y longitud en sus diferentes versiones. Lo que indica que dichas variables están estrechamente relacionadas linealmente, lo cual tiene sentido por su naturaleza geográfica. Por otro lado, la variable `Valor_Punto_Quilometrico` presenta correlaciones positivas y negativas (bajas) con las coordenadas geográficas. Esto es debido a que esta variable es relativa a cada carretera o tramo. Sin embargo, la variable `Flujo_Vehiculos` no muestra una correlación lineal significativa con el resto de las variables, lo que indica que el flujo de vehículos no depende directamente de forma lineal con la posición geográfica de los puntos de medición.
+
 
 La matriz de Spearman (derecha) mantiene un patrón de correlaciones similar al obtenido con Pearson, aunque con ligeras variaciones en la magnitud de los coeficientes. Esto sugiere que las relaciones entre las coordenadas mantienen su monotonía, aunque no de forma estrictamente ascendente. Cabe destacar la correlación negativa entre `Valor_Punto_Quilometrico` y las coordenadas se conserva, confirmando la tendencia inversa entre ambas variables. De igual forma, `Flujo_Vehiculos` sigue mostrando baja relación con las demás variables, confirmando su independencia respecto a la localización geográfica.
 

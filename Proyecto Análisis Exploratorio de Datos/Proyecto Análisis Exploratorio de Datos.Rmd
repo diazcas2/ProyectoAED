@@ -187,6 +187,8 @@ ggsave("flujo.pdf",plot= myplot1, device="pdf",width =12, height = 8, units="cm"
 ```
 
 ![](flujo.pdf)
+
+
 En la gráfica podemos observar que lo más común es que el flujo, oscile entre 0 y 250, aunque también hay registros de observaciones en los que el valor del flujo está cerca de 1000. 
 
 ```{r,include=FALSE}

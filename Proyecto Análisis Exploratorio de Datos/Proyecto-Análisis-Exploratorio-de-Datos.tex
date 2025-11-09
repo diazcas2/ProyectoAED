@@ -177,47 +177,6 @@ Blasco Vega}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Pandoc syntax highlighting
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 
 % tightlist command for lists without linebreak
 \providecommand{\tightlist}{%
@@ -225,6 +184,20 @@ Blasco Vega}
 
 
 % Add imagehandling
+% Custom command from Pandoc 3.2.1 to scale images if necessary
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+\makeatother
 
 
 
@@ -342,26 +315,6 @@ se sustituyeron por \emph{Inicial}, \emph{Exacta} y \emph{Final}; en
 \emph{Ascendente} y \emph{Descendente}; y en \texttt{Tipo\_Vehiculo},
 \emph{T} y \emph{P} se cambiaron por \emph{Todos} y \emph{Pesados.}
 
-A continuación, se muestra un fragmento de las primeras filas del
-dataset, usando la función \texttt{head()}:
-
-\begin{verbatim}
-## # A tibble: 6 x 18
-##   Codigo_CV Num_tramo Fecha      Tipo_Via Metodologia_Captacion Latitud_Exacta
-##   <chr>     <chr>     <date>     <chr>    <chr>                          <dbl>
-## 1 10        007       2025-03-07 Autovia  Espiras                         39.9
-## 2 10        007       2025-03-07 Autovia  Espiras                         39.9
-## 3 10        007       2025-03-07 Autovia  Espiras                         39.9
-## 4 10        007       2025-03-07 Autovia  Espiras                         39.9
-## 5 10        007       2025-03-07 Autovia  Espiras                         39.9
-## 6 10        007       2025-03-07 Autovia  Espiras                         39.9
-## # i 12 more variables: Longitud_Exacta <dbl>, Latitud_Inicio <dbl>,
-## #   Longitud_Inicio <dbl>, Latitud_Final <dbl>, Longitud_Final <dbl>,
-## #   Sentido <chr>, Tipo_Vehiculo <chr>, Flujo_Vehiculos <dbl>,
-## #   Tipo_Ubicacion <chr>, Ubicacion <chr>,
-## #   Tipo_Posicion_Punto_Quilometrico <chr>, Valor_Punto_Quilometrico <int>
-\end{verbatim}
-
 \section{Análisis univariante y gráficos
 exploratorios}\label{anuxe1lisis-univariante-y-gruxe1ficos-exploratorios}
 
@@ -394,41 +347,64 @@ tráfico es invariante.
 ## Valor_Punto_Quilometrico 18883.69 26410.00          21939.30
 \end{verbatim}
 
-\#\#\#\#\#\#\#\#\#\#\#\#\#\#HABLA DE ALGO MÁS GENERAL, EN PLAN QUE VEAS
-LOS RESULTADOS QUE TE SALEN UN POCO POR ENCIMA LO DESTACABLE
-
-Si nos fijamos en el rango, vemos que tanto en la longitud como en la
-latitud (y sobre todo en esta última) de las coordenadas que marcan el
-final del tramo se observa una mayor variación. Esto nos indica que es
-probable que haya algún problema con los datos de las coordenadas del
-tramo final, que veremos más adelante.
+Como era de esperar, las variables \texttt{Flujo\_Vehiculos} y
+\texttt{Valor\_Punto\_Quilometrico} no toman valores negativos. Las
+variables que miden longitud y latitud obtienen estadísticos casi
+idénticos, aunque, si nos fijamos en el rango, vemos que tanto en la
+longitud como en la latitud (y sobre todo en esta última) de las
+coordenadas que marcan el final del tramo se observa una mayor
+variación. Esto nos indica que es probable que haya algún problema con
+los datos de las coordenadas del tramo final, que veremos más adelante.
+Por último, cabe recalcar que la media y la mediana de
+\texttt{Flujo\_Vehiculos} distan mucho.
 
 Pasemos ahora a representar gráficamente aquellas variables en cuyo caso
 sea posible. Empezando con las numéricas, nos fijaremos primeramente en
-\texttt{Flujo\_Vehiculos}: \includegraphics{flujo.eps}
+\texttt{Flujo\_Vehiculos}:
 
-En la gráfica podemos observar que lo más común es que el flujo, oscile
-entre 0 y 250, aunque también hay registros de observaciones en los que
-el valor del flujo está cerca de 1000.
+\pandocbounded{\includegraphics[keepaspectratio]{flujo.pdf}} En la
+gráfica podemos observar que lo más común es que el flujo, oscile entre
+0 y 250, aunque también hay registros de observaciones en los que el
+valor del flujo está cerca de 1000.
 
-\includegraphics{flujo_via_vehiculo.eps}
+\pandocbounded{\includegraphics[keepaspectratio]{flujo_via_vehiculo.pdf}}
 
 Si además tenemos en cuenta el tipo de vía y el tipo de vehículo,
 observamos que el flujo de vehículos pesados suele ser mayor en
 carreteras convencionales, mientras que los vehículos no pesados
 transitan más las autovías y carreteras desdobladas.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{myplot3 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(vehiculos\_tidy2, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{Tipo\_Via,}\AttributeTok{y=}\NormalTok{Valor\_Punto\_Quilometrico)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{fill =} \StringTok{"lavender"}\NormalTok{,}\AttributeTok{color=}\StringTok{"blue"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Valor del punto quilométrico"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Tipo de vía"}\NormalTok{, }\AttributeTok{main =} \StringTok{"Dispersión del punto quilométrico dependiendo del tipo de vía"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{theme\_minimal}\NormalTok{()}
-\FunctionTok{ggsave}\NormalTok{(}\StringTok{"punto\_quilometrico.eps"}\NormalTok{, }\AttributeTok{plot=}\NormalTok{ myplot2, }\AttributeTok{device=}\StringTok{"eps"}\NormalTok{,}\AttributeTok{width =}\DecValTok{12}\NormalTok{, }\AttributeTok{height =} \DecValTok{8}\NormalTok{, }\AttributeTok{units=}\StringTok{"cm"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\pandocbounded{\includegraphics[keepaspectratio]{flujo_sentido.pdf}}
 
-\includegraphics{punto_quilometrico.eps}
+\pandocbounded{\includegraphics[keepaspectratio]{punto_quilometrico.pdf}}
+
+Pasemos ahora a las variables cualitativas. Representaremos primero
+\texttt{Tipo\_Via} y \texttt{Metodo\_Captacion}.
+
+\pandocbounded{\includegraphics[keepaspectratio]{metodo.pdf}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{via.pdf}}
+
+Fijémonos en que, si representamos el método de captación desglosándolo
+según el tipo de carretera podemos sacar dos conclusiones: el método
+dominante es espiras y las gomas solo se usan en carreteras
+convencionales. Por otro lado, en el gráfico de barras se observa
+claramente que hay más observaciones en las carreteras convencionales
+que en las autovías o en las carreteras desdobladas.
+
+Por último, reparemos en las variables numéricas que todavía no hemos
+explorado: las coordenadas geodésicas. Mediante el uso de las librerías
+\texttt{sf} y \texttt{mapSpain} (que contiene mapas políticos de España
+en particular) hemos representado las coordenadas exactas en las que se
+han tomado las mediciones.
+
+\pandocbounded{\includegraphics[keepaspectratio]{mapa_por_via.pdf}}
+
+En este mapa se puede comprobar a simple vista que las coordenadas están
+bien, ya que coinciden con el trazado de las carreteras de la Comunidad
+Valenciana, y que, como habíamos visto antes con el gráfico de barras,
+la cantidad de observaciones en carreteras convencionales es
+considerablemente mayor a la de los otros tipos de vía.
 
 \section{Relación entre las
 variables}\label{relaciuxf3n-entre-las-variables}
@@ -439,7 +415,7 @@ con las variables numéricas, calculando las matrices de correlación de
 Pearson y Spearman con la función cor() para determinar si existe o no
 una relación entre estas variables y las representaremos. Veámoslo:
 
-\includegraphics{cor.eps}
+\includegraphics[width=4.92in]{cor}
 
 En la matriz de Pearson (izquierda) se observa una alta correlación
 positiva entre las variables de latitud y longitud en sus diferentes
@@ -527,7 +503,7 @@ Para ver si hay algún tipo de relación con el día de la semana podemos
 ver la proporción de outliers (frecuencia relativa) con respecto al
 total de outliers según el día:
 
-\includegraphics{freq_dias.eps}
+\pandocbounded{\includegraphics[keepaspectratio]{freq_dias.eps}}
 
 En este caso, vemos que en los días laborales (de lunes a viernes) hay
 una mayor proporción con respecto a los días correspondientes al fin de
@@ -544,13 +520,14 @@ máxima es inferior y, por tanto, tiene una menor capacidad de tráfico.
 Así que, este tipo de vía tiende a tener un flujo de vehículos más
 uniforme que en los otros tipos de vía, en general.
 
-\includegraphics{freq_vias.eps} Por otro lado, tenemos la variable
-\texttt{Tipo\_Vehiculo} que almacena si el vehículo es pesado o no.
-Haciendo uso de la misma junto con \texttt{Flujo\_Vehiculos}, podemos
-representar la frecuencia relativa de outliers de vehículos pesados por
-día de la semana, al igual que del resto de vehículos. Veámoslo:
+\pandocbounded{\includegraphics[keepaspectratio]{freq_vias.eps}} Por
+otro lado, tenemos la variable \texttt{Tipo\_Vehiculo} que almacena si
+el vehículo es pesado o no. Haciendo uso de la misma junto con
+\texttt{Flujo\_Vehiculos}, podemos representar la frecuencia relativa de
+outliers de vehículos pesados por día de la semana, al igual que del
+resto de vehículos. Veámoslo:
 
-\includegraphics{freq_dias_pesados.eps}
+\pandocbounded{\includegraphics[keepaspectratio]{freq_dias_pesados.eps}}
 
 Podemos ver que obtenemos un resultado parecido determinando la
 proporción de outliers según el día de la semana. Aunque podemos ver que
@@ -563,7 +540,7 @@ carretera es convencional. Aunque los vehículos pesados suelen circular
 más por autovía, podemos entender que los picos de flujo se encuentren
 en convencional por una concentración de vehículos puntual.
 
-\includegraphics{freq_vias_pesados.eps}
+\pandocbounded{\includegraphics[keepaspectratio]{freq_vias_pesados.eps}}
 
 Por último, también podemos verificar si las coordendas (latitud y
 longitud) son correctas, es decir, si todos los puntos se encuentran

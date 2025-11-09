@@ -159,11 +159,6 @@ vehiculos_tidy2$Tipo_Posicion_Punto_Quilometrico <-
   replace(. == "FI", "Final")
 ```
 
-A continuación, se muestra un fragmento de las primeras filas del dataset, usando la función `head()`:
-
-```{r,echo=FALSE}
-head(vehiculos_tidy2)
-```
 
 # Análisis univariante y gráficos exploratorios
 
@@ -179,9 +174,7 @@ description %>%
   rename(Media=mean,Mínimo=min,Máximo=max,Mediana=median,Rango = range,Desviación_típica=sd)
 ```
 
-##############HABLA DE ALGO MÁS GENERAL, EN PLAN QUE VEAS LOS RESULTADOS QUE TE SALEN UN POCO POR ENCIMA LO DESTACABLE
-
-Si nos fijamos en el rango, vemos que tanto en la longitud como en la latitud (y sobre todo en esta última) de las coordenadas que marcan el final del tramo se observa una mayor variación. Esto nos indica que es probable que haya algún problema con los datos de las coordenadas del tramo final, que veremos más adelante.
+Como era de esperar, las variables `Flujo_Vehiculos` y `Valor_Punto_Quilometrico` no toman valores negativos. Las variables que miden longitud y latitud obtienen estadísticos casi idénticos, aunque, si nos fijamos en el rango, vemos que tanto en la longitud como en la latitud (y sobre todo en esta última) de las coordenadas que marcan el final del tramo se observa una mayor variación. Esto nos indica que es probable que haya algún problema con los datos de las coordenadas del tramo final, que veremos más adelante. Por último, cabe recalcar que la media y la mediana de `Flujo_Vehiculos` distan mucho.
 
 Pasemos ahora a representar gráficamente aquellas variables en cuyo caso sea posible. Empezando con las numéricas, nos fijaremos primeramente en `Flujo_Vehiculos`:
 
@@ -207,6 +200,16 @@ ggsave("flujo_via_vehiculo.pdf", plot= myplot2, device="pdf",width =12, height =
 ![](flujo_via_vehiculo.pdf)
 
 Si además tenemos en cuenta el tipo de vía y el tipo de vehículo, observamos que el flujo de vehículos pesados suele ser mayor en carreteras convencionales, mientras que los vehículos no pesados transitan más las autovías y carreteras desdobladas.
+
+```{r,include=FALSE}
+ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
+  geom_histogram(fill = "lavender",color="blue",binwidth=30) +
+  labs(y="Recuento", x="Flujo total de vehículos") +
+  facet_wrap(~ Sentido)+
+  theme_minimal()
+ggsave("flujo_sentido.pdf", device="pdf",width =12, height = 8, units="cm")
+```
+![](flujo_sentido.pdf)
 
 ```{r, include=FALSE}
 myplot3 <- ggplot(vehiculos_tidy2, aes(x=Tipo_Via,y=Valor_Punto_Quilometrico)) +
@@ -260,6 +263,8 @@ ggsave("mapa_por_via.pdf", device="pdf",width =14, height = 10, units="cm")
 ```
 ![](mapa_por_via.pdf)
 
+En este mapa se puede comprobar a simple vista que las coordenadas están bien, ya que coinciden con el trazado de las carreteras de la Comunidad Valenciana, y que, como habíamos visto antes con el gráfico de barras, la cantidad de observaciones en carreteras convencionales es considerablemente mayor a la de los otros tipos de vía.
+
 # Relación entre las variables
 En este apartado estudiaremos si existe una relación lineal entre las variables  de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman con la función cor() para determinar si existe o no una relación entre estas variables y las representaremos. Veámoslo:
 ```{r,include=FALSE}
@@ -271,7 +276,8 @@ matrizcorr1 <-cor(vehiculos_num,use='complete.obs',method='pearson')
 matrizcorr2 <-cor(vehiculos_num,use='complete.obs',method='spearman')
 ```
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
+png("cor.png",width = 3, height = 1.5, units = "cm",res=300)
 par(mfrow = c(1, 2))
 corrplot(
   matrizcorr1,type = "lower",
@@ -285,8 +291,12 @@ corrplot(
   col = colorRampPalette(c("red", "gray", "navyblue"))(200),
   tl.cex = 0.7
 )
+dev.off()
 ```
 
+```{r, echo = FALSE, fig.width=6,fig.height=3}
+knitr::include_graphics("cor.png")
+```
 
 
 En la matriz de Pearson (izquierda) se observa una alta correlación positiva entre las variables de latitud y longitud en sus diferentes versiones. Lo que indica que dichas variables están estrechamente relacionadas linealmente, lo cual tiene sentido por su naturaleza geográfica. Por otro lado, la variable `Valor_Punto_Quilométrico` presenta una correlación negativa moderada a alta con las coordenadas geográficas. Esto puede deberse a que a medida que varía el punto kilométrico, también se produce una variación inversa en la posición (latitud o longitud), lo que indica que los puntos de medición están ordenados espacialmente a lo largo del trazado de la vía. Sin embargo, la variable `Flujo_Vehículos` no muestra una correlación lineal significativa con el resto de las variables, lo que indica que el flujo de vehículos no depende directamente de la posición geográfica de los puntos de medición.

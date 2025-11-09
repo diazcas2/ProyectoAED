@@ -81,7 +81,7 @@ La estructura tidy se caracteriza por tener cada variable en una columna, cada o
 
 Comenzamos reorganizando las variables relacionadas con la intensidad del tráfico (`INTA`, `INTAP`, `INTD`, `INTDP`, `INTT` y `INTTP`). Estas columnas almacenan información sobre el sentido del tráfico (ascendente, descendente o total) y el tipo de vehículo (pesado o total), por lo que están estrechamente relacionadas entre sí.
 
-Para convertir el conjunto de datos en tidy, optamos por transformar el formato ancho en uno largo, de modo que cada fila represente una combinación única de tramo, sentido y tipo de vehículo. Para ello aplicamos la función pivot_longer(), que nos permite condensar varias columnas en dos nuevas variables: Sentido, que indica la dirección del tráfico, y Tipo_Vehiculo, que diferencia entre vehículos pesados (P) y el total (T). 
+Para convertir el conjunto de datos en tidy, optamos por transformar el formato ancho en uno largo, de modo que cada fila represente una combinación única de tramo, sentido y tipo de vehículo. Para ello aplicamos la función pivot_longer(), que nos permite condensar varias columnas en dos nuevas variables: `Sentido`, que indica la dirección del tráfico, y `Tipo_Vehiculo`, que diferencia entre vehículos pesados (P) y el total (T). 
 
 ```{r,include=FALSE}
 vehiculos_tidy2 <- vehiculos %>%
@@ -93,7 +93,9 @@ vehiculos_tidy2 <- vehiculos %>%
 ```
 
 De forma análoga, se aplicaron transformaciones similares a otras variables, como `TRAM`, las ubicaciones (`REFINI, REFFI`) y los puntos kilométricos (`PKINI, PKFI, PKE`).
-En el caso de las variables de coordenadas (`PKECOOR, PKINICOOR, PKFICOOR`), que distinguen entre la posición inicial, final y exacta, como cada coordenada incluye la latitud y la longitud separadas por un punto y coma, usamos la función `separate()` para dividir cada columna en longitud y latitud. El separador decimal del conjunto eran las comas, por lo que R detectaba las columnas como tipo carácter. Lo solucionamos usando la función `sub()` para reemplazar las comas por puntos, lo que nos permite convertir correctamente los valores a tipo numérico. Después de convertirlas a tipo numérico, acabamos con las variables `Latitud_Inicio`, `Longitud_Inicio`, `Latitud_Final`, `Longitud_Final`, `Latitud_Exacta` y `Longitud_Exacta`.
+
+
+En el caso de las variables de coordenadas (`PKECOOR, PKINICOOR, PKFICOOR`), que distinguen entre la posición inicial, final y exacta, como cada coordenada incluye la latitud y la longitud separadas por un punto y coma, usamos la función separate() para dividir cada columna en longitud y latitud. El separador decimal del conjunto eran las comas, por lo que R detectaba las columnas como tipo carácter. Lo solucionamos usando la función sub() para reemplazar las comas por puntos, lo que nos permite convertir correctamente los valores a tipo numérico. Después de convertirlas a tipo numérico, acabamos con las variables `Latitud_Inicio`, `Longitud_Inicio`, `Latitud_Final`, `Longitud_Final`, `Latitud_Exacta` y `Longitud_Exacta`.
 ```{r,include=FALSE}
 all(length(vehiculos$TRAM == 5))
 vehiculos_tidy2 <- vehiculos_tidy2 %>%
@@ -128,7 +130,7 @@ vehiculos_tidy2 <- vehiculos_tidy2 %>%
 
 ```
 
-Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función `rename()` y reemplazamos algunos valores abreviados por descripciones completas mediante la función `ifelse()`. Por ejemplo, en las variables relacionadas con ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ 
+Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función rename() y reemplazamos algunos valores abreviados por descripciones completas mediante la función ifelse(). Por ejemplo, en las variables relacionadas con ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ 
 
 ```{r,include=FALSE}
 vehiculos_tidy2 <- vehiculos_tidy2 %>%
@@ -184,7 +186,7 @@ Sin embargo, en la variable `Flujo_Vehiculos` podemos ver que la media (142.7) e
   labs(y="Recuento", x="Flujo total de vehículos") +
   facet_wrap(~Tipo_Via)+
   theme_minimal()
-ggsave("flujo_via.pdf", plot= myplot2, device="pdf",width =9, height = 6, units="cm")
+ggsave("flujo_via.pdf", plot= myplot2, device="pdf",width =10, height = 6, units="cm")
 ```
 ![](flujo_via.pdf)
 
@@ -209,7 +211,7 @@ vehiculos_tidy2 %>%
   group_by(Fecha) %>%
   summarise(Flujo_medio = mean(Flujo_Vehiculos, na.rm = TRUE)) %>%
   ggplot(aes(x = Fecha, y = Flujo_medio)) +
-  geom_line(color = "steelblue") +
+  geom_line(color = "blue") +
   labs(title = "Evolución temporal del Flujo medio")
 ggsave("flujo_tiempo.pdf", device="pdf",width =10, height = 6, units="cm")
 
@@ -463,9 +465,10 @@ ggsave("freq_vias_pesados.pdf",  device="pdf",width =10, height = 5, units="cm")
 ```
 ![](freq_vias_pesados.pdf)
 
+# Conclusiones
+El análisis del tráfico en la Comunidad Valenciana durante el primer semestre de 2025 revela una alta concentración del flujo en determinados tramos, especialmente en carreteras convencionales, que registran el mayor número de observaciones y de valores atípicos. Se aprecia un aumento del tráfico en abril, coincidiendo con Fallas y Semana Santa, y una menor intensidad en enero y junio, coincidiendo con las vacaciones donde la población suele viajar más a otros destinos.
 
-
-
+Por otro lado, las coordenadas geográficas se ajustan correctamente al trazado de las vías, lo que confirma la calidad de los datos. Además, se deduce de las correlaciones que la intensidad del tráfico está más relacionada con el tipo de vía y la época del año que con la localización exacta. En conjunto, el análisis exploratorio muestra patrones temporales y espaciales, que pueden servir de base para futuras estrategias de planificación y gestión del tráfico en la región.
 
 
 

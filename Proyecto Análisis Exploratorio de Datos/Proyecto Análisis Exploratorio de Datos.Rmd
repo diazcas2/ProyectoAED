@@ -310,7 +310,7 @@ ggsave("mapa_final.pdf", device="pdf",width =14, height = 8, units="cm")
 
 ![](mapa_final.pdf)
 
-# Relación entre las variables
+# Análisis bivariante
 ```{r,include=FALSE}
 vehiculos_num <- vehiculos_tidy2[sapply(vehiculos_tidy2, is.numeric)]
 
@@ -333,36 +333,35 @@ corrplot(
 )
 dev.off()
 ```
-En este apartado estudiaremos si existe una relación lineal entre las variables  de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman con la función cor() para determinar si existe o no una relación entre estas variables y las representaremos. Veámoslo:
+En este apartado, estudiaremos la linealidad, monotonía y dependencia de las variables de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman para determinar si existe una relación lineal y una monotonía entre estas variables. Para ello, representamos los coeficientes de Pearson y Spearman para cada par de variables. Veámoslo:
 
 ![](cor.pdf)
 
-En la matriz de Pearson (izquierda) se observa una alta correlación positiva entre las variables de latitud y longitud en sus diferentes versiones. Lo que indica que dichas variables están estrechamente relacionadas linealmente, lo cual tiene sentido por su naturaleza geográfica. Por otro lado, la variable `Valor_Punto_Quilométrico` presenta una correlación negativa moderada a alta con las coordenadas geográficas. Esto puede deberse a que a medida que varía el punto kilométrico, también se produce una variación inversa en la posición (latitud o longitud), lo que indica que los puntos de medición están ordenados espacialmente a lo largo del trazado de la vía. Sin embargo, la variable `Flujo_Vehículos` no muestra una correlación lineal significativa con el resto de las variables, lo que indica que el flujo de vehículos no depende directamente de la posición geográfica de los puntos de medición.
+En la matriz de Pearson (izquierda) se observa una alta correlación positiva entre las variables de latitud y longitud en sus diferentes versiones. Lo que indica que dichas variables están estrechamente relacionadas linealmente, lo cual tiene sentido por su naturaleza geográfica. Por otro lado, la variable `Valor_Punto_Quilometrico` presenta correlaciones positivas y negativas (bajas) con las coordenadas geográficas. Esto es debido a que esta variable es relativa a cada carretera o tramo. Sin embargo, la variable `Flujo_Vehiculos` no muestra una correlación lineal significativa con el resto de las variables, lo que indica que el flujo de vehículos no depende directamente de forma lineal con la posición geográfica de los puntos de medición.
 
-No obstante, la matriz de Spearman (derecha) mantiene un patrón de correlaciones similar al obtenido con Pearson, aunque con ligeras variaciones en la magnitud de los coeficientes. Esto sugiere que las relaciones entre las coordenadas mantienen su monotonía, aunque no  de forma estrictamente lineal. Cabe destacar la correlación negativa entre `Valor_Punto_Quilométrico` y las coordenadas se conserva, confirmando la tendencia inversa entre ambas variables. De igual forma, `Flujo_Vehículos` sigue mostrando baja relación con las demás variables, confirmando su independencia respecto a la localización geográfica.
+La matriz de Spearman (derecha) mantiene un patrón de correlaciones similar al obtenido con Pearson, aunque con ligeras variaciones en la magnitud de los coeficientes. Esto sugiere que las relaciones entre las coordenadas mantienen su monotonía, aunque no de forma estrictamente ascendente. Cabe destacar la correlación negativa entre `Valor_Punto_Quilometrico` y las coordenadas se conserva, confirmando la tendencia inversa entre ambas variables. De igual forma, `Flujo_Vehiculos` sigue mostrando baja relación con las demás variables, confirmando su independencia respecto a la localización geográfica.
 
-Ahora estudiaremos la dependencia o independencia entre algunas variables categóricas: `Tipo_Via`-`Metodologia_Captacion`, `Tipo_Via`-`Tipo_Vehiculo`, `Sentido`-`Tipo_Vehiculo`. Comenzando con las dos primeras variables, calculamos el coeficiente V de Cramer (que está acotado entre 0 y 1):
-```{r,echo=FALSE}
+Ahora estudiaremos la dependencia o independencia entre algunas variables categóricas: `Tipo_Via`-`Metodologia_Captacion`, `Tipo_Via`-`Tipo_Vehiculo` y `Sentido`-`Tipo_Vehiculo`. Para ello, calculamos el coeficiente V de Cramer (que está acotado entre 0 y 1). Obtenemos, respectivamente, 0.076, 0 y 0. 
+```{r,include=FALSE}
 tabla <- table(vehiculos_tidy2$Tipo_Via, vehiculos_tidy2$Metodologia_Captacion)
 CramerV(tabla)
 ```
-Lo que nos indica que hay dependencia pero las variables prácticamente no se influyen entre sí.Veamos que ocurre con las otras variables:
-```{r,echo=FALSE}
+```{r,include=FALSE}
 tabla1 <- table(vehiculos_tidy2$Tipo_Via, vehiculos_tidy2$Tipo_Vehiculo)
 CramerV(tabla1)
 tabla2 <- table(vehiculos_tidy2$Sentido, vehiculos_tidy2$Tipo_Vehiculo)
 CramerV(tabla2)
 ```
-Obtenemos un valor del coeficiente para los pares de variables `Tipo_Via`-`Tipo_Vehiculo` y  `Sentido`-`Tipo_Vehiculo` de 0; por tanto, ambos pares son independientes. Podríamos pensar que existe alguna dependencia entre el tipo de vehículo y el tipo de vía por la que se circula (autovía, convecional o desdoblada), pero observamos que no. En cambio, ya esperábamos que el sentido de circulación (ascendente o descendente) y el tipo de vehículo fueran completamente independientes ya que el tipo de vehículo no depende del sentido del trayecto (los vehículos pueden circular indistintamente en un sentido o en otro).
+Indicándonos que hay una mínima dependencia entre las variables `Tipo_Via`-`Metodologia_Captacion`. Sin embargo, obtenemos un valor del coeficiente para los pares de variables `Tipo_Via`-`Tipo_Vehiculo` y  `Sentido`-`Tipo_Vehiculo` de 0; por tanto, ambos son totalmente independientes. Podríamos pensar que existe alguna dependencia entre el tipo de vehículo y el tipo de vía por la cual se circula (autovía, convecional o desdoblada), pero observamos que no. En cambio, ya esperábamos que el sentido de circulación (ascendente o descendente) y el tipo de vehículo fueran completamente independientes ya que los vehículos pueden circular indistintamente en un sentido o en otro.
 
 # Outliers
 En este último apartado determinaremos los outliers (datos atípicos) de algunas variables numéricas. Haremos el análisis con la variable `Flujo_Vehiculos` y, también, estudiaremos los outliers de esta variable pero considerando solo los vehículos pesados. Así podremos interpretar de una forma más sencilla los resultados.
 
 Para detectar los outliers aplicaremos la regla de Hampel ya que utiliza estimadores robustos y, además, no presupone que los datos siguen una distribución gaussiana. Podremos observar los picos extremos de flujo de vehículos tanto en el flujo total de vehículos como en el de vehículos pesados.
 
-Respecto a la variable `Flujo_Vehiculos` aparecen un total de 2656 outliers. Esta cantidad elevada (aunque representa el 17.4% del total de registros) puede deberse a que tenemos un conjunto de datos muy segado como podemos ver en las Figuras .... Para interpretar este resultado podemos ver si los outliers presentan alguna relación con alguna otra variable, como por ejemplo, el día de la semana (lunes, martes, etc.) o el tipo de vía.
+Respecto a `Flujo_Vehiculos` aparecen un total de 118878 outliers. Esta cantidad elevada (representa el 32.5% del total de registros) puede deberse a que tenemos un conjunto de datos muy segado como podemos ver en las gráficas mostradas en la sección 4. Para interpretar este resultado podemos ver si los outliers presentan alguna relación con alguna otra variable, como por ejemplo, el día de la semana (lunes, martes, etc.) o el tipo de vía.
 
-Para ver si hay algún tipo de relación con el día de la semana podemos ver la proporción de outliers (frecuencia relativa) con respecto al total de outliers según el día:
+Para ver si hay relación con el día de la semana podemos ver la proporción de outliers (frecuencia relativa) con respecto al total de outliers según el día:
 
 ```{r,include=FALSE}
 vehiculos_tidy2$Fecha <- as.Date(vehiculos_tidy2$Fecha, format='%d/%m/%Y')
@@ -380,7 +379,7 @@ Sys.setlocale("LC_TIME", "es_ES.UTF-8")
 
 ```{r, include=FALSE}
 
-datos <- as.data.frame(table(sapply((df$Fecha),weekdays))/2656)
+datos <- as.data.frame(table(sapply((df$Fecha),weekdays))/118878)
 datos$Var1 <- factor(datos$Var1, levels = c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"))
 
 plot1 <-ggplot(datos, aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por día de la semana",  x = "Día de la semana", y = "Frecuencia relativa") + theme_minimal()
@@ -390,16 +389,17 @@ ggsave("freq_dias.eps", plot= plot1, device="eps",width =10, height = 6, units="
 ```
 ![](freq_dias.eps)
 
-En este caso, vemos que en los días laborales (de lunes a viernes) hay una mayor proporción con respecto a los días correspondientes al fin de semana (sábado y domingo). Esto puede deberse a que, entre semana, hay desplazaminetos diaros de trabajadores o transportes de mercancías, repartos... que no se observan en fin de semana, y por ello, estos picos de flujo de vehículos se pueden encontrar en esos días.
+En este caso, vemos que de lunes a sábado hay una mayor proporción con respecto a los domingos (aunque la distribución es prácticamente uniforme). Esto puede deberse a que, de lunes a sábado, hay desplazaminetos diaros de trabajadores o transportes de mercancías, repartos, etc., que no se observan en domingo, y por ello, estos picos más extremos de flujo de vehículos son más probables encontrarlos en estos días.
 
-Ahora, si observamos la proporción de outliers según el tipo de vía, podemos detectar que hay una cantidad superior de outliers en autovía y carretera desdoblada que en carretera convencional. Puede ser debido a que en carretera convencional hay menos carriles, el límite de velocidad máxima es inferior y, por tanto, tiene una menor capacidad de tráfico. Así que, este tipo de vía tiende a tener un flujo de vehículos más uniforme que en los otros tipos de vía, en general.
+Ahora, si observamos la proporción de outliers según el tipo de vía, podemos detectar que hay una cantidad superior de outliers en convencional que en autovía y desdoblada. Puede ser debido a que en carretera convencional hay menos carriles, el límite de velocidad máxima es inferior y, por tanto, tiene una menor capacidad de tráfico. Así que, aunque este tipo de vía tiende a tener un flujo de vehículos más uniforme que los otros tipos de vía (en general), cuando aparece algún pico de flujo de vehículos puede ser considerado como outlier.
 
 ```{r, include=FALSE}
-ggplot(as.data.frame(table((df$Tipo_Via))/2656), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
+ggplot(as.data.frame(table((df$Tipo_Via))/118878), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
 ggsave("freq_vias.eps", device="eps",width =10, height = 5, units="cm")
 ```
 ![](freq_vias.eps)
-Por otro lado, tenemos la variable `Tipo_Vehiculo` que almacena si el vehículo es pesado o no. Haciendo uso de la misma junto con `Flujo_Vehiculos`, podemos representar la frecuencia relativa de outliers de vehículos pesados por día de la semana, al igual que del resto de vehículos. Veámoslo:
+
+Por otro lado, tenemos la variable `Tipo_Vehiculo` que almacena si el vehículo es pesado o no. Haciendo uso de la misma junto con `Flujo_Vehiculos`, podemos representar la frecuencia relativa de outliers de vehículos pesados por día de la semana, al igual que hemos hecho antes. Veámoslo:
 
 
 ```{r, include=FALSE}
@@ -422,7 +422,7 @@ datos_pesados$Dia <- factor(datos_pesados$Dia,
 
 ggplot(datos_pesados, aes(x = Dia, y = Frecuencia)) +
   geom_col(color = "blue", fill = "lavender") +
-  labs(title = "Outliers de vehículos pesados por día de la semana",
+  labs(title = "Outliers de vehículos pesados por día",
        x = "Día de la semana", y = "Frecuencia relativa") +
   theme_minimal()
 
@@ -431,15 +431,13 @@ ggsave("freq_dias_pesados.pdf", device="pdf",width =10, height = 5, units="cm")
 ```
 ![](freq_dias_pesados.pdf)
 
-Podemos ver que obtenemos un resultado parecido determinando la proporción de outliers según el día de la semana. Aunque podemos ver que en domingo la proporción es menor ya que en este día los vehículos pesados no suelen circular ya que no es día laboral.
+Podemos ver que obtenemos un resultado parecido determinando la proporción de outliers según el día de la semana. Aunque observamos que en sábado y domingo la proporción es bastante menor con respecto al resto de días, ya que en estos días los vehículos pesados no suelen circular ya que no es día laboral.
 
-
-
-De esta forma, podríamos mirar que ocurre con los resultados con respecto al tipo de vía, vemos que los outliers se concentran cuando la carretera es convencional. Aunque los vehículos pesados suelen circular más por autovía, podemos entender que los picos de flujo se encuentren en convencional por una concentración de vehículos puntual.
+De esta forma, podríamos mirar que ocurre con los resultados con respecto al tipo de vía. Vemos que los outliers se concentran cuando la carretera es convencional. Aunque los vehículos pesados suelen circular más por autovía, podemos entender que los picos de flujo se encuentren en convencional por una concentración de vehículos puntual (como ocurría cuando considerábamos todos los vehículos).
 
 
 ```{r, include=FALSE}
-ggplot(as.data.frame(table((df$Tipo_Via))/3221), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
+ggplot(as.data.frame(table((df$Tipo_Via))/10866), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
 ggsave("freq_vias_pesados.pdf",  device="pdf",width =10, height = 5, units="cm")
 ```
 ![](freq_vias_pesados.pdf)

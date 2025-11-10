@@ -1,0 +1,467 @@
+---
+title: "Proyecto Análisis Exploratorio de Datos"
+author:
+- name: María de los Ángeles Díaz Castro
+- name: Irene Barba La Orden
+- name: Ana Blasco Vega
+journal: notspecified
+type: article
+status: submit
+
+keywords: null
+
+dataavailability: |
+  Los datos usados en este estudio son públicos disponibles en  [https://dadesobertes.gva.es/dataset/tra-int-veh-2025]
+
+output:
+  rticles::mdpi_article
+---
+
+# Introducción. 
+El tráfico de vehículos va más allá de los números, muestra cómo Valencia se mueve, organiza y enfrenta cada día sus desafíos de desplazamiento. Este proyecto se centra en analizar la intensidad del tráfico en las carreteras de la Comunidad Valenciana durante el primer semestre de 2025, a partir de datos públicos proporcionados por la Generalitat Valenciana. A través de un análisis exploratorio de 15.235 observaciones, se busca detectar las posibles anomalías en el tráfico y explorar el comportamiento de la movilidad en Valencia.
+
+# Importación de los datos.
+Para importar los datos, primero se descarga el fichero y se verifica que los datos estén en el directorio adecuado. Es importante especificar el encoding (en nuestro caso es UTF-8), ya que, de lo contrario, algunos caracteres pueden no reconocerse correctamente. De esta forma, haciendo uso de la función de importación en R con los parámetros adecuados, obtenemos el dataset.
+
+```{r, include=FALSE}
+library(readr)
+library(tidyr)
+library(dplyr)
+library(corrplot)
+library(DescTools)
+library(ggplot2)
+library(mapSpain)
+library(sf)
+library(psych)
+filename <-'../data/intensidad_vehiculos_en_carretera_2025.csv'
+vehiculos <- read.csv(filename, sep=";",encoding = "UTF-8")
+```
+
+Las variables de nuestro dataset son las siguientes:
+
+\begin{enumerate}
+\item \textbf{TRAM} (\textit{numérico}): Código del tramo al que se le asocia el tráfico.
+\subitem  Primer y segundo dígito: código CV- de la carretera; tres últimos dígitos: número de tramo.
+\item \textbf{DIA} (\textit{carácter}): Fecha de los datos.
+\item \textbf{INTA} (\textit{numérico}): Total de vehículos que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTAP} (\textit{numérico}): Total de vehículos pesados que transitan en el sentido ascendente de la kilometración de la carretera.
+\item \textbf{INTD} (\textit{numérico}): Total de vehículos que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTDP} (\textit{numérico}): Total de vehículos pesados que transitan en el sentido descendente de la kilometración de la carretera.
+\item \textbf{INTT} (\textit{numérico}): Total de vehículos que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{INTTP} (\textit{numérico}): Total de vehículos pesados que pasan por el tramo analizado (este dato será la suma de los dos sentidos anteriores).
+\item \textbf{TIPUSV} (\textit{carácter}): Tipo de vía (Autovía, Convencional o Desdoblada).
+\item \textbf{TIPUSE} (\textit{carácter}): Procedimiento de captura de tráfico (Espiras, Gomas Neumáticas, Cámaras o Radar).
+\item \textbf{PKE} (\textit{numérico}): Posición exacta, en metros, donde se ha captado el tráfico, tomando como referencia la placa de kilometraje anterior en sentido ascendente.
+\item \textbf{PKECOOR} (\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto donde se mide el tráfico.
+\item \textbf{PKINI} (\textit{numérico}): Posición inicial del tramo al que se asocia el tráfico, en metros, tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFINI} (\textit{carácter}): Ubicación del inicio del tramo al que se asocia el tráfico.
+\item \textbf{PKINICOOR} (\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto inicial del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
+\item \textbf{PKFI} (\textit{numérico}): Posición final del tramo al que se asocia el tráfico, en metros,tomando como referencia la placa kilométrica anterior en sentido ascendente (tráfico invariante en todo el tramo).
+\item \textbf{REFFI} (\textit{carácter}): Ubicación del final del tramo al que se asocia el tráfico.
+\item \textbf{PKFICOOR} (\textit{carácter}): Coordenadas geodésicas en latitud y longitud del punto final del tramo al que se asocia el tráfico (tráfico invariante en todo el tramo).
+\end{enumerate}
+
+Si le echamos un vistazo a las variables, podemos ver que la variable `DIA` es de tipo character, por lo que es necesario convertirla a formato de fecha. Para ello, usamos la función as.Date(). Por otro lado, es importante preguntarse con cuántos valores faltantes estamos trabajando, para ello usamos is.na() y sumamos los valores faltantes, obteniendo:
+
+```{r,include=FALSE}
+vehiculos$DIA <- as.Date(vehiculos$DIA, format = '%d/%m/%Y')
+class(vehiculos$DIA)
+```
+
+```{r,echo=FALSE}
+sum(is.na(vehiculos))
+```
+Como no tenemos valores faltantes, no será necesario llevar a cabo ningún proceso de imputación o similar. 
+
+
+# Conversión de los datos a estructura Tidy.
+
+La estructura tidy se caracteriza por tener cada variable en una columna, cada observación en una fila y nombres de columnas que sean representativos. Para obtener un conjunto tidy, vamos a realizar diversas transformaciones en nuestros datos para facilitar su análisis.
+
+
+Comenzamos reorganizando las variables relacionadas con la intensidad del tráfico (`INTA`, `INTAP`, `INTD`, `INTDP`, `INTT` y `INTTP`). Estas columnas almacenan información sobre el sentido del tráfico (ascendente, descendente o total) y el tipo de vehículo (pesado o total), por lo que están estrechamente relacionadas entre sí.
+
+Para convertir el conjunto de datos en tidy, optamos por transformar el formato ancho en uno largo, de modo que cada fila represente una combinación única de tramo, sentido y tipo de vehículo. Para ello aplicamos la función pivot_longer(), que nos permite condensar varias columnas en dos nuevas variables: `Sentido`, que indica la dirección del tráfico, y `Tipo_Vehiculo`, que diferencia entre vehículos pesados (P) y el total (T). 
+
+```{r,include=FALSE}
+vehiculos_tidy2 <- vehiculos %>%
+  pivot_longer(col = starts_with('INT'), 
+    names_to = c('Sentido', 'Tipo_Vehiculo'), 
+    names_pattern = '^INT([ADT]){1}(P?)$', values_to = 'Flujo_Vehiculos')%>%
+  mutate(Tipo_Vehiculo = ifelse(Tipo_Vehiculo == 'P', 'P', 'T'))%>%
+  filter(Sentido != 'T')
+```
+
+De forma análoga, se aplicaron transformaciones similares a otras variables, como `TRAM`, las ubicaciones (`REFINI, REFFI`) y los puntos kilométricos (`PKINI, PKFI, PKE`).
+
+
+En el caso de las variables de coordenadas (`PKECOOR, PKINICOOR, PKFICOOR`), que distinguen entre la posición inicial, final y exacta, como cada coordenada incluye la latitud y la longitud separadas por un punto y coma, usamos la función separate() para dividir cada columna en longitud y latitud. El separador decimal del conjunto eran las comas, por lo que R detectaba las columnas como tipo carácter. Lo solucionamos usando la función sub() para reemplazar las comas por puntos, lo que nos permite convertir correctamente los valores a tipo numérico. Después de convertirlas a tipo numérico, acabamos con las variables `Latitud_Inicio`, `Longitud_Inicio`, `Latitud_Final`, `Longitud_Final`, `Latitud_Exacta` y `Longitud_Exacta`.
+```{r,include=FALSE}
+all(length(vehiculos$TRAM == 5))
+vehiculos_tidy2 <- vehiculos_tidy2 %>%
+  separate(col = TRAM, into = c('Codigo_CV', 'Num_tramo'), sep = 2) %>%
+  pivot_longer(col = starts_with('REF'), names_pattern = '^REF(INI|FI)',
+               names_to = 'Tipo_Ubicacion', values_to = 'Ubicacion') 
+```
+
+```{r,include=FALSE}
+
+vehiculos_tidy2 <- vehiculos_tidy2 %>%
+  mutate(PKINICOOR = gsub(",",".",PKINICOOR)) %>%
+  separate(PKINICOOR, into = c("Latitud_Inicio","Longitud_Inicio"), sep=";") %>%
+  mutate(Latitud_Inicio = as.numeric(Latitud_Inicio)) %>%
+  mutate(Longitud_Inicio = as.numeric(Longitud_Inicio)) %>% 
+  mutate(PKFICOOR = gsub(",",".",PKFICOOR)) %>%
+  separate(PKFICOOR, into = c("Latitud_Final","Longitud_Final"), sep=";") %>%
+  mutate(Latitud_Final = as.numeric(Latitud_Final)) %>%
+  mutate(Longitud_Final = as.numeric(Longitud_Final)) %>% 
+  mutate(PKECOOR = gsub(",",".",PKECOOR)) %>%
+  separate(PKECOOR, into = c("Latitud_Exacta","Longitud_Exacta"), sep=";") %>%
+  mutate(Latitud_Exacta = as.numeric(Latitud_Exacta)) %>%
+  mutate(Longitud_Exacta = as.numeric(Longitud_Exacta))
+```
+
+
+```{r,include=FALSE}
+vehiculos_tidy2 <- vehiculos_tidy2 %>%
+   pivot_longer(col = matches('^PK(INI|FI|E)$'), names_pattern = '^PK(INI|FI|E)',
+                names_to = 'Tipo_Posicion_Punto_Quilometrico', 
+                values_to = 'Valor_Punto_Quilometrico') 
+
+```
+
+Solo falta asegurarnos de que los nombres de las columnas sean representativos; para ello, utilizamos la función rename() y reemplazamos algunos valores abreviados por descripciones completas mediante la función ifelse(). Por ejemplo, en las variables relacionadas con ubicación, los códigos _INI_, _E_ y _FI_ se sustituyeron por _Inicial_, _Exacta_ y _Final_; en `Sentido`, los valores _A_ y _D_ pasaron a _Ascendente_ y _Descendente_; y en `Tipo_Vehiculo`, _T_ y _P_ se cambiaron por _Todos_ y _Pesados._ 
+
+```{r,include=FALSE}
+vehiculos_tidy2 <- vehiculos_tidy2 %>%
+  dplyr::rename(Fecha = DIA, Tipo_Via = TIPUSV, Metodologia_Captacion= TIPUSE)
+
+# Rescribimos algunos valores:
+vehiculos_tidy2$Sentido <-
+  vehiculos_tidy2$Sentido %>%
+  replace(. == "A", "Ascendente") %>%
+  replace(. == "D", "Descendente")
+
+vehiculos_tidy2$Tipo_Vehiculo <-
+  vehiculos_tidy2$Tipo_Vehiculo %>%
+  replace(. == "T", "Todos") %>%
+  replace(. == "P", "Pesados")
+
+vehiculos_tidy2$Tipo_Via <-
+  vehiculos_tidy2$Tipo_Via %>%
+  replace(. == "Aut.", "Autovia") %>%
+  replace(. == "Conv.", "Convencional") %>%
+  replace(. == "Desd.", "Desdoblada")
+
+
+vehiculos_tidy2$Tipo_Posicion_Punto_Quilometrico <-
+  vehiculos_tidy2$Tipo_Posicion_Punto_Quilometrico %>%
+  replace(. == "INI", "Inicial") %>%
+  replace(. == "E", "Exacta") %>%
+  replace(. == "FI", "Final")
+```
+
+
+# Análisis univariante y gráficos exploratorios
+
+En esta sección exploraremos los datos mediante un análisis univariante de las variables númericas y el uso de gráficos. Las variables numéricas de las que disponemos son `Flujo_Vehiculos`, `Valor_Punto_Quilometrico`, y las coordenadas geográficas de los puntos en los que se mide el flujo, así como las de los puntos que se han designado como inicio y fin del tramo en el que se asume que el tráfico es invariante. Estudiemos los diferentes estadísticos:
+
+```{r, echo=FALSE,fig.width=10, fig.height=4}
+description<- vehiculos_tidy2 %>% 
+  psych::describe(na.rm = TRUE, interp=FALSE,skew = FALSE, ranges = TRUE,trim=0,
+              type=3,check=TRUE,fast=NULL,quant=c(0.25,0.75),IQR=TRUE,omit=TRUE) 
+
+description %>% 
+  select("min","max","range","IQR","Q0.25","median","mean", "Q0.75","sd") %>% 
+  rename(Media=mean,Mínimo=min,Máximo=max,Mediana=median,Rango = range,Desviación_típica=sd)
+```
+
+Como era de esperar, las variables `Flujo_Vehiculos` y `Valor_Punto_Quilometrico` únicamente toman valores positivos, lo cual es coherente con su naturaleza. Por otro lado, en las variables que representan coordenadas geográficas (latitud y longitud, tanto exactas como de inicio y fin del tramo), podemos ver que los estadísticos muestran valores muy similares entre sí. No obstante, el rango y el IQR de las coordenadas finales son mayores, especialmente en la latitud, lo que nos indica que es probable que haya algún problema con los datos de las coordenadas del tramo final, que veremos más adelante.
+
+Sin embargo, en la variable `Flujo_Vehiculos` podemos ver que la media (142.7) es mucho mayor que la mediana (16.6)(valor central), lo que nos indica que la mayoría de los tramos registran flujos bajos, pero que existen algunos tramos con valores muy altos (outliers) que quizás dependen del tipo de vía que hacen que se eleve la media. Veamos si estamos en lo cierto: 
+
+```{r,include=FALSE}
+  myplot2 <- ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
+  geom_histogram(fill = "lavender",color="blue",binwidth=30) +
+  labs(y="Recuento", x="Flujo total de vehículos") +
+  facet_wrap(~Tipo_Via)+
+  theme_minimal()
+ggsave("flujo_via.pdf", plot= myplot2, device="pdf",width =10, height = 6, units="cm")
+```
+![](flujo_via.pdf)
+
+En los tres casos la distribución es claramente asimétrica hacia la derecha, con la mayoría de los tramos registrando flujos bajos y unos pocos con valores muy altos. Las vías convencionales concentran la mayor cantidad de observaciones y presentan un pico en los flujos bajos, mientras que las autovías y desdobladas muestran patrones similares, aunque con algunos tramos de tráfico más intenso. Estos resultados confirman la presencia de valores extremos que elevan la media de `Flujo_Vehiculos`. Por otro lado, cabe destacar que esta variable no presenta una distribución gaussiana como podría haberse esperado, sino una exponencial.
+
+También podríamos preguntarnos si las variaciones del flujo se ven afectadas por el `Sentido`, ya que los patrones de tráfico suelen presentar asimetrías en los viajes de ida y vuelta. Veámoslo:
+
+```{r,include=FALSE}
+ggplot(vehiculos_tidy2,aes(x = Flujo_Vehiculos)) +
+  geom_histogram(fill = "lavender",color="blue",binwidth=30) +
+  labs(y="Recuento", x="Flujo total de vehículos") +
+  facet_wrap(~ Sentido)+
+  theme_minimal()
+ggsave("flujo_sentido.pdf", device="pdf",width =9, height = 6, units="cm")
+```
+![](flujo_sentido.pdf)
+
+Se puede observar la gran similutd entre los histogramas del flujo en sentido ascendente y descendente, lo que indica la ausencia de una asimetría direccional en el tráfico de Valencia. Sin embargo, esta homogeneidad en el sentido no implica estabilidad temporal, por lo que resulta necesario analizar cómo varía el flujo a lo largo del tiempo para identificar patrones mensuales que sí podrían revelar dinámicas críticas para la gestión de la movilidad.
+
+```{r,include=FALSE}
+vehiculos_tidy2 %>%
+  group_by(Fecha) %>%
+  summarise(Flujo_medio = mean(Flujo_Vehiculos, na.rm = TRUE)) %>%
+  ggplot(aes(x = Fecha, y = Flujo_medio)) +
+  geom_line(color = "blue") +
+  labs(title = "Evolución temporal del Flujo medio")
+ggsave("flujo_tiempo.pdf", device="pdf",width =10, height = 6, units="cm")
+
+```
+![](flujo_tiempo.pdf)
+
+
+
+Podemos ver que `Flujo_Vehiculos` varía según el mes en el que nos encontremos. Cabe destacar que se observa un máximo en abril, que probablemente coincida con las fallas o Semana Santa que coincide con la llegada de turistas a la ciudad. Por otro lado, en enero y junio disminuye el tráfico, esto se puede deber a las vacaciones de navidad y verano que la población suele viajar a nuevos destinos.
+
+Una vez estudiado el flujo de vehículos, estudiemos que ocurre con la variable numérica `Valor_Punto_Quilometrico` vemos su relación con la variable `Tipo_Via`:
+
+```{r, include=FALSE}
+myplot3 <- ggplot(vehiculos_tidy2, aes(x=Tipo_Via,y=Valor_Punto_Quilometrico)) +
+  geom_boxplot(fill = "lavender",color="blue") +
+  labs(y = "Punto quilométrico", x = "Tipo de vía", main = "Dispersión del punto quilométrico dependiendo del tipo de vía") +
+  theme_minimal()
+ggsave("punto_quilometrico.pdf", plot= myplot3, device="pdf",width =9, height = 5, units="cm")
+```
+
+![](punto_quilometrico.pdf)
+
+Cabe destacar que las autovías presentan los valores de punto kilométrico más elevados y dispersos, indicando mayor frecuencia de tráfico. Sin embargo, las vías desdobladas muestran una distribución más concentrada con valores intermedios, mientras que las vías convencionales registran los valores más bajos y compactos. También se aprecia claramente como la gran cantidad de outliers presentes en carreteras desdobladas y convencionales influyen en la discrepancia entre la media y la mediana.
+
+
+A continuación vamos a representar algunas variables categóricas, como es el caso de `Tipo_Via` y `Metodo_Captacion`.
+
+```{r,include=FALSE} 
+par(mfrow = c(1, 2))
+  ggplot(vehiculos_tidy2,aes(Metodologia_Captacion)) + 
+  geom_bar(color = "blue", fill = "lavender") +
+  labs(x = "Método de captación", y = "Recuento") +
+  facet_grid(Tipo_Via~.) +
+  coord_flip()+
+  theme_minimal()
+ggsave("metodo.pdf", device="pdf",width =9, height = 7.5, units="cm")
+  ggplot(vehiculos_tidy2,aes(Tipo_Via)) + 
+  geom_bar(color = "blue", fill = "lavender") +
+  labs(x = "Tipo de vía", y = "Recuento") +
+  theme_minimal()
+ggsave("via.pdf", device="pdf",width =8, height = 4, units="cm")
+```
+![](metodo.pdf) 
+
+Fijémonos en que, si representamos el método de captación desglosándolo según el tipo de carretera podemos sacar dos conclusiones: el método dominante es espiras y las gomas solo se usan en carreteras convencionales.
+
+![](via.pdf)
+
+Por otro lado, en el gráfico `Tipo_Via` se observa claramente que hay más observaciones en las carreteras convencionales que en las autovías o en las carreteras desdobladas.
+
+
+
+En cuanto al resto de variables cualitativas, `Codigo_CV, Num_Tramo, Sentido, Tipo_Vehiculo, Ubicacion, Tipo_Ubicacion y Tipo_Valor_Punto_Quilometrico`, se ha decidido no representarlas por diversos motivos. El principal es que, debido al alcance y los objetivos establecidos para este trabajo, no resulta viable realizar una exploración exhaustiva de todas ellas.
+
+Asimismo, existen razones vinculadas con la propia naturaleza de las variables. En primer lugar,`Codigo_CV` y `Num_Tramo` presentan un número excesivo de categorías, lo que dificulta su representación gráfica de forma clara y significativa. En segundo lugar, la representación de `Sentido`, `Tipo_Vehiculo, Tipo_Ubicacion` y `Tipo_Valor_Punto_Quilometrico` carecería de sentido, ya que estas variables fueron generadas mediante la función pivot_longer(). Por ello, las proporciones de sus valores son idénticas y, en consecuencia, de carácter sintético, es decir, no aportan información relevante para el análisis.
+
+
+Por último, reparemos en las variables numéricas que todavía no hemos explorado: las coordenadas geodésicas. Mediante el uso de las librerías `sf` y `mapSpain` (que contiene mapas políticos de España en particular) hemos representado los diferentes tipos de coordenadas en las que se han tomado las mediciones. Empecemos por las exactas:
+
+```{r, include=FALSE}
+coord_exactas <- vehiculos_tidy2 %>% 
+  select(Tipo_Via, Latitud_Exacta, Longitud_Exacta, Metodologia_Captacion) %>% 
+  distinct
+
+valencia <- esp_get_munic_siane(region = "Comunidad Valenciana") %>%
+    mutate(
+        Provincia = esp_dict_translate(ine.prov.name, "es")
+     )
+
+coord_exactas_sf <- st_as_sf(coord_exactas, coords = c("Longitud_Exacta", "Latitud_Exacta"), crs = 4326)
+ggplot() +
+  geom_sf(data = valencia, fill = "beige") +
+  geom_sf(data = coord_exactas_sf,aes(col = Tipo_Via), size = 1) +
+  scale_color_manual(guide="none",values=c("#d87373","#63b0b8","blue")) +
+  facet_wrap(~ Tipo_Via, ncol = 3) +
+  theme_minimal()
+ggsave("mapa_por_via.pdf", device="pdf",width =14, height = 7, units="cm")
+```
+![](mapa_por_via.pdf)
+
+En este mapa puede comprobarse visualmente que las coordenadas son correctas, ya que coinciden con el trazado de las carreteras de la Comunidad Valenciana. Además, se observa, al igual que en el gráfico de barras anterior, que el número de observaciones en carreteras convencionales es considerablemente superior al de los demás tipos de vía.
+
+A continuación, representamos las coordenadas de los puntos iniciales y finales de los tramos. Observando un único punto fuera del territorio a estudiar en las coordenadas finales, que probablemente se deba a un error en la recopilación de datos.
+
+```{r, include=FALSE}
+coord_iniciales <- vehiculos_tidy2 %>% 
+  select(Latitud_Inicio, Longitud_Inicio) %>% 
+  distinct
+
+coord_finales <- vehiculos_tidy2 %>% 
+  select(Latitud_Final, Longitud_Final) %>% 
+  distinct
+
+coord_iniciales_sf <- st_as_sf(coord_iniciales, coords = c("Longitud_Inicio", "Latitud_Inicio"), crs = 4326)
+coord_finales_sf <- st_as_sf(coord_finales, coords = c("Longitud_Final", "Latitud_Final"), crs = 4326)
+ggplot() +
+  geom_sf(data = valencia, fill = "beige") +
+  geom_sf(data = coord_iniciales_sf, size = 0.75, color="blue") +
+  labs(title= "Coordenadas\n iniciales") +
+  theme_minimal()
+ggsave("mapa_incial.pdf", device="pdf",width =5, height = 8, units="cm")
+
+
+ggplot() +
+  geom_sf(data = valencia, fill = "beige") +
+  geom_sf(data = coord_finales_sf, size = 0.75, color="blue") +
+  labs(title = "Coordenadas\n finales") +
+  theme_minimal()
+ggsave("mapa_final.pdf", device="pdf",width =5, height = 7.65, units="cm")
+```
+![](mapa_incial.pdf) ![](mapa_final.pdf)
+
+# Análisis bivariante
+```{r,include=FALSE}
+vehiculos_num <- vehiculos_tidy2[sapply(vehiculos_tidy2, is.numeric)]
+
+matrizcorr1 <-cor(vehiculos_num,use='complete.obs',method='pearson')
+matrizcorr2 <-cor(vehiculos_num,use='complete.obs',method='spearman')
+
+pdf("cor.pdf",width = 5.2, height = 3)
+par(mfrow = c(1, 2))
+corrplot(
+  matrizcorr1,type = "lower",
+  tl.col = "black",
+  col = colorRampPalette(c("red", "gray", "navyblue"))(200),
+  tl.cex = 0.7
+)
+corrplot(
+  matrizcorr2,type = "lower",
+  tl.col = "black",
+  col = colorRampPalette(c("red", "gray", "navyblue"))(200),
+  tl.cex = 0.7
+)
+dev.off()
+```
+En este apartado, estudiaremos la linealidad, monotonía y dependencia de las variables de nuestro conjunto de datos. En primer lugar, comenzaremos con las variables numéricas, calculando las matrices de correlación de Pearson y Spearman para determinar si existe una relación lineal y una monotonía entre estas variables. Para ello, representamos los coeficientes de Pearson y Spearman para cada par de variables. Veámoslo:
+
+![](cor.pdf)
+
+En la matriz de Pearson (izquierda) se observa una alta correlación positiva entre las variables de latitud y longitud en sus diferentes versiones. Lo que indica que dichas variables están estrechamente relacionadas linealmente, lo cual tiene sentido por su naturaleza geográfica. Por otro lado, la variable `Valor_Punto_Quilometrico` presenta correlaciones positivas y negativas (bajas) con las coordenadas geográficas. Esto es debido a que esta variable es relativa a cada carretera o tramo. Sin embargo, la variable `Flujo_Vehiculos` no muestra una correlación lineal significativa con el resto de las variables, lo que indica que el flujo de vehículos no depende directamente de forma lineal con la posición geográfica de los puntos de medición.
+
+
+La matriz de Spearman (derecha) mantiene un patrón de correlaciones similar al obtenido con Pearson, aunque con ligeras variaciones en la magnitud de los coeficientes. Esto sugiere que las relaciones entre las coordenadas mantienen su monotonía, aunque no de forma estrictamente ascendente. Cabe destacar la correlación negativa entre `Valor_Punto_Quilometrico` y las coordenadas se conserva, confirmando la tendencia inversa entre ambas variables. De igual forma, `Flujo_Vehiculos` sigue mostrando baja relación con las demás variables, confirmando su independencia respecto a la localización geográfica.
+
+Ahora estudiaremos la dependencia o independencia entre algunas variables categóricas: `Tipo_Via`-`Metodologia_Captacion`, `Tipo_Via`-`Tipo_Vehiculo` y `Sentido`-`Tipo_Vehiculo`. Para ello, calculamos el coeficiente V de Cramer (que está acotado entre 0 y 1). Obteniendo, respectivamente, 0.076, 0 y 0. 
+```{r,include=FALSE}
+tabla <- table(vehiculos_tidy2$Tipo_Via, vehiculos_tidy2$Metodologia_Captacion)
+CramerV(tabla)
+```
+```{r,include=FALSE}
+tabla1 <- table(vehiculos_tidy2$Tipo_Via, vehiculos_tidy2$Tipo_Vehiculo)
+CramerV(tabla1)
+tabla2 <- table(vehiculos_tidy2$Sentido, vehiculos_tidy2$Tipo_Vehiculo)
+CramerV(tabla2)
+```
+Indicándonos que hay una mínima dependencia entre las variables `Tipo_Via`-`Metodologia_Captacion`. Sin embargo, obtenemos un valor del coeficiente para los pares de variables `Tipo_Via`-`Tipo_Vehiculo` y  `Sentido`-`Tipo_Vehiculo` de 0; por tanto, ambos son totalmente independientes. Podríamos pensar que existe alguna dependencia entre el tipo de vehículo y el tipo de vía por la cual se circula (autovía, convecional o desdoblada), pero observamos que no. En cambio, ya esperábamos que el sentido de circulación (ascendente o descendente) y el tipo de vehículo fueran completamente independientes ya que los vehículos pueden circular indistintamente en un sentido o en otro.
+
+# Outliers
+En este último apartado determinaremos los outliers (datos atípicos) de algunas variables numéricas. Haremos el análisis con la variable `Flujo_Vehiculos` y, también, estudiaremos los outliers de esta variable pero considerando solo los vehículos pesados. Así podremos interpretar de una forma más completa los resultados.
+
+Para detectar los outliers aplicaremos la regla de Hampel ya que utiliza estimadores robustos y, además, no presupone que los datos siguen una distribución gaussiana. Podremos observar los picos extremos de flujo de vehículos tanto en el flujo total de vehículos como en el de vehículos pesados.
+
+Respecto a `Flujo_Vehiculos` aparecen un total de 118878 outliers. Esta cantidad elevada (representa el 32.5% del total de registros) puede deberse a que tenemos un conjunto de datos muy segado como podemos ver en las gráficas mostradas en la sección 4. Para interpretar este resultado podemos ver si los outliers presentan alguna relación con alguna otra variable, como por ejemplo, el día de la semana (lunes, martes, etc.) o el tipo de vía.
+
+Para ver si hay relación con el día de la semana podemos ver la proporción de outliers (frecuencia relativa) con respecto al total de outliers según el día:
+
+```{r,include=FALSE}
+vehiculos_tidy2$Fecha <- as.Date(vehiculos_tidy2$Fecha, format='%d/%m/%Y')
+reglahampel <- function(x){
+  mediana <- median(x, na.rm=T)
+  madm <- mad(x, na.rm=T)
+  res <- abs(x-mediana)>3*madm
+  return(res)
+}
+
+sum(reglahampel(vehiculos_tidy2$Flujo_Vehiculos))
+df <- vehiculos_tidy2 %>% filter(reglahampel(Flujo_Vehiculos))
+Sys.setlocale("LC_TIME", "es_ES.UTF-8")
+```
+
+```{r, include=FALSE}
+
+datos <- as.data.frame(table(sapply((df$Fecha),weekdays))/118878)
+datos$Var1 <- factor(datos$Var1, levels = c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"))
+
+plot1 <-ggplot(datos, aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por día de la semana",  x = "Día de la semana", y = "Frecuencia relativa") + theme_minimal()
+
+ggsave("freq_dias.eps", plot= plot1, device="eps",width =10, height = 6, units="cm")
+
+```
+![](freq_dias.eps)
+
+En este caso, vemos que de lunes a sábado hay una mayor proporción con respecto a los domingos (aunque la distribución es prácticamente uniforme). Esto puede deberse a que, de lunes a sábado, hay desplazaminetos diaros de trabajadores o transportes de mercancías, repartos, etc., que no se observan en domingo, y por ello, estos picos más extremos de flujo de vehículos son más probables encontrarlos en esos días.
+
+Ahora, si observamos la proporción de outliers según el tipo de vía, podemos detectar que hay una cantidad superior de outliers en convencional que en autovía y desdoblada. Puede ser debido a que en carretera convencional hay menos carriles, el límite de velocidad máxima es inferior y, por tanto, tiene una menor capacidad de tráfico. Por ello, cuando aparece algún pico de flujo de vehículos puede ser considerado como outlier.
+
+```{r, include=FALSE}
+ggplot(as.data.frame(table((df$Tipo_Via))/118878), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
+ggsave("freq_vias.eps", device="eps",width =10, height = 5, units="cm")
+```
+![](freq_vias.eps)
+
+Por otro lado, tenemos la variable `Tipo_Vehiculo` que almacena si el vehículo es pesado o no. Haciendo uso de la misma junto con `Flujo_Vehiculos`, podemos representar la frecuencia relativa de outliers de vehículos pesados por día de la semana, al igual que hemos hecho antes. Veámoslo:
+
+
+```{r, include=FALSE}
+# Filtramos solo los vehículos pesados
+df_pesados <- vehiculos_tidy2 %>%
+  filter(Tipo_Vehiculo == "Pesados") %>%
+  filter(reglahampel(Flujo_Vehiculos))
+
+
+# Asegurar idioma español
+Sys.setlocale("LC_TIME", "es_ES.UTF-8")  # o "Spanish_Spain.1252" en Windows
+
+# Calcular frecuencia relativa por día de la semana
+datos_pesados <- as.data.frame(table(weekdays(df_pesados$Fecha)) / nrow(df_pesados))
+colnames(datos_pesados) <- c("Dia", "Frecuencia")
+
+# Ordenar los días correctamente
+datos_pesados$Dia <- factor(datos_pesados$Dia,
+                            levels = c("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"))
+
+ggplot(datos_pesados, aes(x = Dia, y = Frecuencia)) +
+  geom_col(color = "blue", fill = "lavender") +
+  labs(title = "Outliers de vehículos pesados por día",
+       x = "Día de la semana", y = "Frecuencia relativa") +
+  theme_minimal()
+
+ggsave("freq_dias_pesados.pdf", device="pdf",width =10, height = 5, units="cm")
+
+```
+![](freq_dias_pesados.pdf)
+
+Podemos ver que obtenemos un resultado parecido determinando la proporción de outliers según el día de la semana. Aunque observamos que en sábado y domingo la proporción es bastante menor con respecto al resto de días, ya que en estos días los vehículos pesados no suelen circular ya que no es día laboral.
+
+De esta forma, podríamos mirar que ocurre con los resultados con respecto al tipo de vía. Vemos que hay más outliers en carretera desdoblada (aunque no hay una gran diferencia con los otros tipos de vía). Como hemos visto antes, este tipo de vehículos transitan más por este tipo de carretera (y por convencional). Entonces podemos entender que los picos de flujo se encuentren en desdoblada (y convencional) por una concentración de vehículos puntual.
+
+
+```{r, include=FALSE}
+ggplot(as.data.frame(table((df_pesados$Tipo_Via))/nrow(df_pesados)), aes(x = Var1, y = Freq, fill = Var1)) +geom_col(color='blue',fill = "lavender")+ labs(title = "Outliers por tipo de vía",  x = "Tipo de vía", y = "Frecuencia relativa") + theme_minimal()
+ggsave("freq_vias_pesados.pdf",  device="pdf",width =10, height = 5, units="cm")
+```
+![](freq_vias_pesados.pdf)
+
+# Conclusiones
+El análisis del tráfico en la Comunidad Valenciana durante el primer semestre de 2025 revela una alta concentración del flujo en determinados tramos, especialmente en carreteras convencionales, que registran el mayor número de observaciones y de valores atípicos. Se aprecia un aumento del tráfico en abril, coincidiendo con Fallas y Semana Santa, y una menor intensidad en enero y junio, coincidiendo con las vacaciones donde la población suele viajar más a otros destinos.
+
+Por otro lado, las coordenadas geográficas se ajustan correctamente al trazado de las vías, lo que confirma la calidad de los datos. Además, se deduce de las correlaciones que la intensidad del tráfico está más relacionada con el tipo de vía y la época del año que con la localización exacta. En conjunto, el análisis exploratorio muestra patrones temporales y espaciales, que pueden servir de base para futuras estrategias de planificación y gestión del tráfico en la región.
+
+
+
+
